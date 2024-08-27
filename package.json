@@ -1,0 +1,18 @@
+{
+    "name": "mindmap",
+    "version": "1.0.0",
+    "description": "mindmap, 脑图",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "lezi",
+    "license": "ISC",
+    "devDependencies": {
+        "vite": "^5.4.2"
+    },
+    "dependencies": {
+        "zrender": "^3.7.4"
+    }
+}
