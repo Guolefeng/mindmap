@@ -1,7 +1,7 @@
 /**
  * @desc 图谱节点之间连线
  */
-import * as zrender from "zrender";
+import zrender from "zrender";
 export default class Line {
     constructor({ x1 = 0, y1 = 0, x2 = 0, y2 = 0, config = {} }) {
         this.x1 = x1;
@@ -84,10 +84,8 @@ export default class Line {
                         y2: this.y2,
                     },
                 },
-                {
-                    duration: animation.time,
-                    easing: animation.easing,
-                }
+                animation.time,
+                animation.easing
             );
         } else {
             this.line.attr("shape", {

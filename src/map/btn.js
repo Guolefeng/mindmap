@@ -5,7 +5,9 @@
  * @param {object} data 节点数据
  * @param {object} config 配置信息
  */
-import * as zrender from "zrender";
+
+import zrender from "zrender";
+
 export default class Btn {
     constructor({ x, y, data, type = 0, config }) {
         this.x = x;
@@ -95,10 +97,8 @@ export default class Btn {
                     {
                         scale: [1, 1],
                     },
-                    {
-                        duration: animation.time,
-                        easing: animation.easing,
-                    }
+                    animation.time,
+                    animation.easing
                 );
             } else {
                 this.data.group.attr("scale", [1, 1]);
@@ -114,10 +114,8 @@ export default class Btn {
                     {
                         scale: [0, 0],
                     },
-                    {
-                        duration: animation.time,
-                        easing: animation.easing,
-                    }
+                    animation.time,
+                    animation.easing
                 );
             } else {
                 this.data.group.attr("scale", [0, 0]);
@@ -137,10 +135,8 @@ export default class Btn {
                         y: this.y,
                     },
                 },
-                {
-                    duration: animation.time,
-                    easing: animation.easing,
-                }
+                animation.time,
+                animation.easing
             );
         } else {
             this.btn.attr("shape", {

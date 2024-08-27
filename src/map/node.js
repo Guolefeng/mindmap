@@ -4,7 +4,7 @@
  * @param {func} onNodeContentMenuClick 鼠标右键节点
  * @param {func} onTextChange 节点名字修改时
  */
-import * as zrender from "zrender";
+import zrender from "zrender";
 export default class Node {
     constructor({
         container = null, // 图谱容器
@@ -77,7 +77,7 @@ export default class Node {
                     : this.level === 0
                     ? rootRect.bg
                     : normalRect.bg,
-                text: this.data.chinese_name,
+                text: this.data.name,
                 textOffset,
                 textFill:
                     this.level === 0
@@ -91,7 +91,7 @@ export default class Node {
             },
             z: 10,
         });
-        this.rect.node_id = this.data.node_id;
+        this.rect.id = this.data.id;
         this.group.add(this.rect);
 
         // 创建拖拽时的占位矩形
@@ -204,8 +204,6 @@ export default class Node {
         });
     }
 
-    _calcW() {}
-
     onMouseUp() {
         const { lineColor } = this.config;
         this.group.attr("position", [0, 0]);
@@ -263,11 +261,11 @@ export default class Node {
         const input = document.createElement("input");
         input.style = `
             position: fixed;
-            left: ${x + 1}px;
-            top: ${y + 1}px;
+            left: ${x}px;
+            top: ${y}px;
             padding: 0 12px;
-            width: ${w}px;
-            height: ${h}px;
+            width: ${w - 28}px;
+            height: ${h - 3}px;
             border-radius: ${radius}px;
             outline: none;
             border: none;
@@ -278,7 +276,7 @@ export default class Node {
             z-index: 10;
             background: ${normalRect.bg};
         `;
-        input.value = this.data.chinese_name;
+        input.value = this.data.name;
         input.onkeyup = (e) => {
             e.stopPropagation();
             e.preventDefault();
@@ -286,7 +284,7 @@ export default class Node {
                 input.blur();
                 return;
             }
-            this.data.chinese_name = e.target.value;
+            this.data.name = e.target.value;
         };
         input.onblur = (e) => {
             this.onTextChange(this.data);
@@ -333,10 +331,8 @@ export default class Node {
                         y: this.y,
                     },
                 },
-                {
-                    duration: animation.time,
-                    easing: animation.easing,
-                }
+                animation.time,
+                animation.easing
             );
             this.placeholderRect &&
                 this.placeholderRect.animateTo(
@@ -346,10 +342,8 @@ export default class Node {
                             y: this.y,
                         },
                     },
-                    {
-                        duration: animation.time,
-                        easing: animation.easing,
-                    }
+                    animation.time,
+                    animation.easing
                 );
         } else {
             this.rect.attr("shape", {
@@ -368,7 +362,7 @@ export default class Node {
         if (this.readonly) {
             return;
         }
-        this.chinese_name = this.data.chinese_name;
+        this.name = this.data.name;
         const clientRect = this.container.getBoundingClientRect();
         const rect = {
             x: this.x + clientRect.left,
@@ -380,9 +374,6 @@ export default class Node {
     }
 
     setName(text) {
-        if (this.readonly) {
-            return;
-        }
         this.rect.attr("style", {
             text,
         });
@@ -401,10 +392,8 @@ export default class Node {
                         width: this.w,
                     },
                 },
-                {
-                    duration: animation.time,
-                    easing: animation.easing,
-                }
+                animation.time,
+                animation.easing
             );
             this.placeholderRect &&
                 this.placeholderRect.animateTo(
@@ -413,10 +402,8 @@ export default class Node {
                             width: this.w,
                         },
                     },
-                    {
-                        duration: animation.time,
-                        easing: animation.easing,
-                    }
+                    animation.time,
+                    animation.easing
                 );
         } else {
             this.rect.attr("shape", { width: this.w });

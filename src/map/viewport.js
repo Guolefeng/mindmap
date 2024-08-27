@@ -3,10 +3,10 @@
  * @param dom 画布的dom对象
  * @param rootGroup 画布的zrender对象
  */
-import * as zrender from "zrender";
+import zrender from "zrender";
 
 const MIN_SCALE = 0;
-const MAX_SCALE = 2;
+const MAX_SCALE = 10;
 
 const Viewport = (
     dom,
@@ -21,7 +21,7 @@ const Viewport = (
     const containerDom = dom;
     const group = rootGroup;
     const zr = zrd;
-    const scaleInterval = 0.01;
+    const scaleInterval = 0.1;
     const posInterval = 20;
     let isHoverNode = false;
     let viewBox = {

@@ -1,4 +1,4 @@
-import * as zrender from "zrender";
+import zrender from "zrender";
 import findIndex from "lodash/findIndex";
 import cloneDeep from "lodash/cloneDeep";
 import Node from "./node";
@@ -24,7 +24,7 @@ export default class Mindmap {
         onError = () => {},
         onUpdateNodesChange = () => {},
     }) {
-        this.container = container; // 图谱渲染dom
+        this.container = container; // 容器
         this.data = data; // 图谱数据
         this.readonly = readonly; // 图谱是否只读
         this.onNodeContentMenuClick = onNodeContentMenuClick; // 右击节点
@@ -204,10 +204,7 @@ export default class Mindmap {
     // 拖拽区域监听修改 图谱区域抬起鼠标 FIXME 缩放后拖拽位置有误
     _onMouseUp = (marquee) => {
         const fn = (d) => {
-            const i = findIndex(
-                this.selected_nodes,
-                (n) => n.node_id === d.node_id
-            );
+            const i = findIndex(this.selected_nodes, (n) => n.id === d.id);
             const isInte = marquee._rect.intersect(d.node.rect._rect);
             if (i !== -1) {
                 d.node.cancelNode();
@@ -243,7 +240,7 @@ export default class Mindmap {
     _resetSlibingPosition(data, dy) {
         if (data.fatherNode) {
             data.fatherNode.children.forEach((n) => {
-                if (n.node_id !== data.node_id) {
+                if (n.id !== data.id) {
                     if (data.node.y < n.node.y) {
                         // 向下移动节点
                         this._resetChildPosition(n, 0, dy, true);
@@ -273,8 +270,8 @@ export default class Mindmap {
         if (newD) {
             const nd = cloneDeep(newD);
             newData = {
-                node_id: nd.node_id,
-                chinese_name: nd.chinese_name,
+                id: nd.id,
+                name: nd.name,
                 children: [],
                 level: newLevel,
                 is_has_children: nd.is_has_children,
@@ -284,8 +281,8 @@ export default class Mindmap {
             };
         } else {
             newData = {
-                node_id: this._getUUID(),
-                chinese_name: "",
+                id: this._getUUID(),
+                name: "",
                 children: [],
                 level: newLevel,
                 is_deleted: false,
@@ -296,7 +293,7 @@ export default class Mindmap {
         }
         if (isSilbing) {
             newData.fatherNode = data.fatherNode;
-            newData.parent_id = data.fatherNode.node_id;
+            newData.parent_id = data.fatherNode.id;
         } else {
             if (!data.group) {
                 data.group = new zrender.Group({
@@ -304,7 +301,7 @@ export default class Mindmap {
                 });
             }
             newData.fatherNode = data;
-            newData.parent_id = data.node_id;
+            newData.parent_id = data.id;
         }
         // 添加节点
         const w = this._getTextWidth(newData, newLevel);
@@ -318,10 +315,8 @@ export default class Mindmap {
         if (isSilbing) {
             // 节点兄弟节点对本节点的影响
             const i =
-                findIndex(
-                    data.fatherNode.children,
-                    (n) => n.node_id === data.node_id
-                ) + 1;
+                findIndex(data.fatherNode.children, (n) => n.id === data.id) +
+                1;
             let silbingNodeNum = 0;
             const silbingNodes = data.fatherNode.children.slice(0, i);
             silbingNodes.forEach((n) => {
@@ -414,10 +409,7 @@ export default class Mindmap {
     }
 
     _updateNodes = (newNode) => {
-        const i = findIndex(
-            this.updated_nodes,
-            (n) => n.node_id === newNode.node_id
-        );
+        const i = findIndex(this.updated_nodes, (n) => n.id === newNode.id);
         if (i !== -1) {
             this.updated_nodes.splice(i, 1);
         }
@@ -443,7 +435,7 @@ export default class Mindmap {
                 const i =
                     findIndex(
                         data.fatherNode.children,
-                        (n) => n.node_id === data.node_id
+                        (n) => n.id === data.id
                     ) + 1;
                 data.fatherNode.children.splice(i, 0, newData);
                 this._resetSlibingPosition(newData, dy);
@@ -569,7 +561,7 @@ export default class Mindmap {
             }
             const i = findIndex(
                 data.fatherNode.children,
-                (n) => n.node_id === data.node_id
+                (n) => n.id === data.id
             );
             data.fatherNode.children.splice(i, 1);
             if (data.fatherNode.children.length === 0) {
@@ -613,10 +605,7 @@ export default class Mindmap {
 
     // 点击节点
     onRectNodeClick(e, data) {
-        const i = findIndex(
-            this.selected_nodes,
-            (n) => n.node_id === data.node_id
-        );
+        const i = findIndex(this.selected_nodes, (n) => n.id === data.id);
         if (i === -1) {
             if (this.canMutiSelect) {
                 data.node.selectNode();
@@ -647,14 +636,13 @@ export default class Mindmap {
 
     // 节点文本改变事件
     onTextChange(data) {
-        this.is_editing_text = false;
         if (this.readonly) {
             return;
         }
-        if (data.chinese_name === data.node.rect.style.text) {
+        if (data.name === data.node.rect.style.text) {
             return;
         }
-        data.node.setName(data.chinese_name);
+        data.node.setName(data.name);
         const w = this._getTextWidth(data, data.level);
         const dw = w - data.node.w;
         data.node.setWidth(w);
@@ -680,15 +668,13 @@ export default class Mindmap {
         fn(data);
         this.onNodeTextChange(data);
         this._updateNodes(data);
+        this.is_editing_text = false;
     }
 
     // 鼠标hover节点
     onMouseOver(e, data) {
         this.viewport.setIsHoverNode(true);
-        if (
-            this.dragSourceNode &&
-            this.dragSourceNode.node_id !== data.node_id
-        ) {
+        if (this.dragSourceNode && this.dragSourceNode.id !== data.id) {
             this.dragTargetNode = data;
         }
         if (this.viewport.getIsSelecting()) {
@@ -774,7 +760,7 @@ export default class Mindmap {
         fn(source, target);
         const newData = cloneDeep(source);
         newData.fatherNode = target;
-        newData.parent_id = target.node_id;
+        newData.parent_id = target.id;
         this._updateNodes(newData);
     }
 
@@ -830,7 +816,7 @@ export default class Mindmap {
         const { fontFamily, rootRect, normalRect, textPadding } = this.config;
         const w =
             (getTextWidth(
-                data.chinese_name,
+                data.name,
                 `${
                     type === 0 ? rootRect.fontSize : normalRect.fontSize
                 }px ${fontFamily}`
@@ -912,7 +898,7 @@ export default class Mindmap {
                 n.level = level;
                 n.fatherNode = fatherNode;
                 // 计算节点宽高
-                const text = n.chinese_name;
+                const text = n.name;
                 const w =
                     text && text !== ""
                         ? this._getTextWidth(n, level)
@@ -1062,7 +1048,7 @@ export default class Mindmap {
                 if (!n.children || n.children.length === 0) {
                     continue;
                 }
-                if (n.children[i].node_id === id) {
+                if (n.children[i].id === id) {
                     return n.children[i];
                 } else {
                     return fn(n.children[i]);

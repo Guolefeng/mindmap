@@ -1,5 +1,5 @@
 import Mindmap from "./map";
-
+import test from "./test";
 let map;
 const initMap = () => {
     if (map) {
@@ -7,13 +7,11 @@ const initMap = () => {
     }
     map = new Mindmap({
         container: document.getElementById("app"),
-        data: {
-            level: 0,
-            node_id: 0,
-            chinese_name: "根节点",
-            children: [],
-        },
+        data: test,
         readonly: false,
+        onUpdateNodesChange: (nodes) => {
+            console.log("nodes", nodes);
+        },
     });
     map.render();
 };
