@@ -1,10 +1,10 @@
 /**
- * @desc 图谱中的节点
+ * @desc 脑图中的节点
  */
 import zrender from "zrender";
 export default class Node {
     constructor({
-        container = null, // 图谱容器
+        container = null, // 脑图容器
         x = 0,
         y = 0,
         w = 80,
@@ -27,7 +27,6 @@ export default class Node {
         this.h = h;
         this.data = data;
         this.readonly = readonly;
-        this.level = data.level;
         this.config = config;
         this.onNodeClick = onNodeClick;
         this.onTextChange = onTextChange;

@@ -21,7 +21,7 @@ const Viewport = ({ dom, rootGroup, zrd, onMouseDown, onZoom }) => {
         scale: 1,
     };
 
-    let dragging = false; // 是否鼠标按下拖拽移动图谱
+    let dragging = false; // 是否鼠标按下拖拽移动脑图
     let lastX = 0;
     let lastY = 0;
 
@@ -61,7 +61,7 @@ const Viewport = ({ dom, rootGroup, zrd, onMouseDown, onZoom }) => {
             return;
         }
         if (dragging) {
-            // 拖拽移动图谱
+            // 拖拽移动脑图
             zr.dom.children[0].children[0].style.cursor = "grabbing";
             viewBox.x += e.layerX - lastX;
             viewBox.y += e.layerY - lastY;

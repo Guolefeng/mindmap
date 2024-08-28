@@ -75,3 +75,5 @@ export const isIntersect = (rect1, rect2) => {
     }
     return false;
 };
+
+export const uuid = () => new Date().getTime();
