@@ -1,7 +1,7 @@
 {
     "name": "mindmap",
     "version": "1.0.0",
-    "description": "mindmap, 脑图",
+    "description": "mindmap, 脑图, 思维导图, 脑图, 思维导图, 思维导图",
     "scripts": {
         "dev": "vite",
         "build": "vite build",
@@ -9,6 +9,14 @@
     },
     "author": "lezi",
     "license": "ISC",
+    "main": "./build/mindmap.umd.js",
+    "module": "./build/mindmap.es.js",
+    "exports": {
+        ".": {
+            "import": "./build/mindmap.es.js",
+            "require": "./build/mindmap.umd.js"
+        }
+    },
     "devDependencies": {
         "vite": "^5.4.2"
     },
