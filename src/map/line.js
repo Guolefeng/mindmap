@@ -1,5 +1,5 @@
 /**
- * @desc 图谱节点之间连线
+ * @desc 节点之间连线
  */
 import zrender from "zrender";
 export default class Line {

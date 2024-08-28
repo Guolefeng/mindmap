@@ -1,9 +1,5 @@
 /**
- * @desc 图谱中的按钮
- * @param {number} x
- * @param {number} y
- * @param {object} data 节点数据
- * @param {object} config 配置信息
+ * @desc 图中的按钮
  */
 
 import zrender from "zrender";
@@ -13,7 +9,7 @@ export default class Btn {
         this.x = x;
         this.y = y;
         this.data = data;
-        this.type = type;
+        this.type = type; // 0 收齐 1 展开
         this.config = config;
         this._init();
     }

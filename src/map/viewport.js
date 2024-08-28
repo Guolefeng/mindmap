@@ -8,17 +8,8 @@ import zrender from "zrender";
 const MIN_SCALE = 0;
 const MAX_SCALE = 10;
 
-const Viewport = (
-    dom,
-    rootGroup,
-    zrd,
-    onMouseDown,
-    onMouseMove,
-    onMouseUp,
-    onZoom,
-    origin
-) => {
-    const containerDom = dom;
+const Viewport = ({ dom, rootGroup, zrd, onMouseDown, onZoom }) => {
+    const container = dom;
     const group = rootGroup;
     const zr = zrd;
     const scaleInterval = 0.1;
@@ -33,28 +24,6 @@ const Viewport = (
     let dragging = false; // 是否鼠标按下拖拽移动图谱
     let lastX = 0;
     let lastY = 0;
-
-    let selecting = false; // 是否框选多选
-    let x = 0; // 拖拽区域x坐标
-    let y = 0; // 拖拽区域y坐标
-    let w = 0; // 拖拽区域宽
-    let h = 0; // 拖拽区域高
-    const marquee = new zrender.Rect({
-        shape: {
-            x: 0,
-            y: 0,
-            width: 0,
-            height: 0,
-        },
-        style: {
-            fill: "#5CDBD31A",
-            stroke: "#5CDBD3",
-            lineWidth: 1,
-        },
-        z: 100,
-        silent: true,
-    });
-    zr.add(marquee);
 
     // 设置视野位置
     const _setViewport = (x, y) => {
@@ -84,15 +53,7 @@ const Viewport = (
         onMouseDown(e);
         lastX = e.layerX;
         lastY = e.layerY;
-        if (!dragging) {
-            x = e.layerX;
-            y = e.layerY;
-            selecting = true;
-            marquee.attr("shape", {
-                x,
-                y,
-            });
-        }
+        dragging = true;
     };
 
     const mousemove = (e) => {
@@ -107,25 +68,6 @@ const Viewport = (
             _setViewport(viewBox.x, viewBox.y);
             lastX = e.layerX;
             lastY = e.layerY;
-            if (w !== 0 || h !== 0) {
-                w = 0;
-                h = 0;
-                marquee.attr("shape", {
-                    width: w,
-                    height: h,
-                });
-            }
-            return;
-        }
-        if (selecting) {
-            // 圈选图谱中节点
-            w = e.layerX - x;
-            h = e.layerY - y;
-            marquee.attr("shape", {
-                width: w,
-                height: h,
-            });
-            onMouseMove();
         }
     };
 
@@ -133,42 +75,8 @@ const Viewport = (
         if (isHoverNode) {
             return;
         }
-        if (dragging) {
-            dragging = false;
-            zr.dom.children[0].children[0].style.cursor = "grab";
-        }
-        if (selecting) {
-            if (
-                marquee.shape.width !== 0 &&
-                marquee.shape.height !== 0 &&
-                marquee._rect
-            ) {
-                marquee._rect.x = marquee._rect.x - viewBox.x;
-                marquee._rect.y = marquee._rect.y - viewBox.y;
-                // marquee._rect.width = marquee._rect.width * viewBox.scale;
-                // marquee._rect.height = marquee._rect.height * viewBox.scale;
-                const sx = w < 0 ? x + w : x;
-                const sy = h < 0 ? y + h : y;
-                const nx =
-                    sx - viewBox.x + (sx - origin[0]) * (viewBox.scale - 1);
-                const ny =
-                    sy - viewBox.y + (sy - origin[1]) * (viewBox.scale - 1);
-                const rect = {
-                    x: nx,
-                    y: ny,
-                    w: w,
-                    h: h,
-                };
-                onMouseUp(marquee);
-            }
-            selecting = false;
-            marquee.attr("shape", {
-                x: 0,
-                y: 0,
-                width: 0,
-                height: 0,
-            });
-        }
+        dragging = false;
+        zr.dom.children[0].children[0].style.cursor = "default";
     };
 
     const mousewheel = (e) => {
@@ -236,53 +144,36 @@ const Viewport = (
 
     // 画布视野移动设置
     // 添加画布的鼠标点击事件
-    containerDom.addEventListener("mousedown", mousedown);
+    container.addEventListener("mousedown", mousedown);
 
     // 添加画布的鼠标移动事件
-    containerDom.addEventListener("mousemove", mousemove);
+    container.addEventListener("mousemove", mousemove);
 
     // 添加画布的鼠标释放事件
-    containerDom.addEventListener("mouseup", mouseup);
+    container.addEventListener("mouseup", mouseup);
 
     // 添加鼠标滚轮事件
-    containerDom.addEventListener("mousewheel", mousewheel);
+    container.addEventListener("mousewheel", mousewheel);
 
     // 添加窗口大小改变的事件
     window.addEventListener("resize", resize);
 
     // 移除监听事件
     const dispose = () => {
-        containerDom.removeEventListener("mousedown", mousedown);
-        containerDom.removeEventListener("mousemove", mousemove);
-        containerDom.removeEventListener("mouseup", mouseup);
-        containerDom.removeEventListener("mousewheel", mousewheel);
+        container.removeEventListener("mousedown", mousedown);
+        container.removeEventListener("mousemove", mousemove);
+        container.removeEventListener("mouseup", mouseup);
+        container.removeEventListener("mousewheel", mousewheel);
         window.removeEventListener("resize", resize);
     };
 
     return {
-        setIsDragging: (drag) => {
-            if (drag) {
-                zr.dom.children[0].children[0].style.cursor = "grab";
-            } else {
-                zr.dom.children[0].children[0].style.cursor = "default";
-            }
-            dragging = drag;
-        },
-        getIsSelecting: () => {
-            return selecting;
-        },
-        getViewbox: () => {
-            return viewBox;
-        },
         setIsHoverNode: (isHover) => {
             isHoverNode = isHover;
         },
         zoom: (scale) => {
             _setViewportScale(scale * (MAX_SCALE - MIN_SCALE));
         },
-        mousedown,
-        mousemove,
-        mouseup,
         dispose,
     };
 };

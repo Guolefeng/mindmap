@@ -1,8 +1,5 @@
 /**
  * @desc 图谱中的节点
- * @param {func} onNodeClick 鼠标左键节点
- * @param {func} onNodeContentMenuClick 鼠标右键节点
- * @param {func} onTextChange 节点名字修改时
  */
 import zrender from "zrender";
 export default class Node {
@@ -16,13 +13,12 @@ export default class Node {
         readonly = true,
         config = {},
         onNodeClick = () => {},
-        onNodeContentMenuClick = () => {},
         onTextChange = () => {},
-        onNodeMouseOver = () => {},
-        onNodeMouseOut = () => {},
         onNodeDoubleClick = () => {},
         onNodeMouseDown = () => {},
         onNodeMouseUp = () => {},
+        onNodeMouseEnter = () => {},
+        onNodeMouseLeave = () => {},
     }) {
         this.container = container;
         this.x = x;
@@ -34,28 +30,21 @@ export default class Node {
         this.level = data.level;
         this.config = config;
         this.onNodeClick = onNodeClick;
-        this.onNodeContentMenuClick = onNodeContentMenuClick;
         this.onTextChange = onTextChange;
-        this.onNodeMouseOver = onNodeMouseOver;
-        this.onNodeMouseOut = onNodeMouseOut;
         this.onNodeDoubleClick = onNodeDoubleClick;
         this.onNodeMouseDown = onNodeMouseDown;
         this.onNodeMouseUp = onNodeMouseUp;
+        this.onNodeMouseEnter = onNodeMouseEnter;
+        this.onNodeMouseLeave = onNodeMouseLeave;
         this._init();
         this.isSelected = false;
     }
 
     _init() {
-        const {
-            radius,
-            rootRect,
-            normalRect,
-            fontFamily,
-            fontWeight,
-            searchColor,
-        } = this.config;
+        const { radius, rootRect, normalRect, fontFamily, fontWeight } =
+            this.config;
         this.group = new zrender.Group({
-            draggable: !this.readonly,
+            draggable: false,
         });
         let textOffset = [0, 0];
         this.rect = new zrender.Rect({
@@ -72,11 +61,7 @@ export default class Node {
                     this.level === 0
                         ? rootRect.borderWidth
                         : normalRect.borderWidth,
-                fill: this.data.is_selected
-                    ? searchColor
-                    : this.level === 0
-                    ? rootRect.bg
-                    : normalRect.bg,
+                fill: this.level === 0 ? rootRect.bg : normalRect.bg,
                 text: this.data.name,
                 textOffset,
                 textFill:
@@ -109,9 +94,7 @@ export default class Node {
             this.onNodeDoubleClick(e, this.data);
             e.event.preventDefault();
             e.event.stopPropagation();
-            if (!this.readonly) {
-                this.editName(e);
-            }
+            this.editName(e);
         });
         this.group.on("click", (e) => {
             this.timer && clearTimeout(this.timer);
@@ -119,12 +102,7 @@ export default class Node {
                 e.event.preventDefault();
                 e.event.stopPropagation();
                 this.onNodeClick(e, this.data);
-            }, 200);
-        });
-        this.group.on("contextmenu", (e) => {
-            e.event.preventDefault();
-            e.event.stopPropagation();
-            this.onNodeContentMenuClick(e, this.data);
+            }, 100);
         });
         this.group.on("mouseover", (e) => {
             if (!this.isSelected) {
@@ -135,7 +113,7 @@ export default class Node {
                             : normalRect.hoverBorderColor,
                 });
             }
-            this.onNodeMouseOver(e, this.data);
+            this.onNodeMouseEnter(e, this.data);
         });
         this.group.on("mouseout", (e) => {
             if (!this.isSelected) {
@@ -143,31 +121,34 @@ export default class Node {
                     stroke: this.level === 0 ? rootRect.bg : normalRect.bg,
                 });
             }
-            this.onNodeMouseOut(e, this.data);
+            this.onNodeMouseLeave(e, this.data);
         });
         this.group.on("mousedown", (e) => {
             if (this.readonly) {
-                return;
-            }
-            if (e.event.button !== 0) {
-                this.group.attr("draggable", false);
                 return;
             }
             if (this.data.level === 0) {
                 return;
             }
             this.moveable = true;
+            this.group.attr("draggable", true);
             this.onNodeMouseDown(e, this.data);
         });
         this.group.on("mousemove", (e) => {
             if (this.readonly) {
                 return;
             }
-            if (this.data.level === 0 || !this.moveable) {
+            if (!this.moveable) {
+                return;
+            }
+            if (this.data.level === 0) {
                 return;
             }
             if (this.rect.z === 10) {
                 this.rect.attr("z", 8);
+            }
+            if (this.data.btn && this.data.btn.type === 1) {
+                this.data.btn.setType(0);
             }
             if (
                 this.data.lineBeforeBtn &&
@@ -195,10 +176,10 @@ export default class Node {
             if (this.readonly) {
                 return;
             }
-            if (e.event.button !== 0) {
-                this.group.attr("draggable", false);
+            if (this.data.level === 0) {
                 return;
             }
+            this.group.attr("draggable", false);
             this.onMouseUp();
             this.onNodeMouseUp(this.data);
         });
@@ -208,8 +189,9 @@ export default class Node {
         const { lineColor } = this.config;
         this.group.attr("position", [0, 0]);
         this.group.attr("scale", [1, 1]);
-        if (this.rect.z === 8) {
-            this.rect.attr("z", 10);
+        this.rect.attr("z", 10);
+        if (this.data.btn && this.data.btn.type === 0) {
+            this.data.btn.setType(1);
         }
         if (
             this.data.lineBeforeBtn &&
@@ -294,7 +276,7 @@ export default class Node {
         document.body.appendChild(input);
         setTimeout(() => {
             input.focus();
-        }, 300); // 动画时间为300ms
+        }, 100); // 动画时间为300ms
     }
 
     // 选中节点

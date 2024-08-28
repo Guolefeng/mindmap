@@ -12,38 +12,21 @@ export default class Mindmap {
         container,
         data,
         readonly = true,
-        onNodeContentMenuClick = () => {},
         onNodeClick = () => {},
-        onNodeMouseOver = () => {},
-        onNodeMouseOut = () => {},
-        onNodeDoubleClick = () => {},
-        onNodeTextChange = () => {},
-        onMapMouseDown = () => {},
         onZoom = () => {},
-        onSelectedNodesChange = () => {},
         onError = () => {},
-        onUpdateNodesChange = () => {},
     }) {
         this.container = container; // 容器
         this.data = data; // 图谱数据
         this.readonly = readonly; // 图谱是否只读
-        this.onNodeContentMenuClick = onNodeContentMenuClick; // 右击节点
         this.onNodeClick = onNodeClick; // 单击节点
-        this.onNodeMouseOver = onNodeMouseOver; // hover节点
-        this.onNodeMouseOut = onNodeMouseOut; // out节点
-        this.onNodeDoubleClick = onNodeDoubleClick; // 双击节点
-        this.onNodeTextChange = onNodeTextChange; // 节点名字修改
-        this.onMapMouseDown = onMapMouseDown; // 图谱背景区域点击
         this.onZoom = onZoom; // 缩放回调
-        this.onSelectedNodesChange = onSelectedNodesChange; // 节点选中列表修改回调
         this.onError = onError; // 警告或错误通知回调
-        this.onUpdateNodesChange = onUpdateNodesChange;
 
         this._setConfig(); // 设置配置项
         this._init(); // 初始化图谱
-        this.selected_nodes = []; // 选中的节点列表
+        this.selectedNodes = []; // 选中的节点列表
         this.updated_nodes = []; // 被修改的节点列表(新增的子节点, 新增的兄弟节点, 修改节点的父节点, 修改节点中文名, 删除节点, 修改节点类型)
-        this.canMutiSelect = false; // 是否可以多选
         this.dragSourceNode = null; // 拖拽节点
         this.dragTargetNode = null; // 拖拽节点到目标节点
         this.isEditingText = false; // 是否处于文本编辑状态
@@ -103,7 +86,6 @@ export default class Mindmap {
                 time: 100,
                 easing: "linear",
             },
-            searchColor: "#FFF566", // 搜索高亮颜色
         };
     }
 
@@ -112,25 +94,20 @@ export default class Mindmap {
         this.zr = new zrender.init(this.container, {
             // renderer: 'svg',
         });
-        const origin = [cx, cy];
         this.rootGroup = new zrender.Group({
             position: [0, 0],
-            origin,
+            origin: [cx, cy],
         });
         // 设置视野
-        this.viewport = Viewport(
-            this.container,
-            this.rootGroup,
-            this.zr,
-            this._onMouseDown,
-            this._onMouseMove,
-            this._onMouseUp,
-            this.onZoom,
-            origin
-        );
+        this.viewport = Viewport({
+            dom: this.container,
+            rootGroup: this.rootGroup,
+            zrd: this.zr,
+            onMouseDown: this._onMouseDown,
+            onZoom: this.onZoom,
+        });
         // 添加键盘按键事件
         document.addEventListener("keydown", this._onKeyDown);
-        document.addEventListener("keyup", this._onKeyUp);
     }
 
     _onKeyDown = (e) => {
@@ -160,30 +137,6 @@ export default class Mindmap {
                     this.removeNode();
                 }
                 break;
-            case 17: // ctrl键事件 结合鼠标点击事件多选节点
-            case 91: // command键事件 结合鼠标点击事件多选节点
-                this.canMutiSelect = true;
-                break;
-            case 32:
-                // 空格键事件 结合鼠标点击事件拖拽移动图谱位置
-                this.viewport.setIsDragging(true);
-                break;
-            default:
-                break;
-        }
-    };
-
-    _onKeyUp = (e) => {
-        switch (e.keyCode) {
-            case 17:
-                this.canMutiSelect = false;
-                break;
-            case 91:
-                this.canMutiSelect = false;
-                break;
-            case 32:
-                this.viewport.setIsDragging(false);
-                break;
             default:
                 break;
         }
@@ -191,32 +144,7 @@ export default class Mindmap {
 
     // 点击屏幕其他范围
     _onMouseDown = (e) => {
-        if (this.canMutiSelect) {
-            return;
-        }
         this.cancelSelected();
-        this.onMapMouseDown(e);
-    };
-
-    // 拖拽区域监听修改
-    _onMouseMove = () => {};
-
-    // 拖拽区域监听修改 图谱区域抬起鼠标 FIXME 缩放后拖拽位置有误
-    _onMouseUp = (marquee) => {
-        const fn = (d) => {
-            const i = findIndex(this.selected_nodes, (n) => n.id === d.id);
-            const isInte = marquee._rect.intersect(d.node.rect._rect);
-            if (i !== -1) {
-                d.node.cancelNode();
-                this.selected_nodes.splice(i, 1);
-            } else if (isInte && i === -1) {
-                d.node.selectNode();
-                this.selected_nodes.push(d);
-            }
-            d.children.forEach((c) => fn(c));
-        };
-        fn(this.data);
-        this.onSelectedNodesChange(this.selected_nodes);
     };
 
     // 递归调整节点及子节点位置
@@ -277,7 +205,7 @@ export default class Mindmap {
                 is_has_children: nd.is_has_children,
                 is_deleted: false,
                 is_selected: nd.is_selected,
-                parent_id: nd.parent_id,
+                pid: nd.pid,
             };
         } else {
             newData = {
@@ -293,7 +221,7 @@ export default class Mindmap {
         }
         if (isSilbing) {
             newData.fatherNode = data.fatherNode;
-            newData.parent_id = data.fatherNode.id;
+            newData.pid = data.fatherNode.id;
         } else {
             if (!data.group) {
                 data.group = new zrender.Group({
@@ -301,7 +229,7 @@ export default class Mindmap {
                 });
             }
             newData.fatherNode = data;
-            newData.parent_id = data.id;
+            newData.pid = data.id;
         }
         // 添加节点
         const w = this._getTextWidth(newData, newLevel);
@@ -414,7 +342,6 @@ export default class Mindmap {
             this.updated_nodes.splice(i, 1);
         }
         this.updated_nodes.push(newNode);
-        this.onUpdateNodesChange(this.updated_nodes);
     };
 
     // 添加同级节点
@@ -424,10 +351,10 @@ export default class Mindmap {
         }
         const { nodeAreaHeight } = this.config;
         const dy = nodeAreaHeight / 2;
-        if (this.selected_nodes.length === 0) {
+        if (this.selectedNodes.length === 0) {
             this.onError("请先选中节点");
-        } else if (this.selected_nodes.length === 1) {
-            const data = this.selected_nodes[0];
+        } else if (this.selectedNodes.length === 1) {
+            const data = this.selectedNodes[0];
             if (data.level === 0) {
                 this.onError("根节点无法新增兄弟节点");
             } else {
@@ -441,13 +368,12 @@ export default class Mindmap {
                 this._resetSlibingPosition(newData, dy);
                 // 设置新增节点为选中节点
                 data.node.cancelNode();
-                this.selected_nodes = [];
+                this.selectedNodes = [];
                 newData.node.selectNode();
                 // 同时进入编辑节点名字状态
                 newData.node.editName();
                 this.is_editing_text = true;
-                this.selected_nodes.push(newData);
-                this.onSelectedNodesChange(this.selected_nodes);
+                this.selectedNodes.push(newData);
                 this._updateNodes(newData);
             }
         } else {
@@ -461,12 +387,12 @@ export default class Mindmap {
             return;
         }
         const { nodeAreaHeight } = this.config;
-        const data = this.selected_nodes[0];
-        if (this.selected_nodes.length === 0) {
+        const data = this.selectedNodes[0];
+        if (this.selectedNodes.length === 0) {
             this.onError("请先选中节点");
         } else if (data.is_has_children && data.btn && data.btn.type === 0) {
             this.onError("请先展开节点");
-        } else if (this.selected_nodes.length === 1) {
+        } else if (this.selectedNodes.length === 1) {
             const { space } = this.config;
             // 添加btn
             if (!data.btn) {
@@ -506,13 +432,12 @@ export default class Mindmap {
             }
             // 设置新增节点为选中节点
             data.node.cancelNode();
-            this.selected_nodes = [];
+            this.selectedNodes = [];
             newData.node.selectNode();
             // 同时进入编辑节点名字状态
             newData.node.editName();
             this.is_editing_text = true;
-            this.selected_nodes.push(newData);
-            this.onSelectedNodesChange(this.selected_nodes);
+            this.selectedNodes.push(newData);
             this._updateNodes(newData);
         } else {
             this.onError("新增节点, 只能选中一个节点");
@@ -528,7 +453,7 @@ export default class Mindmap {
         if (nodes) {
             needDeleteNodes = nodes;
         } else {
-            needDeleteNodes = this.selected_nodes;
+            needDeleteNodes = this.selectedNodes;
         }
         if (needDeleteNodes.length === 0) {
             this.onError("请先选中节点");
@@ -586,8 +511,7 @@ export default class Mindmap {
                 data.fatherNode.btn = undefined;
                 data.fatherNode.lineBeforeBtn = undefined;
             }
-            this.selected_nodes = [];
-            this.onSelectedNodesChange(this.selected_nodes);
+            this.selectedNodes = [];
             data.is_deleted = true;
             // 只有删除原本属于图谱中的节点才会更新到this.updated_nodes, 新增的节点, 删除后不会添加到this.updated_nodes中
             if (!data.is_new_add && is_updated) {
@@ -605,33 +529,25 @@ export default class Mindmap {
 
     // 点击节点
     onRectNodeClick(e, data) {
-        const i = findIndex(this.selected_nodes, (n) => n.id === data.id);
+        const i = findIndex(this.selectedNodes, (n) => n.id === data.id);
         if (i === -1) {
-            if (this.canMutiSelect) {
-                data.node.selectNode();
-                this.selected_nodes.push(data);
-            } else {
-                this.selected_nodes.forEach((n) => {
-                    n.node.cancelNode();
-                });
-                data.node.selectNode();
-                this.selected_nodes = [data];
-            }
+            this.selectedNodes.forEach((n) => {
+                n.node.cancelNode();
+            });
+            data.node.selectNode();
+            this.selectedNodes = [data];
         } else {
             data.node.cancelNode();
-            this.selected_nodes.splice(i, 1);
+            this.selectedNodes.splice(i, 1);
         }
         this.onNodeClick(e);
-        this.onSelectedNodesChange(this.selected_nodes);
     }
 
     // 鼠标右击节点
     onContentMenuClick(e, data) {
         this.cancelSelected();
         data.node.selectNode();
-        this.selected_nodes.push(data);
-        this.onSelectedNodesChange(this.selected_nodes);
-        this.onNodeContentMenuClick(e, data);
+        this.selectedNodes.push(data);
     }
 
     // 节点文本改变事件
@@ -666,7 +582,6 @@ export default class Mindmap {
             });
         };
         fn(data);
-        this.onNodeTextChange(data);
         this._updateNodes(data);
         this.is_editing_text = false;
     }
@@ -677,16 +592,11 @@ export default class Mindmap {
         if (this.dragSourceNode && this.dragSourceNode.id !== data.id) {
             this.dragTargetNode = data;
         }
-        if (this.viewport.getIsSelecting()) {
-            return;
-        }
-        this.onNodeMouseOver(e, data);
     }
 
     // 鼠标离开节点
     onMouseOut(e, data) {
         this.viewport.setIsHoverNode(false);
-        this.onNodeMouseOut(e, data);
         this.dragTargetNode = null;
     }
 
@@ -760,15 +670,12 @@ export default class Mindmap {
         fn(source, target);
         const newData = cloneDeep(source);
         newData.fatherNode = target;
-        newData.parent_id = target.id;
+        newData.pid = target.id;
         this._updateNodes(newData);
     }
 
     _onNodeDoubleClick(e, data) {
         this.is_editing_text = true;
-        if (this.readonly) {
-            this.onNodeDoubleClick(e, data);
-        }
     }
 
     // 节点
@@ -783,13 +690,12 @@ export default class Mindmap {
             readonly: this.readonly,
             config: this.config,
             onNodeClick: this.onRectNodeClick.bind(this),
-            onNodeContentMenuClick: this.onContentMenuClick.bind(this),
             onTextChange: this.onTextChange.bind(this),
-            onNodeMouseOver: this.onMouseOver.bind(this),
-            onNodeMouseOut: this.onMouseOut.bind(this),
             onNodeDoubleClick: this._onNodeDoubleClick.bind(this),
             onNodeMouseDown: this.onNodeMouseDown.bind(this),
             onNodeMouseUp: this.onNodeMouseUp.bind(this),
+            onNodeMouseEnter: this.onMouseOver.bind(this),
+            onNodeMouseLeave: this.onMouseOut.bind(this),
         });
         return node;
     }
@@ -865,27 +771,16 @@ export default class Mindmap {
             scale: animation.switch ? [0, 0] : [1, 1],
             origin: this.data.childOrigin,
         });
-        if (this.data.children && this.data.children.length > 0) {
-            // 收起按钮
-            const unfoldBtn = this._getBtn(
-                this.data.childOrigin[0],
-                this.data.childOrigin[1],
-                this.data,
-                1
-            );
-            this.rootGroup.add(unfoldBtn.getBtn());
-            this.data.btn = unfoldBtn;
-        } else {
-            // 展开按钮
-            const foldBtn = this._getBtn(
-                this.data.childOrigin[0],
-                this.data.childOrigin[1],
-                this.data,
-                0
-            );
-            this.rootGroup.add(foldBtn.getBtn());
-            this.data.btn = foldBtn;
-        }
+
+        // 按钮
+        const btn = this._getBtn(
+            this.data.childOrigin[0],
+            this.data.childOrigin[1],
+            this.data,
+            this.data.children && this.data.children.length > 0 ? 1 : 0
+        );
+        this.rootGroup.add(btn.getBtn());
+        this.data.btn = btn;
         // 根节点右侧线起始坐标
         this.data.lineStartPos = { x: cx + rootW / 2, y: cy };
         // ******** 绘制子节点
@@ -1033,7 +928,7 @@ export default class Mindmap {
         if (!data) {
             return;
         }
-        let father_data = this.findData(data.parent_id);
+        let father_data = this.findData(data.pid);
         if (!father_data) {
             father_data = this.data;
         } // 没有父节点 视为在根节点上添加data节点
@@ -1075,30 +970,28 @@ export default class Mindmap {
 
     // 取消选中状态
     cancelSelected() {
-        if (this.selected_nodes.length > 0) {
-            this.selected_nodes.forEach((n) => {
+        if (this.selectedNodes.length > 0) {
+            this.selectedNodes.forEach((n) => {
                 n.node.cancelNode();
             });
-            this.selected_nodes = [];
-            this.onSelectedNodesChange(this.selected_nodes);
+            this.selectedNodes = [];
         }
     }
 
     // 选择整个分支
     selectBranch() {
-        if (this.selected_nodes.length === 0) {
+        if (this.selectedNodes.length === 0) {
             this.onError("请选择节点");
-        } else if (this.selected_nodes.length === 1) {
-            const data = this.selected_nodes[0];
+        } else if (this.selectedNodes.length === 1) {
+            const data = this.selectedNodes[0];
             const fn = (tree) => {
                 tree.children.forEach((t) => {
                     t.node.selectNode();
-                    this.selected_nodes.push(t);
+                    this.selectedNodes.push(t);
                     fn(t);
                 });
             };
             fn(data);
-            this.onSelectedNodesChange(this.selected_nodes);
         } else {
             this.onError("只能选择一个节点");
         }
@@ -1110,13 +1003,12 @@ export default class Mindmap {
             tree.children.forEach((t) => {
                 if (t.is_selected) {
                     t.node.selectNode();
-                    this.selected_nodes.push(t);
+                    this.selectedNodes.push(t);
                 }
                 fn(t);
             });
         };
         fn(this.data);
-        this.onSelectedNodesChange(this.selected_nodes);
     }
 
     selectNodeById(id) {
@@ -1124,18 +1016,17 @@ export default class Mindmap {
             tree.children.forEach((t) => {
                 if (t.id === id) {
                     t.node.selectNode();
-                    this.selected_nodes.push(t);
+                    this.selectedNodes.push(t);
                 } else if (
-                    this.selected_nodes.filter((item) => item.id === t.id)
+                    this.selectedNodes.filter((item) => item.id === t.id)
                 ) {
                     t.node.cancelNode();
-                    this.selected_nodes = [];
+                    this.selectedNodes = [];
                 }
                 fn(t);
             });
         };
         fn(this.data);
-        this.onSelectedNodesChange(this.selected_nodes);
     }
 
     // 编辑名字
@@ -1143,10 +1034,10 @@ export default class Mindmap {
         if (this.readonly) {
             return;
         }
-        if (this.selected_nodes.length === 0) {
+        if (this.selectedNodes.length === 0) {
             this.onError("请选择节点");
-        } else if (this.selected_nodes.length === 1) {
-            const data = this.selected_nodes[0];
+        } else if (this.selectedNodes.length === 1) {
+            const data = this.selectedNodes[0];
             data.node.editName(e);
             this.is_editing_text = true;
         } else {
@@ -1166,6 +1057,5 @@ export default class Mindmap {
         this.zr && this.zr.dispose();
         this.viewport && this.viewport.dispose();
         document.removeEventListener("keydown", this._onKeyDown);
-        document.removeEventListener("keyup", this._onKeyUp);
     }
 }
