@@ -1,6 +1,4 @@
 import zrender from "zrender";
-import findIndex from "lodash/findIndex";
-import cloneDeep from "lodash/cloneDeep";
 import Node from "./node";
 import Line from "./line";
 import Btn from "./btn";
@@ -37,11 +35,11 @@ export default class Mindmap {
         // 普通矩形
         const normalRect = {
             w: 50,
-            h: 40,
+            h: 30,
             bg: "#F3F7F7",
             textColor: "#00474F",
-            fontSize: 16,
-            borderWidth: 4,
+            fontSize: 14,
+            borderWidth: 3,
             hoverBorderColor: "#C1F3F0", // hover时边框颜色
             clickBorderColor: "#5CDBD3", // 点击选中时边框颜色
         };
@@ -59,14 +57,14 @@ export default class Mindmap {
             textPadding: 8,
             fontFamily: "PingFangSC-Semibold PingFang SC",
             fontWeight: 600,
-            fontSize: 16,
+            fontSize: 14,
             rootRect: {
                 // 跟节点矩形
                 w: 80,
-                h: 58,
+                h: 40,
                 bg: "#5CDBD3",
                 textColor: "#fff",
-                fontSize: 22,
+                fontSize: 20,
                 borderWidth: 4,
                 hoverBorderColor: "#C1F3F0", // hover时边框颜色
                 clickBorderColor: "#13C2C2", // 点击选中时边框颜色
@@ -99,9 +97,9 @@ export default class Mindmap {
         });
         // 设置视野
         this.viewport = Viewport({
-            dom: this.container,
+            container: this.container,
             rootGroup: this.rootGroup,
-            zrd: this.zr,
+            zr: this.zr,
             onMouseDown: this._onMouseDown,
             onZoom: this.onZoom,
         });
@@ -241,8 +239,7 @@ export default class Mindmap {
         if (isSilbing) {
             // 兄弟节点对本节点的影响
             const i =
-                findIndex(
-                    targetData.fatherNode.children,
+                targetData.fatherNode.children.findIndex(
                     (n) => n.id === targetData.id
                 ) + 1;
             let silbingNodeNum = 0;
@@ -352,8 +349,7 @@ export default class Mindmap {
             } else {
                 const newData = this._addNode(data, true, null);
                 const i =
-                    findIndex(
-                        data.fatherNode.children,
+                    data.fatherNode.children.findIndex(
                         (n) => n.id === data.id
                     ) + 1;
                 data.fatherNode.children.splice(i, 0, newData);
@@ -482,8 +478,7 @@ export default class Mindmap {
             if (data.node.placeholderRect) {
                 data.fatherNode.group.remove(data.node.placeholderRect);
             }
-            const i = findIndex(
-                data.fatherNode.children,
+            const i = data.fatherNode.children.findIndex(
                 (n) => n.id === data.id
             );
             data.fatherNode.children.splice(i, 1);
@@ -518,7 +513,7 @@ export default class Mindmap {
 
     // 点击节点
     onRectNodeClick(e, data) {
-        const i = findIndex(this.selectedNodes, (n) => n.id === data.id);
+        const i = this.selectedNodes.findIndex((n) => n.id === data.id);
         if (i === -1) {
             this.selectedNodes.forEach((n) => {
                 n.node.cancelNode();
@@ -592,12 +587,10 @@ export default class Mindmap {
             return;
         }
         if (this.dragSourceNode && this.dragTargetNode) {
-            if (
-                this.dragTargetNode.children.length > 0 &&
-                this.dragTargetNode.btn &&
-                this.dragTargetNode.btn.type === 0
-            ) {
-                this.onError("请先展开目标节点");
+            const i = this.dragTargetNode.children.findIndex(
+                (n) => n.id === this.dragSourceNode.id
+            );
+            if (i > -1) {
                 this.dragSourceNode.node.onMouseUp();
                 return;
             }
@@ -649,9 +642,6 @@ export default class Mindmap {
             sou.children.forEach((s) => fn(s, newData));
         };
         fn(source, target);
-        const newData = cloneDeep(source);
-        newData.fatherNode = target;
-        newData.pid = target.id;
     }
 
     _onNodeDoubleClick(e, data) {
@@ -662,6 +652,7 @@ export default class Mindmap {
     _getNode({ x, y, w, h, data }) {
         const node = new Node({
             container: this.container,
+            rootGroup: this.rootGroup,
             x,
             y,
             w,

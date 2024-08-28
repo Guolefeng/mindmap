@@ -4,7 +4,8 @@
 import zrender from "zrender";
 export default class Node {
     constructor({
-        container = null, // 脑图容器
+        container,
+        rootGroup,
         x = 0,
         y = 0,
         w = 80,
@@ -21,6 +22,7 @@ export default class Node {
         onNodeMouseLeave = () => {},
     }) {
         this.container = container;
+        this.rootGroup = rootGroup;
         this.x = x;
         this.y = y;
         this.w = w;
@@ -345,11 +347,14 @@ export default class Node {
         }
         this.name = this.data.name;
         const clientRect = this.container.getBoundingClientRect();
+        const { position, scale } = this.rootGroup;
+        const [offsetX, offsetY] = position;
+        const [scaleX, scaleY] = scale;
         const rect = {
-            x: this.x + clientRect.left,
-            y: this.y + clientRect.top,
-            w: this.w,
-            h: this.h,
+            x: this.x + (clientRect.left + offsetX) * scaleX,
+            y: this.y + (clientRect.top + offsetY) * scaleY,
+            w: this.w * scaleX,
+            h: this.h * scaleY,
         };
         this._generateInputDom(rect);
     }
