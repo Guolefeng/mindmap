@@ -196,7 +196,7 @@ export default class Node {
                 return;
             }
             if (e.event.button !== 0) {
-                this.group.attr("draggable", !this.readonly);
+                this.group.attr("draggable", false);
                 return;
             }
             this.onMouseUp();
