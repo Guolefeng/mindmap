@@ -75,7 +75,7 @@ export default class Mindmap {
             lineWidth: 4, // 节点间线宽
             lineColor: "#006D75", // 节点间线颜色
             symbolLineWidth: 2, // 展开收起按钮线宽
-            symbolRadius: 10, // 展开时候按钮半径
+            symbolRadius: 8, // 展开时候按钮半径
             nodeAreaHeight: normalRect.h + space.y * 2, // 节点区域高度
             animation: {
                 // 动画

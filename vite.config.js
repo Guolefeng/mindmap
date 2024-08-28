@@ -16,7 +16,7 @@ export default {
             },
         },
         lib: {
-            entry: "src/index.js", // 指定入口文件
+            entry: "src/map/index.js", // 指定入口文件
             name: "mindmap", // 输出的全局变量名称
             fileName: (format) => `mindmap.${format}.js`, // 输出文件名
         },

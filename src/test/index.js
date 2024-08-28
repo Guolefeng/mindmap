@@ -1,5 +1,7 @@
-import Mindmap from "./map";
+import Mindmap from "../../build/mindmap.es.js";
+// import MindMap from "../map/index.js";
 import test from "./test";
+
 let map;
 const initMap = () => {
     if (map) {
