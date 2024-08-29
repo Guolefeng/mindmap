@@ -1,7 +1,20 @@
-使用方式：
+## 这个工具支持两种模式：
+
+-   **ES Module**: `build/mindmap.es.js`
+-   **UMD**: `build/mindmap.umd.js`
+
+## Install
+
+```
+$ npm install --save mindmaple
+```
+
+## Usage
 
 ```js
-map = new Mindmap({
+import Mindmap from "mindmaple";
+
+const map = new Mindmap({
     container: document.getElementById("app"),
     data: {
         name: "根节点",
@@ -86,20 +99,12 @@ map = new Mindmap({
 });
 ```
 
-### Project Setup
+## API
 
-```sh
-npm install
-```
+## Related
 
-### Compile and Hot-Reload for Development
+-   [cat](https://github.com/Guolefeng/cat) - 简单的打字跟随桌面系统
 
-```sh
-npm run dev
-```
+## License
 
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+ISC © [guolefeng](https://guolefeng.com)
