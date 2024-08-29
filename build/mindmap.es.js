@@ -15321,6 +15321,7 @@ class Mindmap {
     this.dragSourceNode = null;
     this.dragTargetNode = null;
     this.isEditingText = false;
+    this.render();
   }
   _setConfig() {
     const w = this.container.clientWidth;
