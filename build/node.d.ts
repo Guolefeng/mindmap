@@ -1,0 +1,58 @@
+import { ITree, IConfig, IRect } from './types';
+interface IParams {
+    container: HTMLElement;
+    rootGroup: any;
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+    data: ITree;
+    readonly: boolean;
+    config: IConfig;
+    onNodeClick: (e: any, data: ITree) => void;
+    onTextChange: (data: ITree) => void;
+    onNodeDoubleClick: (e: any, data: ITree) => void;
+    onNodeMouseUp: (e: any, data: ITree) => void;
+    onNodeMouseDown: (e: any, data: ITree) => void;
+    onNodeMouseEnter: (e: any, data: ITree) => void;
+    onNodeMouseLeave: () => void;
+}
+export default class Node {
+    container: HTMLElement;
+    rootGroup: any;
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+    level: number;
+    data: ITree;
+    readonly: boolean;
+    config: IConfig;
+    group: any;
+    rect: any;
+    placeholderRect: any;
+    moveable: boolean;
+    isSelected: boolean;
+    timer: any;
+    inputDom: HTMLInputElement;
+    onNodeClick: (e: any, data: ITree) => void;
+    onTextChange: (data: ITree) => void;
+    onNodeDoubleClick: (e: any, data: ITree) => void;
+    onNodeMouseDown: (e: any, data: ITree) => void;
+    onNodeMouseUp: (e: any, data: ITree) => void;
+    onNodeMouseEnter: (e: any, data: ITree) => void;
+    onNodeMouseLeave: (e: any, data: ITree) => void;
+    constructor({ container, rootGroup, x, y, w, h, data, readonly, config, onNodeClick, onTextChange, onNodeDoubleClick, onNodeMouseDown, onNodeMouseUp, onNodeMouseEnter, onNodeMouseLeave, }: IParams);
+    _init(): void;
+    onMouseUp(): void;
+    _getPlaceholderRect(): any;
+    _generateInputDom({ x, y, w, h }: IRect): void;
+    selectNode(): void;
+    cancelNode(): void;
+    translate(dx?: number, dy?: number): void;
+    editName(): void;
+    setName(text: string): void;
+    setWidth(w: number): void;
+    getNode(): any;
+}
+export {};

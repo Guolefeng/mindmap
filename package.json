@@ -1,24 +1,31 @@
 {
     "name": "mindmaple",
-    "version": "1.0.0",
+    "private": false,
+    "version": "1.0.2",
     "description": "mindmap, 脑图, 思维导图, 脑图, 思维导图, 思维导图",
     "scripts": {
         "dev": "vite",
         "build": "vite build",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
+    "type": "module",
     "author": "lezi",
     "license": "ISC",
     "main": "./build/mindmap.umd.js",
     "module": "./build/mindmap.es.js",
+    "types": "./build/index.d.ts",
     "exports": {
         ".": {
             "import": "./build/mindmap.es.js",
-            "require": "./build/mindmap.umd.js"
+            "require": "./build/mindmap.umd.js",
+            "types": "./build/index.d.ts"
         }
     },
     "devDependencies": {
-        "vite": "^5.4.2"
+        "@types/zrender": "^4.0.6",
+        "typescript": "^5.5.4",
+        "vite": "^5.4.2",
+        "vite-plugin-dts": "^4.0.3"
     },
     "dependencies": {
         "zrender": "^4.3.2"

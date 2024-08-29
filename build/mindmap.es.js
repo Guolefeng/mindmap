@@ -1,11 +1,5 @@
-var __defProp = Object.defineProperty;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
-function getDefaultExportFromCjs(x) {
-  return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
-}
-var zrender$2 = {};
 var zrender$1 = {};
+var zrender = {};
 var idStart = 2311;
 function _default$f() {
   return idStart++;
@@ -8225,11 +8219,11 @@ ZRender.prototype = {
     delInstance(this.id);
   }
 };
-zrender$1.version = version;
-zrender$1.init = init;
-zrender$1.dispose = dispose;
-zrender$1.getInstance = getInstance;
-zrender$1.registerPainter = registerPainter;
+zrender.version = version;
+zrender.init = init;
+zrender.dispose = dispose;
+zrender.getInstance = getInstance;
+zrender.registerPainter = registerPainter;
 var _export = {};
 var path$1 = {};
 var curve = {};
@@ -13296,14 +13290,14 @@ function requirePainter$1() {
     this.gradientManager = new GradientManager(zrId, svgRoot);
     this.clipPathManager = new ClippathManager(zrId, svgRoot);
     this.shadowManager = new ShadowManager(zrId, svgRoot);
-    var viewport = document.createElement("div");
-    viewport.style.cssText = "overflow:hidden;position:relative";
+    var viewport2 = document.createElement("div");
+    viewport2.style.cssText = "overflow:hidden;position:relative";
     this._svgDom = svgDom;
     this._svgRoot = svgRoot;
     this._backgroundRoot = bgRoot;
-    this._viewport = viewport;
-    root.appendChild(viewport);
-    viewport.appendChild(svgDom);
+    this._viewport = viewport2;
+    root.appendChild(viewport2);
+    viewport2.appendChild(svgDom);
     this.resize(opts.width, opts.height);
     this._visibleList = [];
   };
@@ -13468,18 +13462,18 @@ function requirePainter$1() {
       }
     },
     resize: function(width, height) {
-      var viewport = this._viewport;
-      viewport.style.display = "none";
+      var viewport2 = this._viewport;
+      viewport2.style.display = "none";
       var opts = this._opts;
       width != null && (opts.width = width);
       height != null && (opts.height = height);
       width = this._getSize(0);
       height = this._getSize(1);
-      viewport.style.display = "";
+      viewport2.style.display = "";
       if (this._width !== width || this._height !== height) {
         this._width = width;
         this._height = height;
-        var viewportStyle = viewport.style;
+        var viewportStyle = viewport2.style;
         viewportStyle.width = width + "px";
         viewportStyle.height = height + "px";
         var svgRoot = this._svgDom;
@@ -13548,7 +13542,7 @@ function requireSvg() {
   if (hasRequiredSvg) return svg;
   hasRequiredSvg = 1;
   requireGraphic$1();
-  var _zrender = zrender$1;
+  var _zrender = zrender;
   var registerPainter2 = _zrender.registerPainter;
   var Painter2 = requirePainter$1();
   registerPainter2("svg", Painter2);
@@ -14506,14 +14500,14 @@ function requireVml() {
   if (hasRequiredVml) return vml;
   hasRequiredVml = 1;
   requireGraphic();
-  var _zrender = zrender$1;
+  var _zrender = zrender;
   var registerPainter2 = _zrender.registerPainter;
   var Painter2 = requirePainter();
   registerPainter2("vml", Painter2);
   return vml;
 }
 (function(exports) {
-  var _zrender = zrender$1;
+  var _zrender = zrender;
   (function() {
     for (var key in _zrender) {
       if (_zrender == null || !_zrender.hasOwnProperty(key) || key === "default" || key === "__esModule") return;
@@ -14529,8 +14523,7 @@ function requireVml() {
   })();
   requireSvg();
   requireVml();
-})(zrender$2);
-const zrender = /* @__PURE__ */ getDefaultExportFromCjs(zrender$2);
+})(zrender$1);
 class Node {
   constructor({
     container,
@@ -14578,11 +14571,11 @@ class Node {
   }
   _init() {
     const { radius, rootRect, normalRect, fontFamily, fontWeight } = this.config;
-    this.group = new zrender.Group({
+    this.group = new zrender$1.Group({
       draggable: false
     });
     let textOffset = [0, 0];
-    this.rect = new zrender.Rect({
+    this.rect = new zrender$1.Rect({
       shape: {
         r: radius,
         x: this.x,
@@ -14619,7 +14612,7 @@ class Node {
       this.onNodeDoubleClick(e, this.data);
       e.event.preventDefault();
       e.event.stopPropagation();
-      this.editName(e);
+      this.editName();
     });
     this.group.on("click", (e) => {
       this.timer && clearTimeout(this.timer);
@@ -14694,7 +14687,7 @@ class Node {
       }
       this.group.attr("draggable", false);
       this.onMouseUp();
-      this.onNodeMouseUp(this.data);
+      this.onNodeMouseUp(e, this.data);
     });
   }
   onMouseUp() {
@@ -14721,7 +14714,7 @@ class Node {
   }
   _getPlaceholderRect() {
     const { rootRect, radius } = this.config;
-    return new zrender.Rect({
+    return new zrender$1.Rect({
       shape: {
         r: radius,
         x: this.x,
@@ -14743,7 +14736,7 @@ class Node {
       return;
     }
     const { fontSize, fontFamily, radius, normalRect } = this.config;
-    const input = document.createElement("input");
+    let input = document.createElement("input");
     input.style = `
             position: fixed;
             left: ${x}px;
@@ -14834,11 +14827,10 @@ class Node {
       });
     }
   }
-  editName(e) {
+  editName() {
     if (this.readonly) {
       return;
     }
-    this.name = this.data.name;
     const clientRect = this.container.getBoundingClientRect();
     const { position, scale } = this.rootGroup;
     const [offsetX, offsetY] = position;
@@ -14901,7 +14893,7 @@ class Line {
   }
   _init() {
     const { lineWidth, lineColor, radius } = this.config;
-    const Line2 = zrender.Path.extend({
+    const Line2 = zrender$1.Path.extend({
       shape: {
         x1: 0,
         y1: 0,
@@ -15001,7 +14993,7 @@ class Btn {
   }
   _init() {
     const { symbolLineWidth, symbolRadius, lineColor, normalRect } = this.config;
-    const Button = zrender.Path.extend({
+    const Button = zrender$1.Path.extend({
       shape: {
         x: 0,
         y: 0,
@@ -15117,7 +15109,7 @@ class Btn {
     return this.btn;
   }
 }
-const Viewport = ({
+const viewport = ({
   container,
   rootGroup,
   zr,
@@ -15229,7 +15221,7 @@ const Viewport = ({
   };
 };
 const getTextWidth = (text2, font) => {
-  const canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
+  const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d");
   context.font = font;
   const metrics = context.measureText(text2);
@@ -15249,6 +15241,7 @@ const getEndNodeNum = (tree) => {
 };
 const uuid = () => (/* @__PURE__ */ new Date()).getTime();
 class Mindmap {
+  // 视口
   constructor({
     container,
     data,
@@ -15260,7 +15253,7 @@ class Mindmap {
     onError = () => {
     }
   }) {
-    __publicField(this, "_onKeyDown", (e) => {
+    this._onKeyDown = (e) => {
       switch (e.keyCode) {
         case 9:
           if (this.readonly) {
@@ -15288,12 +15281,11 @@ class Mindmap {
           }
           break;
       }
-    });
-    // 点击屏幕其他范围
-    __publicField(this, "_onMouseDown", (e) => {
+    };
+    this._onMouseDown = () => {
       this.cancelSelected();
-    });
-    __publicField(this, "findData", (id) => {
+    };
+    this.findData = (id) => {
       const fn = (n) => {
         for (let i = 0; i < n.children.length; i++) {
           if (!n.children || n.children.length === 0) {
@@ -15308,7 +15300,7 @@ class Mindmap {
       };
       const d = fn(this.data);
       return d ? d : null;
-    });
+    };
     this.container = container;
     this.data = data;
     this.readonly = readonly;
@@ -15391,14 +15383,14 @@ class Mindmap {
   }
   _init() {
     const { cx, cy } = this.config;
-    this.zr = new zrender.init(this.container, {
+    this.zr = new zrender$1.init(this.container, {
       // renderer: 'svg',
     });
-    this.rootGroup = new zrender.Group({
+    this.rootGroup = new zrender$1.Group({
       position: [0, 0],
       origin: [cx, cy]
     });
-    this.viewport = Viewport({
+    this.viewport = viewport({
       container: this.container,
       rootGroup: this.rootGroup,
       zr: this.zr,
@@ -15474,7 +15466,7 @@ class Mindmap {
       newData.pid = targetData.fatherNode.id;
     } else {
       if (!targetData.group) {
-        targetData.group = new zrender.Group({
+        targetData.group = new zrender$1.Group({
           origin: targetData.childOrigin
         });
       }
@@ -15783,7 +15775,7 @@ class Mindmap {
     }
   }
   // 鼠标离开节点
-  onMouseOut(e, data) {
+  onMouseOut() {
     this.viewport.setIsHoverNode(false);
     this.dragTargetNode = null;
   }
@@ -15889,11 +15881,11 @@ class Mindmap {
     return new Line({ x1, y1, x2, y2, config: this.config });
   }
   // 计算文字宽度
-  _getTextWidth(data, type) {
+  _getTextWidth(data, level) {
     const { fontFamily, rootRect, normalRect, textPadding } = this.config;
     const w = (getTextWidth(
       data.name,
-      `${type === 0 ? rootRect.fontSize : normalRect.fontSize}px ${fontFamily}`
+      `${level === 0 ? rootRect.fontSize : normalRect.fontSize}px ${fontFamily}`
     ) || normalRect.w) + textPadding * 2;
     return w;
   }
@@ -15928,7 +15920,7 @@ class Mindmap {
     });
     this.rootGroup.add(lineBeforeBtn.getLine());
     this.data.lineBeforeBtn = lineBeforeBtn;
-    this.data.group = new zrender.Group({
+    this.data.group = new zrender$1.Group({
       scale: animation.switch ? [0, 0] : [1, 1],
       origin: this.data.childOrigin
     });
@@ -15999,7 +15991,7 @@ class Mindmap {
         n.childOrigin = [lineStartPos.x + space.x / 2, lineStartPos.y];
         n.childStartY = y + h / 2 - nodeEndNum * nodeAreaHeight / 2;
         if (n.children.length > 0) {
-          const branchGroup = new zrender.Group({
+          const branchGroup = new zrender$1.Group({
             // scale: animation.switch ? [0, 0] : [1, 1],
             origin: n.childOrigin
           });
@@ -16053,7 +16045,7 @@ class Mindmap {
     }
   }
   // 编辑名字
-  editName(e) {
+  editName() {
     if (this.readonly) {
       return;
     }
@@ -16061,7 +16053,7 @@ class Mindmap {
       this.onError("请选择节点");
     } else if (this.selectedNodes.length === 1) {
       const data = this.selectedNodes[0];
-      data.node.editName(e);
+      data.node.editName();
       this.isEditingText = true;
     } else {
       this.onError("只能选择一个节点");

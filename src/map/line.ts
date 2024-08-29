@@ -1,9 +1,26 @@
 /**
  * @desc 节点之间连线
  */
-import zrender from "zrender";
+import * as zrender from "zrender";
+import type { IConfig } from "./types";
+
+interface IParams {
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+    config: IConfig;
+}
+
 export default class Line {
-    constructor({ x1 = 0, y1 = 0, x2 = 0, y2 = 0, config = {} }) {
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+    config: IConfig;
+    line: any;
+
+    constructor({ x1 = 0, y1 = 0, x2 = 0, y2 = 0, config = {} }: IParams) {
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
@@ -14,6 +31,7 @@ export default class Line {
 
     _init() {
         const { lineWidth, lineColor, radius } = this.config;
+        // @ts-ignore
         const Line = zrender.Path.extend({
             shape: {
                 x1: 0,
@@ -23,7 +41,7 @@ export default class Line {
                 interval: 0,
                 radius: 0,
             },
-            buildPath: (path, shape) => {
+            buildPath: (path: any, shape: any) => {
                 const x1 = shape.x1;
                 const y1 = shape.y1;
                 const x2 = shape.x2;
@@ -64,11 +82,11 @@ export default class Line {
         });
     }
 
-    setConfig(config) {
+    setConfig(config: IConfig) {
         this.config = config;
     }
 
-    translate(dx1, dy1, dx2, dy2) {
+    translate(dx1: number, dy1: number, dx2: number, dy2: number) {
         const { animation } = this.config;
         this.x1 += dx1;
         this.y1 += dy1;
@@ -97,7 +115,7 @@ export default class Line {
         }
     }
 
-    setColor(color) {
+    setColor(color: string) {
         this.line.attr("style", {
             stroke: color,
         });

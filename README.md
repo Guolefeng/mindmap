@@ -1,4 +1,4 @@
-## 这个工具支持两种模式：
+## mode：
 
 -   **ES Module**: `build/mindmap.es.js`
 -   **UMD**: `build/mindmap.umd.js`

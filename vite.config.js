@@ -1,4 +1,8 @@
-export default {
+import { defineConfig } from "vite";
+import dts from "vite-plugin-dts";
+
+export default defineConfig({
+    plugins: [dts()],
     build: {
         minify: "terser", // 打包结果是否minify
         target: "es2015",
@@ -16,9 +20,9 @@ export default {
             },
         },
         lib: {
-            entry: "src/map/index.js", // 指定入口文件
+            entry: "src/map/index.ts", // 指定入口文件
             name: "mindmap", // 输出的全局变量名称
             fileName: (format) => `mindmap.${format}.js`, // 输出文件名
         },
     },
-};
+});

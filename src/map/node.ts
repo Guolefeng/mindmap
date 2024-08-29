@@ -1,8 +1,54 @@
 /**
  * @desc 脑图中的节点
  */
-import zrender from "zrender";
+import * as zrender from "zrender";
+import type { ITree, IConfig, IRect } from "./types";
+
+interface IParams {
+    container: HTMLElement;
+    rootGroup: any;
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+    data: ITree;
+    readonly: boolean;
+    config: IConfig;
+    onNodeClick: (e: any, data: ITree) => void;
+    onTextChange: (data: ITree) => void;
+    onNodeDoubleClick: (e: any, data: ITree) => void;
+    onNodeMouseUp: (e: any, data: ITree) => void;
+    onNodeMouseDown: (e: any, data: ITree) => void;
+    onNodeMouseEnter: (e: any, data: ITree) => void;
+    onNodeMouseLeave: () => void;
+}
+
 export default class Node {
+    container: HTMLElement;
+    rootGroup: any;
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+    level: number;
+    data: ITree;
+    readonly: boolean;
+    config: IConfig;
+    group: any;
+    rect: any;
+    placeholderRect: any;
+    moveable: boolean;
+    isSelected: boolean;
+    timer: any;
+    inputDom: HTMLInputElement;
+    onNodeClick: (e: any, data: ITree) => void;
+    onTextChange: (data: ITree) => void;
+    onNodeDoubleClick: (e: any, data: ITree) => void;
+    onNodeMouseDown: (e: any, data: ITree) => void;
+    onNodeMouseUp: (e: any, data: ITree) => void;
+    onNodeMouseEnter: (e: any, data: ITree) => void;
+    onNodeMouseLeave: (e: any, data: ITree) => void;
+
     constructor({
         container,
         rootGroup,
@@ -20,7 +66,7 @@ export default class Node {
         onNodeMouseUp = () => {},
         onNodeMouseEnter = () => {},
         onNodeMouseLeave = () => {},
-    }) {
+    }: IParams) {
         this.container = container;
         this.rootGroup = rootGroup;
         this.x = x;
@@ -44,10 +90,12 @@ export default class Node {
     _init() {
         const { radius, rootRect, normalRect, fontFamily, fontWeight } =
             this.config;
+        // @ts-ignore
         this.group = new zrender.Group({
             draggable: false,
         });
         let textOffset = [0, 0];
+        // @ts-ignore
         this.rect = new zrender.Rect({
             shape: {
                 r: radius,
@@ -85,19 +133,19 @@ export default class Node {
             // 根节点除外
             this.placeholderRect = this._getPlaceholderRect();
             this.data.fatherNode.group.add(this.placeholderRect);
-            this.placeholderRect.on("mouseup", (e) => {
+            this.placeholderRect.on("mouseup", (e: any) => {
                 this.onMouseUp();
             });
         }
 
-        this.group.on("dblclick", (e) => {
+        this.group.on("dblclick", (e: any) => {
             this.timer && clearTimeout(this.timer);
             this.onNodeDoubleClick(e, this.data);
             e.event.preventDefault();
             e.event.stopPropagation();
-            this.editName(e);
+            this.editName();
         });
-        this.group.on("click", (e) => {
+        this.group.on("click", (e: any) => {
             this.timer && clearTimeout(this.timer);
             this.timer = setTimeout(() => {
                 e.event.preventDefault();
@@ -105,7 +153,7 @@ export default class Node {
                 this.onNodeClick(e, this.data);
             }, 100);
         });
-        this.group.on("mouseover", (e) => {
+        this.group.on("mouseover", (e: any) => {
             if (!this.isSelected) {
                 this.rect.attr("style", {
                     stroke:
@@ -116,7 +164,7 @@ export default class Node {
             }
             this.onNodeMouseEnter(e, this.data);
         });
-        this.group.on("mouseout", (e) => {
+        this.group.on("mouseout", (e: any) => {
             if (!this.isSelected) {
                 this.rect.attr("style", {
                     stroke: this.level === 0 ? rootRect.bg : normalRect.bg,
@@ -124,7 +172,7 @@ export default class Node {
             }
             this.onNodeMouseLeave(e, this.data);
         });
-        this.group.on("mousedown", (e) => {
+        this.group.on("mousedown", (e: any) => {
             if (this.readonly) {
                 return;
             }
@@ -135,7 +183,7 @@ export default class Node {
             this.group.attr("draggable", true);
             this.onNodeMouseDown(e, this.data);
         });
-        this.group.on("mousemove", (e) => {
+        this.group.on("mousemove", (e: any) => {
             if (this.readonly) {
                 return;
             }
@@ -173,7 +221,7 @@ export default class Node {
                 this.placeholderRect.attr("invisible", false);
             }
         });
-        this.group.on("mouseup", (e) => {
+        this.group.on("mouseup", (e: any) => {
             if (this.readonly) {
                 return;
             }
@@ -182,7 +230,7 @@ export default class Node {
             }
             this.group.attr("draggable", false);
             this.onMouseUp();
-            this.onNodeMouseUp(this.data);
+            this.onNodeMouseUp(e, this.data);
         });
     }
 
@@ -217,6 +265,7 @@ export default class Node {
 
     _getPlaceholderRect() {
         const { rootRect, radius } = this.config;
+        // @ts-ignore
         return new zrender.Rect({
             shape: {
                 r: radius,
@@ -235,13 +284,13 @@ export default class Node {
     }
 
     // 双击生成文本输入框
-    _generateInputDom({ x, y, w, h }) {
+    _generateInputDom({ x, y, w, h }: IRect) {
         if (!x || !y || !w || !h) {
             return;
         }
         const { fontSize, fontFamily, radius, normalRect } = this.config;
         // 编辑框
-        const input = document.createElement("input");
+        let input: any = document.createElement("input");
         input.style = `
             position: fixed;
             left: ${x}px;
@@ -260,7 +309,7 @@ export default class Node {
             background: ${normalRect.bg};
         `;
         input.value = this.data.name;
-        input.onkeyup = (e) => {
+        input.onkeyup = (e: any) => {
             e.stopPropagation();
             e.preventDefault();
             if (e.keyCode === 13) {
@@ -269,7 +318,7 @@ export default class Node {
             }
             this.data.name = e.target.value;
         };
-        input.onblur = (e) => {
+        input.onblur = (e: any) => {
             this.onTextChange(this.data);
             input.autofocus = false;
             document.body.removeChild(input);
@@ -341,11 +390,11 @@ export default class Node {
         }
     }
 
-    editName(e) {
+    editName() {
         if (this.readonly) {
             return;
         }
-        this.name = this.data.name;
+        // this.name = this.data.name;
         const clientRect = this.container.getBoundingClientRect();
         const { position, scale } = this.rootGroup;
         const [offsetX, offsetY] = position;
@@ -359,13 +408,13 @@ export default class Node {
         this._generateInputDom(rect);
     }
 
-    setName(text) {
+    setName(text: string) {
         this.rect.attr("style", {
             text,
         });
     }
 
-    setWidth(w) {
+    setWidth(w: number) {
         if (this.readonly) {
             return;
         }

@@ -2,10 +2,26 @@
  * @desc 图中的按钮
  */
 
-import zrender from "zrender";
+import * as zrender from "zrender";
+import type { ITree, IConfig, IBtnType } from "./types";
+
+interface IParams {
+    x: number;
+    y: number;
+    data: ITree;
+    type?: IBtnType;
+    config: IConfig;
+}
 
 export default class Btn {
-    constructor({ x, y, data, type = 0, config }) {
+    x: number;
+    y: number;
+    data: ITree;
+    type: number; // 0 收齐 1 展开
+    config: IConfig;
+    btn: any;
+
+    constructor({ x, y, data, type = 0, config }: IParams) {
         this.x = x;
         this.y = y;
         this.data = data;
@@ -17,6 +33,7 @@ export default class Btn {
     _init() {
         const { symbolLineWidth, symbolRadius, lineColor, normalRect } =
             this.config;
+        // @ts-ignore
         const Button = zrender.Path.extend({
             shape: {
                 x: 0,
@@ -56,7 +73,7 @@ export default class Btn {
             },
             z: 5,
         });
-        this.btn.on("click", (e) => {
+        this.btn.on("click", (e: any) => {
             if (e.target.shape.type === 0) {
                 if (this.data.group) {
                     this.setType(1);
@@ -78,7 +95,7 @@ export default class Btn {
     }
 
     // 修改按钮类型
-    setType(type) {
+    setType(type: IBtnType) {
         const { animation } = this.config;
         this.type = type;
         this.btn.attr("shape", { type });
@@ -86,7 +103,7 @@ export default class Btn {
             type === 1 &&
             this.data.group &&
             this.data.group.scale &&
-            this.data.group.scale.some((s) => s === 0)
+            this.data.group.scale.some((s: number) => s === 0)
         ) {
             if (animation.switch) {
                 this.data.group.animateTo(
@@ -103,7 +120,7 @@ export default class Btn {
             type === 0 &&
             this.data.group.scale &&
             this.data.group.scale &&
-            this.data.group.scale.some((s) => s === 1)
+            this.data.group.scale.some((s: number) => s === 1)
         ) {
             if (animation.switch) {
                 this.data.group.animateTo(
@@ -119,7 +136,7 @@ export default class Btn {
         }
     }
 
-    translate(dx, dy) {
+    translate(dx: number, dy: number) {
         const { animation } = this.config;
         this.x += dx;
         this.y += dy;

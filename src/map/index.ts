@@ -1,11 +1,36 @@
-import zrender from "zrender";
+import * as zrender from "zrender";
 import Node from "./node";
 import Line from "./line";
 import Btn from "./btn";
-import Viewport from "./viewport";
+import { viewport } from "./viewport";
 import { getTextWidth, getEndNodeNum, uuid } from "./utils";
+import type { ITree, IRect, IConfig, IBtnType, IPoint2 } from "./types";
+
+interface IParams {
+    container: HTMLElement; // 容器
+    data: ITree; // 脑图数据
+    readonly?: boolean; // 脑图是否只读
+    onNodeClick?: (data: ITree) => void; // 单击节点
+    onZoom?: (scale: number) => void; // 缩放回调
+    onError?: (msg: string) => void; // 警告或错误通知回调
+}
 
 export default class Mindmap {
+    container: HTMLElement; // 容器
+    data: ITree; // 脑图数据
+    readonly: boolean; // 脑图是否只读
+    onNodeClick: (data: ITree) => void; // 单击节点
+    onZoom: (scale: number) => void; // 缩放回调
+    onError: (msg: string) => void; // 警告或错误通知回调
+    config: IConfig; // 配置项
+    selectedNodes: ITree[]; // 选中的节点列表
+    dragSourceNode: ITree | null; // 拖拽节点
+    dragTargetNode: ITree | null; // 拖拽节点到目标节点
+    isEditingText: boolean; // 是否处于文本编辑状态
+    rootGroup: any; // 根 Group
+    zr: any; // ZRender 实例
+    viewport: any; // 视口
+
     constructor({
         container,
         data,
@@ -13,7 +38,7 @@ export default class Mindmap {
         onNodeClick = () => {},
         onZoom = () => {},
         onError = () => {},
-    }) {
+    }: IParams) {
         this.container = container; // 容器
         this.data = data; // 脑图数据
         this.readonly = readonly; // 脑图是否只读
@@ -89,15 +114,17 @@ export default class Mindmap {
 
     _init() {
         const { cx, cy } = this.config;
+        // @ts-ignore
         this.zr = new zrender.init(this.container, {
             // renderer: 'svg',
         });
+        // @ts-ignore
         this.rootGroup = new zrender.Group({
             position: [0, 0],
             origin: [cx, cy],
         });
         // 设置视野
-        this.viewport = Viewport({
+        this.viewport = viewport({
             container: this.container,
             rootGroup: this.rootGroup,
             zr: this.zr,
@@ -108,7 +135,7 @@ export default class Mindmap {
         document.addEventListener("keydown", this._onKeyDown);
     }
 
-    _onKeyDown = (e) => {
+    _onKeyDown = (e: any) => {
         switch (e.keyCode) {
             case 9: // tab键事件 新增子节点
                 if (this.readonly) {
@@ -141,12 +168,12 @@ export default class Mindmap {
     };
 
     // 点击屏幕其他范围
-    _onMouseDown = (e) => {
+    _onMouseDown = () => {
         this.cancelSelected();
     };
 
     // 递归调整节点及子节点位置
-    _resetChildPosition(n, dx, dy, notTrans) {
+    _resetChildPosition(n: ITree, dx: number, dy: number, notTrans: boolean) {
         n.node.translate(0, dy);
         n.lineBeforeNode &&
             n.lineBeforeNode.translate(dx, notTrans ? 0 : dy, dx, dy);
@@ -163,9 +190,9 @@ export default class Mindmap {
     }
 
     // 递归调整当前父节点的同级节点的位置
-    _resetSlibingPosition(data, dy) {
+    _resetSlibingPosition(data: ITree, dy: number) {
         if (data.fatherNode) {
-            data.fatherNode.children.forEach((n) => {
+            data.fatherNode.children.forEach((n: ITree) => {
                 if (n.id !== data.id) {
                     if (data.node.y < n.node.y) {
                         // 向下移动节点
@@ -192,11 +219,11 @@ export default class Mindmap {
      * @param {*} newD 将要新增的节点数据
      * @returns 新节点数据
      */
-    _addNode(targetData, isSilbing, newD) {
+    _addNode(targetData: ITree, isSilbing: boolean, newD: ITree | null) {
         const { space, normalRect, nodeAreaHeight } = this.config;
         const newLevel = isSilbing ? targetData.level : targetData.level + 1;
         // 新增节点数据
-        let newData;
+        let newData: any;
         if (newD) {
             newData = {
                 id: newD.id,
@@ -219,6 +246,7 @@ export default class Mindmap {
             newData.pid = targetData.fatherNode.id;
         } else {
             if (!targetData.group) {
+                // @ts-ignore
                 targetData.group = new zrender.Group({
                     origin: targetData.childOrigin,
                 });
@@ -241,11 +269,11 @@ export default class Mindmap {
             // 兄弟节点对本节点的影响
             const i =
                 targetData.fatherNode.children.findIndex(
-                    (n) => n.id === targetData.id
+                    (n: ITree) => n.id === targetData.id
                 ) + 1;
             let silbingNodeNum = 0;
             const silbingNodes = targetData.fatherNode.children.slice(0, i);
-            silbingNodes.forEach((n) => {
+            silbingNodes.forEach((n: ITree) => {
                 silbingNodeNum += getEndNodeNum(n);
             });
             if (silbingNodeNum > 0) {
@@ -351,7 +379,7 @@ export default class Mindmap {
                 const newData = this._addNode(data, true, null);
                 const i =
                     data.fatherNode.children.findIndex(
-                        (n) => n.id === data.id
+                        (n: ITree) => n.id === data.id
                     ) + 1;
                 data.fatherNode.children.splice(i, 0, newData);
                 this._resetSlibingPosition(newData, dy);
@@ -440,7 +468,7 @@ export default class Mindmap {
      * @param {*} nodes 删除节点列表
      * @returns
      */
-    removeNode(nodes) {
+    removeNode(nodes?: ITree[]) {
         if (this.readonly) {
             return;
         }
@@ -480,7 +508,7 @@ export default class Mindmap {
                 data.fatherNode.group.remove(data.node.placeholderRect);
             }
             const i = data.fatherNode.children.findIndex(
-                (n) => n.id === data.id
+                (n: ITree) => n.id === data.id
             );
             data.fatherNode.children.splice(i, 1);
             if (data.fatherNode.children.length === 0) {
@@ -513,7 +541,7 @@ export default class Mindmap {
     }
 
     // 点击节点
-    onRectNodeClick(e, data) {
+    onRectNodeClick(e: any, data: ITree) {
         const i = this.selectedNodes.findIndex((n) => n.id === data.id);
         if (i === -1) {
             this.selectedNodes.forEach((n) => {
@@ -529,7 +557,7 @@ export default class Mindmap {
     }
 
     // 节点文本改变事件
-    onTextChange(data) {
+    onTextChange(data: ITree) {
         if (this.readonly) {
             return;
         }
@@ -546,7 +574,7 @@ export default class Mindmap {
         if (data.lineStartPos) {
             data.lineStartPos.x += dw;
         }
-        const fn = (tree) => {
+        const fn = (tree: ITree) => {
             tree.children.forEach((t) => {
                 t.node.translate(dw, 0);
                 t.lineBeforeNode && t.lineBeforeNode.translate(dw, 0, dw, 0);
@@ -564,7 +592,7 @@ export default class Mindmap {
     }
 
     // 鼠标hover节点
-    onMouseOver(e, data) {
+    onMouseOver(e: any, data: ITree) {
         this.viewport.setIsHoverNode(true);
         if (this.dragSourceNode && this.dragSourceNode.id !== data.id) {
             this.dragTargetNode = data;
@@ -572,18 +600,18 @@ export default class Mindmap {
     }
 
     // 鼠标离开节点
-    onMouseOut(e, data) {
+    onMouseOut() {
         this.viewport.setIsHoverNode(false);
         this.dragTargetNode = null;
     }
 
     // 鼠标点击节点
-    onNodeMouseDown(e, data) {
+    onNodeMouseDown(e: any, data: ITree) {
         this.dragSourceNode = data;
     }
 
     // 按下的鼠标抬起事件
-    onNodeMouseUp(data) {
+    onNodeMouseUp(data: ITree) {
         if (this.readonly) {
             return;
         }
@@ -605,7 +633,7 @@ export default class Mindmap {
     }
 
     // 拖动添加节点
-    addNode(source, target) {
+    addNode(source: ITree, target: ITree) {
         if (this.readonly) {
             return;
         }
@@ -633,7 +661,7 @@ export default class Mindmap {
             target.fatherNode.group.add(lineBeforeBtn.getLine());
             target.lineBeforeBtn = lineBeforeBtn;
         }
-        const fn = (sou, tar) => {
+        const fn = (sou: ITree, tar: ITree) => {
             const newData = this._addNode(tar, false, sou);
             tar.children.push(newData);
             if (tar.children.length > 1) {
@@ -645,12 +673,12 @@ export default class Mindmap {
         fn(source, target);
     }
 
-    _onNodeDoubleClick(e, data) {
+    _onNodeDoubleClick(e: any, data: ITree) {
         this.isEditingText = true;
     }
 
     // 节点
-    _getNode({ x, y, w, h, data }) {
+    _getNode({ x, y, w, h, data }: IRect) {
         const node = new Node({
             container: this.container,
             rootGroup: this.rootGroup,
@@ -673,7 +701,7 @@ export default class Mindmap {
     }
 
     // 展开收起按钮 type 0 展开 1 收起
-    _getBtn(x, y, data, type = 0) {
+    _getBtn(x: number, y: number, data: ITree, type: IBtnType = 0) {
         const btn = new Btn({
             x,
             y,
@@ -685,18 +713,18 @@ export default class Mindmap {
     }
 
     // 节点之间连线
-    _getLine({ x1, y1, x2, y2 }) {
+    _getLine({ x1, y1, x2, y2 }: IPoint2) {
         return new Line({ x1, y1, x2, y2, config: this.config });
     }
 
     // 计算文字宽度
-    _getTextWidth(data, type) {
+    _getTextWidth(data: ITree, level: number) {
         const { fontFamily, rootRect, normalRect, textPadding } = this.config;
         const w =
             (getTextWidth(
                 data.name,
                 `${
-                    type === 0 ? rootRect.fontSize : normalRect.fontSize
+                    level === 0 ? rootRect.fontSize : normalRect.fontSize
                 }px ${fontFamily}`
             ) || normalRect.w) +
             textPadding * 2;
@@ -739,6 +767,7 @@ export default class Mindmap {
         this.rootGroup.add(lineBeforeBtn.getLine());
         this.data.lineBeforeBtn = lineBeforeBtn;
         // 根节点下所有其他节点和连线所属的group
+        // @ts-ignore
         this.data.group = new zrender.Group({
             scale: animation.switch ? [0, 0] : [1, 1],
             origin: this.data.childOrigin,
@@ -759,7 +788,7 @@ export default class Mindmap {
         // 第一层节点起始坐标Y值
         this.data.childStartY =
             cy - (getEndNodeNum(this.data) * nodeAreaHeight) / 2;
-        const traverseNode = (fatherNode) => {
+        const traverseNode = (fatherNode: ITree) => {
             const level = fatherNode.level + 1;
             fatherNode.children.forEach((n, i) => {
                 n.level = level;
@@ -828,6 +857,7 @@ export default class Mindmap {
                 n.childOrigin = [lineStartPos.x + space.x / 2, lineStartPos.y];
                 n.childStartY = y + h / 2 - (nodeEndNum * nodeAreaHeight) / 2;
                 if (n.children.length > 0) {
+                    // @ts-ignore
                     const branchGroup = new zrender.Group({
                         // scale: animation.switch ? [0, 0] : [1, 1],
                         origin: n.childOrigin,
@@ -876,8 +906,8 @@ export default class Mindmap {
         this._generateMap();
     }
 
-    findData = (id) => {
-        const fn = (n) => {
+    findData = (id: number) => {
+        const fn = (n: ITree) => {
             for (let i = 0; i < n.children.length; i++) {
                 if (!n.children || n.children.length === 0) {
                     continue;
@@ -904,7 +934,7 @@ export default class Mindmap {
     }
 
     // 编辑名字
-    editName(e) {
+    editName() {
         if (this.readonly) {
             return;
         }
@@ -912,7 +942,7 @@ export default class Mindmap {
             this.onError("请选择节点");
         } else if (this.selectedNodes.length === 1) {
             const data = this.selectedNodes[0];
-            data.node.editName(e);
+            data.node.editName();
             this.isEditingText = true;
         } else {
             this.onError("只能选择一个节点");
@@ -920,7 +950,7 @@ export default class Mindmap {
     }
 
     // 设置脑图缩放
-    zoomMap(scale) {
+    zoomMap(scale: number) {
         this.viewport.zoom(scale);
     }
 

@@ -2,7 +2,25 @@
  * 画布视野设置模块
  */
 
-const Viewport = ({
+interface IParams {
+    container: HTMLElement;
+    rootGroup: any;
+    zr: any;
+    onMouseDown?: Function;
+    onZoom?: Function;
+    scaleable?: boolean;
+    SCALE_STEP?: number; // 缩放步长
+    SCALE_MIN?: number; // 视野最小缩放
+    SCALE_MAX?: number; // 视野最大缩放
+}
+
+interface IReturn {
+    setIsHoverNode: (isHover: boolean) => void;
+    zoom: (scale: number) => void;
+    dispose: () => void;
+}
+
+export const viewport = ({
     container,
     rootGroup,
     zr,
@@ -12,7 +30,7 @@ const Viewport = ({
     SCALE_STEP = 0.1, // 缩放步长
     SCALE_MIN = 0.2, // 视野最小缩放
     SCALE_MAX = 3, // 视野最大缩放
-}) => {
+}: IParams): IReturn => {
     let isHoveringNode = false;
     let dragging = false;
     let lastX = 0;
@@ -24,12 +42,12 @@ const Viewport = ({
     };
 
     // 设置视野位置
-    const setViewport = (x, y) => {
+    const setViewport = (x: number, y: number) => {
         rootGroup.attr("position", [x, y]);
     };
 
     // 设置视野缩放
-    const setViewportScale = (s) => {
+    const setViewportScale = (s: number) => {
         if (s > SCALE_MAX) {
             s = SCALE_MAX;
         }
@@ -41,7 +59,7 @@ const Viewport = ({
         onZoom((s / (SCALE_MAX - SCALE_MIN)).toFixed(2));
     };
 
-    const mousedown = (e) => {
+    const mousedown = (e: any) => {
         if (isHoveringNode) {
             return;
         }
@@ -54,7 +72,7 @@ const Viewport = ({
         dragging = true;
     };
 
-    const mousemove = (e) => {
+    const mousemove = (e: any) => {
         if (isHoveringNode) {
             return;
         }
@@ -77,7 +95,7 @@ const Viewport = ({
         zr.dom.children[0].children[0].style.cursor = "default";
     };
 
-    const mousewheel = (e) => {
+    const mousewheel = (e: any) => {
         if (!scaleable) {
             return;
         }
@@ -128,14 +146,12 @@ const Viewport = ({
     };
 
     return {
-        setIsHoverNode: (isHover) => {
+        setIsHoverNode: (isHover: boolean) => {
             isHoveringNode = isHover;
         },
-        zoom: (scale) => {
+        zoom: (scale: number) => {
             setViewportScale(scale * (SCALE_MAX - SCALE_MIN));
         },
         dispose,
     };
 };
-
-export default Viewport;

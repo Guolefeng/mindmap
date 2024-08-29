@@ -1,3 +1,5 @@
+import type { ITree, IRect } from "./types.ts";
+
 /**
  * Uses canvas.measureText to compute and return the width of the given text of given font in pixels.
  *
@@ -6,12 +8,10 @@
  *
  * @see https://stackoverflow.com/questions/118241/calculate-text-width-with-javascript/21015393#21015393
  */
-export const getTextWidth = (text, font) => {
+export const getTextWidth = (text: string, font: string) => {
     // re-use canvas object for better performance
-    const canvas =
-        getTextWidth.canvas ||
-        (getTextWidth.canvas = document.createElement("canvas"));
-    const context = canvas.getContext("2d");
+    const canvas = document.createElement("canvas");
+    const context: CanvasRenderingContext2D = canvas.getContext("2d");
     context.font = font;
     const metrics = context.measureText(text);
     return Math.round(metrics.width);
@@ -22,9 +22,9 @@ export const getTextWidth = (text, font) => {
  * @param {object} tree 树
  * @return {number} 个数
  */
-export const getEndNodeNum = (tree) => {
+export const getEndNodeNum = (tree: ITree) => {
     let num = 0;
-    const fn = (t, level) => {
+    const fn = (t: ITree, level?: number) => {
         if (t.children.length === 0) {
             num++;
             return;
@@ -36,11 +36,11 @@ export const getEndNodeNum = (tree) => {
 };
 
 /**
- * @desc 判断rect1是否与rect2交叉 2020-05-28
+ * 判断rect1是否与rect2交叉 2020-05-28
  * @param {object} rect { x, y, w, h }
  * @return {bool} true 交叉 false 没有交叉
  */
-export const isIntersect = (rect1, rect2) => {
+export const isIntersect = (rect1: IRect, rect2: IRect) => {
     const minX = rect1.x;
     const maxX = rect1.x + rect1.w;
     const minY = rect1.y;

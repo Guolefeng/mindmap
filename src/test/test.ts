@@ -1,4 +1,4 @@
-export default {
+const data: any = {
     name: "根节点",
     children: [
         {
@@ -77,3 +77,5 @@ export default {
         },
     ],
 };
+
+export default data;
