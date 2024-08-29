@@ -27,6 +27,7 @@ export default class Mindmap {
         this.dragSourceNode = null; // 拖拽节点
         this.dragTargetNode = null; // 拖拽节点到目标节点
         this.isEditingText = false; // 是否处于文本编辑状态
+        this.render();
     }
 
     _setConfig() {
