@@ -556,7 +556,7 @@ export default class Mindmap {
             data.node.cancelNode();
             this.selectedNodes.splice(i, 1);
         }
-        this.onNodeClick(e);
+        this.onNodeClick(data);
     }
 
     // 节点文本改变事件

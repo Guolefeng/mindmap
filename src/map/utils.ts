@@ -9,7 +9,6 @@ import type { INode, IRect } from "./types.ts";
  * @see https://stackoverflow.com/questions/118241/calculate-text-width-with-javascript/21015393#21015393
  */
 export const getTextWidth = (text: string, font: string) => {
-    // re-use canvas object for better performance
     const canvas = document.createElement("canvas");
     const context: CanvasRenderingContext2D = canvas.getContext("2d");
     context.font = font;

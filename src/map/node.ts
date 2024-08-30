@@ -269,6 +269,7 @@ export default class Node {
             padding: 0 ${r.textPadding};
             width: ${w}px;
             height: ${h}px;
+            line-height: ${h}px;
             border-radius: ${r.radius}px;
             outline: none;
             border: none;
@@ -279,6 +280,7 @@ export default class Node {
             border: 2px solid ${r.bg};
             z-index: 10;
             background: ${r.bg};
+            color: ${r.textColor};
             box-sizing: border-box;
             text-align: center;
         `;

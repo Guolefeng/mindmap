@@ -14,6 +14,12 @@ const initMap = () => {
         config: {
             rootNode: {},
         },
+        onError: (msg) => {
+            console.log(msg);
+        },
+        onNodeClick: (data) => {
+            console.log(data);
+        },
     });
 };
 
