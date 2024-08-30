@@ -258,25 +258,29 @@ export default class Node {
         if (!x || !y || !w || !h) {
             return;
         }
-        const { normalNode, animation } = this.config;
+        const { rootNode, normalNode, animation } = this.config;
+        const r = this.data.level === 0 ? rootNode : normalNode;
         // 编辑框
         let input: any = document.createElement("input");
         input.style = `
             position: fixed;
             left: ${x}px;
             top: ${y}px;
-            padding: 0 12px;
+            padding: 0 ${r.textPadding};
             width: ${w}px;
-            height: ${h - 4}px;
-            border-radius: ${normalNode.radius}px;
+            height: ${h}px;
+            border-radius: ${r.radius}px;
             outline: none;
             border: none;
-            font-size: ${normalNode.fontSize};
-            font-family: ${normalNode.fontFamily};
-            border-radius: ${normalNode.radius}px;
-            border: 2px solid #5CDBD3;
+            font-size: ${r.fontSize};
+            font-family: ${r.fontFamily};
+            font-weight: ${r.fontWeight};
+            border-radius: ${r.radius}px;
+            border: 2px solid ${r.bg};
             z-index: 10;
-            background: ${normalNode.bg};
+            background: ${r.bg};
+            box-sizing: border-box;
+            text-align: center;
         `;
         input.value = this.data.name;
         input.onkeyup = (e: any) => {

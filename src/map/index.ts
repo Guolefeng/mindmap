@@ -39,26 +39,24 @@ export default class Mindmap {
         config = {},
         readonly = true,
         onNodeClick = () => {},
-        onZoom = () => {},
         onError = () => {},
     }: IParams) {
         this.container = container; // 容器
         this.data = data; // 脑图数据
         this.readonly = readonly; // 脑图是否只读
         this.onNodeClick = onNodeClick; // 单击节点
-        this.onZoom = onZoom; // 缩放回调
         this.onError = onError; // 警告或错误通知回调
-
-        this.setConfig(config); // 设置配置项
-        this.init(); // 初始化脑图
         this.selectedNodes = []; // 选中的节点列表
         this.dragSourceNode = null; // 拖拽节点
         this.dragTargetNode = null; // 拖拽节点到目标节点
         this.isEditingText = false; // 是否处于文本编辑状态
-        this.render();
+
+        this.setConfig(config); // 设置配置项
+        this.init(); // 初始化
+        this.render(); // 渲染
     }
 
-    private setConfig(config: IConfig) {
+    setConfig(config: IConfig) {
         const w = this.container.clientWidth;
         const h = this.container.clientHeight;
         this.config = mergeObjects(
@@ -98,7 +96,7 @@ export default class Mindmap {
                     radius: 20, // 节点矩形圆角
                 },
                 space: {
-                    x: 40, // 节点之间间距 x轴方向
+                    x: 60, // 节点之间间距 x轴方向
                     y: 10, // 节点之间间距 y轴方向
                 },
                 line: {
@@ -139,7 +137,6 @@ export default class Mindmap {
             rootGroup: this.rootGroup,
             zr: this.zr,
             onMouseDown: this._onMouseDown,
-            onZoom: this.onZoom,
         });
         document.addEventListener("keydown", this._onKeyDown);
     }
@@ -733,8 +730,8 @@ export default class Mindmap {
         return w;
     }
 
-    // 生成脑图
-    private generateMap() {
+    // 渲染脑图
+    render() {
         const { cx, cy, rootNode, normalNode, space, animation } = this.config;
         // ******** 绘制根节点
         // 根节点宽度
@@ -896,9 +893,10 @@ export default class Mindmap {
         this.zr.add(this.rootGroup);
     }
 
-    // 渲染脑图
-    render() {
-        this.generateMap();
+    rerender(config: IConfig) {
+        this.setConfig(config);
+        this.zr && this.zr.clear();
+        this.render();
     }
 
     findData = (id: number) => {
