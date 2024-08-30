@@ -11,6 +11,9 @@ const initMap = () => {
         container: document.getElementById("app") as HTMLElement,
         data: test,
         readonly: false,
+        config: {
+            rootNode: {},
+        },
     });
 };
 

@@ -59,7 +59,7 @@ export const viewport = ({
         onZoom((s / (SCALE_MAX - SCALE_MIN)).toFixed(2));
     };
 
-    const mousedown = (e: any) => {
+    const mousedown = (e: PointerEvent) => {
         if (isHoveringNode) {
             return;
         }
@@ -72,7 +72,7 @@ export const viewport = ({
         dragging = true;
     };
 
-    const mousemove = (e: any) => {
+    const mousemove = (e: PointerEvent) => {
         if (isHoveringNode) {
             return;
         }
@@ -95,7 +95,7 @@ export const viewport = ({
         zr.dom.children[0].children[0].style.cursor = "default";
     };
 
-    const mousewheel = (e: any) => {
+    const mousewheel = (e: WheelEvent) => {
         if (!scaleable) {
             return;
         }
@@ -104,16 +104,14 @@ export const viewport = ({
         if (isHoveringNode) {
             return;
         }
-        if (e.ctrlKey || e.altKey) {
-            if (e.wheelDelta < 0) {
-                // 向上
-                viewBox.scale -= SCALE_STEP;
-            } else {
-                // 向下
-                viewBox.scale += SCALE_STEP;
-            }
-            setViewportScale(viewBox.scale);
+        if (e.deltaY < 0) {
+            // 向上
+            viewBox.scale -= SCALE_STEP;
+        } else {
+            // 向下
+            viewBox.scale += SCALE_STEP;
         }
+        setViewportScale(viewBox.scale);
     };
 
     const resize = () => {

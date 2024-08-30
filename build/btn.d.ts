@@ -1,15 +1,15 @@
-import { ITree, IConfig, IBtnType } from './types';
+import { INode, IConfig, IBtnType } from "./types";
 interface IParams {
     x: number;
     y: number;
-    data: ITree;
+    data: INode;
     type?: IBtnType;
     config: IConfig;
 }
 export default class Btn {
     x: number;
     y: number;
-    data: ITree;
+    data: INode;
     type: number;
     config: IConfig;
     btn: any;

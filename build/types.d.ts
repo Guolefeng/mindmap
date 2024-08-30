@@ -1,6 +1,6 @@
-export interface ITree {
+export interface INode {
     name?: string;
-    children?: ITree[];
+    children?: INode[];
     level?: number;
     [key: string]: any;
 }
@@ -27,13 +27,12 @@ export interface IConfig {
     h?: number;
     cx?: number;
     cy?: number;
-    textFill?: string;
     textPadding?: number;
     fontFamily?: string;
     fontWeight?: number;
     fontSize?: number;
-    rootRect?: IRectConfig;
-    normalRect?: IRectConfig;
+    rootNode?: IRectConfig;
+    normalNode?: IRectConfig;
     radius?: number;
     space?: {
         x?: number;

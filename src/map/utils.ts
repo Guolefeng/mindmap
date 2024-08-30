@@ -1,4 +1,4 @@
-import type { ITree, IRect } from "./types.ts";
+import type { INode, IRect } from "./types.ts";
 
 /**
  * Uses canvas.measureText to compute and return the width of the given text of given font in pixels.
@@ -22,9 +22,9 @@ export const getTextWidth = (text: string, font: string) => {
  * @param {object} tree 树
  * @return {number} 个数
  */
-export const getEndNodeNum = (tree: ITree) => {
+export const getEndNodeNum = (tree: INode) => {
     let num = 0;
-    const fn = (t: ITree, level?: number) => {
+    const fn = (t: INode, level?: number) => {
         if (t.children.length === 0) {
             num++;
             return;
@@ -76,4 +76,38 @@ export const isIntersect = (rect1: IRect, rect2: IRect) => {
     return false;
 };
 
-export const uuid = () => new Date().getTime();
+export const uuid = () =>
+    Date.now().toString(36) + Math.random().toString(36).substring(2);
+
+export const mergeObjects = (obj1, obj2) => {
+    const result = {};
+
+    // 合并 obj1 的所有属性
+    for (const key in obj1) {
+        if (obj1.hasOwnProperty(key)) {
+            result[key] = obj1[key];
+        }
+    }
+
+    // 合并 obj2 的所有属性
+    for (const key in obj2) {
+        if (obj2.hasOwnProperty(key)) {
+            if (
+                typeof obj2[key] === "object" &&
+                obj2[key] !== null &&
+                !Array.isArray(obj2[key])
+            ) {
+                // 如果是对象，则递归合并
+                result[key] = mergeObjects(result[key] || {}, obj2[key]);
+            } else if (Array.isArray(obj2[key])) {
+                // 如果是数组，则合并数组
+                result[key] = (result[key] || []).concat(obj2[key]);
+            } else {
+                // 如果是基本数据类型，则直接赋值
+                result[key] = obj2[key];
+            }
+        }
+    }
+
+    return result;
+};

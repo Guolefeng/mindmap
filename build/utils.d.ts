@@ -1,4 +1,4 @@
-import { ITree, IRect } from './types.ts';
+import { INode, IRect } from "./types.ts";
 /**
  * Uses canvas.measureText to compute and return the width of the given text of given font in pixels.
  *
@@ -13,7 +13,7 @@ export declare const getTextWidth: (text: string, font: string) => number;
  * @param {object} tree 树
  * @return {number} 个数
  */
-export declare const getEndNodeNum: (tree: ITree) => number;
+export declare const getEndNodeNum: (tree: INode) => number;
 /**
  * 判断rect1是否与rect2交叉 2020-05-28
  * @param {object} rect { x, y, w, h }

@@ -3,12 +3,12 @@
  */
 
 import * as zrender from "zrender";
-import type { ITree, IConfig, IBtnType } from "./types";
+import type { INode, IConfig, IBtnType } from "./types";
 
 interface IParams {
     x: number;
     y: number;
-    data: ITree;
+    data: INode;
     type?: IBtnType;
     config: IConfig;
 }
@@ -16,24 +16,22 @@ interface IParams {
 export default class Btn {
     x: number;
     y: number;
-    data: ITree;
-    type: number; // 0 收齐 1 展开
+    data: INode;
+    type: IBtnType; // 0 收起 1 展开
     config: IConfig;
-    btn: any;
+    btn: zrender.Path;
 
     constructor({ x, y, data, type = 0, config }: IParams) {
         this.x = x;
         this.y = y;
         this.data = data;
-        this.type = type; // 0 收齐 1 展开
+        this.type = type;
         this.config = config;
-        this._init();
+        this.init();
     }
 
-    _init() {
-        const { symbolLineWidth, symbolRadius, lineColor, normalRect } =
-            this.config;
-        // @ts-ignore
+    private init() {
+        const { btn, line, normalNode } = this.config;
         const Button = zrender.Path.extend({
             shape: {
                 x: 0,
@@ -63,13 +61,13 @@ export default class Btn {
             shape: {
                 x: this.x,
                 y: this.y,
-                r: symbolRadius,
+                r: btn.radius,
                 type: this.type,
             },
             style: {
                 fill: "#fff",
-                stroke: lineColor,
-                lineWidth: symbolLineWidth,
+                stroke: line.color,
+                lineWidth: btn.lineWidth,
             },
             z: 5,
         });
@@ -84,12 +82,12 @@ export default class Btn {
         });
         this.btn.on("mouseover", () => {
             this.btn.attr("style", {
-                stroke: normalRect.clickBorderColor,
+                stroke: normalNode.clickBorderColor,
             });
         });
         this.btn.on("mouseout", () => {
             this.btn.attr("style", {
-                stroke: lineColor,
+                stroke: line.color,
             });
         });
     }
@@ -118,7 +116,6 @@ export default class Btn {
             }
         } else if (
             type === 0 &&
-            this.data.group.scale &&
             this.data.group.scale &&
             this.data.group.scale.some((s: number) => s === 1)
         ) {

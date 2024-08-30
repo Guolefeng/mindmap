@@ -2,52 +2,51 @@
  * @desc 脑图中的节点
  */
 import * as zrender from "zrender";
-import type { ITree, IConfig, IRect } from "./types";
+import type { INode, IConfig, IRect } from "./types";
 
 interface IParams {
     container: HTMLElement;
-    rootGroup: any;
+    rootGroup: zrender.Group;
     x: number;
     y: number;
     w: number;
     h: number;
-    data: ITree;
+    data: INode;
     readonly: boolean;
     config: IConfig;
-    onNodeClick: (e: any, data: ITree) => void;
-    onTextChange: (data: ITree) => void;
-    onNodeDoubleClick: (e: any, data: ITree) => void;
-    onNodeMouseUp: (e: any, data: ITree) => void;
-    onNodeMouseDown: (e: any, data: ITree) => void;
-    onNodeMouseEnter: (e: any, data: ITree) => void;
+    onNodeClick: (e: any, data: INode) => void;
+    onTextChange: (data: INode) => void;
+    onNodeDoubleClick: (e: any, data: INode) => void;
+    onNodeMouseUp: (e: any, data: INode) => void;
+    onNodeMouseDown: (e: any, data: INode) => void;
+    onNodeMouseEnter: (e: any, data: INode) => void;
     onNodeMouseLeave: () => void;
 }
 
 export default class Node {
     container: HTMLElement;
-    rootGroup: any;
+    rootGroup: zrender.Group;
     x: number;
     y: number;
     w: number;
     h: number;
-    level: number;
-    data: ITree;
+    data: INode;
     readonly: boolean;
     config: IConfig;
     group: any;
     rect: any;
-    placeholderRect: any;
+    placeholderRect: zrender.Rect;
     moveable: boolean;
     isSelected: boolean;
     timer: any;
     inputDom: HTMLInputElement;
-    onNodeClick: (e: any, data: ITree) => void;
-    onTextChange: (data: ITree) => void;
-    onNodeDoubleClick: (e: any, data: ITree) => void;
-    onNodeMouseDown: (e: any, data: ITree) => void;
-    onNodeMouseUp: (e: any, data: ITree) => void;
-    onNodeMouseEnter: (e: any, data: ITree) => void;
-    onNodeMouseLeave: (e: any, data: ITree) => void;
+    onNodeClick: (e: any, data: INode) => void;
+    onTextChange: (data: INode) => void;
+    onNodeDoubleClick: (e: any, data: INode) => void;
+    onNodeMouseDown: (e: any, data: INode) => void;
+    onNodeMouseUp: (e: any, data: INode) => void;
+    onNodeMouseEnter: (e: any, data: INode) => void;
+    onNodeMouseLeave: (e: any, data: INode) => void;
 
     constructor({
         container,
@@ -83,44 +82,34 @@ export default class Node {
         this.onNodeMouseUp = onNodeMouseUp;
         this.onNodeMouseEnter = onNodeMouseEnter;
         this.onNodeMouseLeave = onNodeMouseLeave;
-        this._init();
         this.isSelected = false;
+        this.init();
     }
 
-    _init() {
-        const { radius, rootRect, normalRect, fontFamily, fontWeight } =
-            this.config;
-        // @ts-ignore
+    private init() {
+        const { rootNode, normalNode } = this.config;
+
         this.group = new zrender.Group({
             draggable: false,
         });
-        let textOffset = [0, 0];
-        // @ts-ignore
+        const r = this.data.level === 0 ? rootNode : normalNode;
         this.rect = new zrender.Rect({
             shape: {
-                r: radius,
+                r: r.radius,
                 x: this.x,
                 y: this.y,
                 width: this.w,
                 height: this.h,
             },
             style: {
-                stroke: this.level === 0 ? rootRect.bg : normalRect.bg,
-                lineWidth:
-                    this.level === 0
-                        ? rootRect.borderWidth
-                        : normalRect.borderWidth,
-                fill: this.level === 0 ? rootRect.bg : normalRect.bg,
+                stroke: r.bg,
+                lineWidth: r.borderWidth,
+                fill: r.bg,
                 text: this.data.name,
-                textOffset,
-                textFill:
-                    this.level === 0
-                        ? rootRect.textColor
-                        : normalRect.textColor,
-                fontSize:
-                    this.level === 0 ? rootRect.fontSize : normalRect.fontSize,
-                fontFamily,
-                fontWeight,
+                textFill: r.textColor,
+                fontSize: r.fontSize,
+                fontFamily: r.fontFamily,
+                fontWeight: r.fontWeight,
                 transformText: true, // 跟随group缩放
             },
             z: 10,
@@ -131,7 +120,7 @@ export default class Node {
         // 创建拖拽时的占位矩形
         if (this.data.level !== 0) {
             // 根节点除外
-            this.placeholderRect = this._getPlaceholderRect();
+            this.placeholderRect = this.getPlaceholderRect();
             this.data.fatherNode.group.add(this.placeholderRect);
             this.placeholderRect.on("mouseup", (e: any) => {
                 this.onMouseUp();
@@ -156,10 +145,7 @@ export default class Node {
         this.group.on("mouseover", (e: any) => {
             if (!this.isSelected) {
                 this.rect.attr("style", {
-                    stroke:
-                        this.level === 0
-                            ? rootRect.hoverBorderColor
-                            : normalRect.hoverBorderColor,
+                    stroke: r.hoverBorderColor,
                 });
             }
             this.onNodeMouseEnter(e, this.data);
@@ -167,7 +153,7 @@ export default class Node {
         this.group.on("mouseout", (e: any) => {
             if (!this.isSelected) {
                 this.rect.attr("style", {
-                    stroke: this.level === 0 ? rootRect.bg : normalRect.bg,
+                    stroke: r.bg,
                 });
             }
             this.onNodeMouseLeave(e, this.data);
@@ -196,28 +182,19 @@ export default class Node {
             if (this.rect.z === 10) {
                 this.rect.attr("z", 8);
             }
-            if (this.data.btn && this.data.btn.type === 1) {
+            if (this.data.btn?.type === 1) {
                 this.data.btn.setType(0);
             }
-            if (
-                this.data.lineBeforeBtn &&
-                this.data.lineBeforeBtn.line.style !== rootRect.bg
-            ) {
-                this.data.lineBeforeBtn.setColor(rootRect.bg);
+            if (this.data.lineBeforeBtn?.line?.style !== rootNode.bg) {
+                this.data.lineBeforeBtn?.setColor?.(rootNode.bg);
             }
-            if (
-                this.data.lineBeforeNode &&
-                this.data.lineBeforeNode.line.z === 1
-            ) {
-                this.data.lineBeforeNode.line.attr("z", 2);
+            if (this.data.lineBeforeNode?.line?.z === 1) {
+                this.data.lineBeforeNode?.line?.attr("z", 2);
             }
-            if (
-                this.data.lineBeforeNode &&
-                this.data.lineBeforeNode.line.style !== rootRect.bg
-            ) {
-                this.data.lineBeforeNode.setColor(rootRect.bg);
+            if (this.data.lineBeforeNode?.line?.style !== rootNode.bg) {
+                this.data.lineBeforeNode?.setColor?.(rootNode.bg);
             }
-            if (this.placeholderRect && this.placeholderRect.invisible) {
+            if (this.placeholderRect?.invisible) {
                 this.placeholderRect.attr("invisible", false);
             }
         });
@@ -225,9 +202,7 @@ export default class Node {
             if (this.readonly) {
                 return;
             }
-            if (this.data.level === 0) {
-                return;
-            }
+
             this.group.attr("draggable", false);
             this.onMouseUp();
             this.onNodeMouseUp(e, this.data);
@@ -235,47 +210,42 @@ export default class Node {
     }
 
     onMouseUp() {
-        const { lineColor } = this.config;
+        const { line } = this.config;
+        const lineColor = line.color;
         this.group.attr("position", [0, 0]);
         this.group.attr("scale", [1, 1]);
         this.rect.attr("z", 10);
-        if (this.data.btn && this.data.btn.type === 0) {
-            this.data.btn.setType(1);
+        if (this.data.btn?.type === 0) {
+            this.data.btn?.setType(1);
         }
-        if (
-            this.data.lineBeforeBtn &&
-            this.data.lineBeforeBtn.line.style !== lineColor
-        ) {
-            this.data.lineBeforeBtn.setColor(lineColor);
+        if (this.data.lineBeforeBtn?.line?.style !== lineColor) {
+            this.data.lineBeforeBtn?.setColor?.(lineColor);
         }
-        if (this.data.lineBeforeNode && this.data.lineBeforeNode.line.z === 2) {
-            this.data.lineBeforeNode.line.attr("z", 1);
+        if (this.data.lineBeforeNode?.line?.z === 2) {
+            this.data.lineBeforeNode?.line?.attr("z", 1);
         }
-        if (
-            this.data.lineBeforeNode &&
-            this.data.lineBeforeNode.line.style !== lineColor
-        ) {
-            this.data.lineBeforeNode.setColor(lineColor);
+        if (this.data.lineBeforeNode?.line?.style !== lineColor) {
+            this.data.lineBeforeNode?.setColor?.(lineColor);
         }
-        if (this.placeholderRect && this.placeholderRect.invisible) {
+        if (this.placeholderRect?.invisible) {
             this.placeholderRect.attr("invisible", true);
         }
         this.moveable = false;
     }
 
-    _getPlaceholderRect() {
-        const { rootRect, radius } = this.config;
-        // @ts-ignore
+    getPlaceholderRect() {
+        const { rootNode, normalNode } = this.config;
+
         return new zrender.Rect({
             shape: {
-                r: radius,
+                r: normalNode.radius,
                 x: this.x,
                 y: this.y,
                 width: this.w,
                 height: this.h,
             },
             style: {
-                fill: rootRect.bg,
+                fill: rootNode.bg,
             },
             z: 9,
             silent: false,
@@ -284,11 +254,11 @@ export default class Node {
     }
 
     // 双击生成文本输入框
-    _generateInputDom({ x, y, w, h }: IRect) {
+    generateInputDom({ x, y, w, h }: IRect) {
         if (!x || !y || !w || !h) {
             return;
         }
-        const { fontSize, fontFamily, radius, normalRect } = this.config;
+        const { normalNode, animation } = this.config;
         // 编辑框
         let input: any = document.createElement("input");
         input.style = `
@@ -296,17 +266,17 @@ export default class Node {
             left: ${x}px;
             top: ${y}px;
             padding: 0 12px;
-            width: ${w - 28}px;
-            height: ${h - 3}px;
-            border-radius: ${radius}px;
+            width: ${w}px;
+            height: ${h - 4}px;
+            border-radius: ${normalNode.radius}px;
             outline: none;
             border: none;
-            font-size: ${fontSize};
-            font-family: ${fontFamily};
-            border-radius: ${normalRect.radius}px;
+            font-size: ${normalNode.fontSize};
+            font-family: ${normalNode.fontFamily};
+            border-radius: ${normalNode.radius}px;
             border: 2px solid #5CDBD3;
             z-index: 10;
-            background: ${normalRect.bg};
+            background: ${normalNode.bg};
         `;
         input.value = this.data.name;
         input.onkeyup = (e: any) => {
@@ -326,27 +296,27 @@ export default class Node {
         document.body.appendChild(input);
         setTimeout(() => {
             input.focus();
-        }, 100); // 动画时间为300ms
+        }, animation.time);
     }
 
     // 选中节点
     selectNode() {
-        const { rootRect, normalRect } = this.config;
+        const { rootNode, normalNode } = this.config;
         this.isSelected = true;
         this.rect.attr("style", {
             stroke:
-                this.level === 0
-                    ? rootRect.clickBorderColor
-                    : normalRect.clickBorderColor,
+                this.data.level === 0
+                    ? rootNode.clickBorderColor
+                    : normalNode.clickBorderColor,
         });
     }
 
     // 取消选中节点
     cancelNode() {
-        const { rootRect, normalRect } = this.config;
+        const { rootNode, normalNode } = this.config;
         this.isSelected = false;
         this.rect.attr("style", {
-            stroke: this.level === 0 ? rootRect.bg : normalRect.bg,
+            stroke: this.data.level === 0 ? rootNode.bg : normalNode.bg,
         });
     }
 
@@ -405,7 +375,7 @@ export default class Node {
             w: this.w * scaleX,
             h: this.h * scaleY,
         };
-        this._generateInputDom(rect);
+        this.generateInputDom(rect);
     }
 
     setName(text: string) {
@@ -430,20 +400,18 @@ export default class Node {
                 animation.time,
                 animation.easing
             );
-            this.placeholderRect &&
-                this.placeholderRect.animateTo(
-                    {
-                        shape: {
-                            width: this.w,
-                        },
+            this.placeholderRect?.animateTo(
+                {
+                    shape: {
+                        width: this.w,
                     },
-                    animation.time,
-                    animation.easing
-                );
+                },
+                animation.time,
+                animation.easing
+            );
         } else {
             this.rect.attr("shape", { width: this.w });
-            this.placeholderRect &&
-                this.placeholderRect.attr("shape", { width: this.w });
+            this.placeholderRect?.attr("shape", { width: this.w });
         }
     }
 

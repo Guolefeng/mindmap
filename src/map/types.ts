@@ -1,6 +1,6 @@
-export interface ITree {
+export interface INode {
     name?: string;
-    children?: ITree[];
+    children?: INode[];
     level?: number;
     [key: string]: any;
 }
@@ -23,6 +23,20 @@ export interface IRectConfig {
     hoverBorderColor?: string;
     clickBorderColor?: string;
     radius?: number;
+    textPadding?: number;
+    fontFamily?: string;
+    fontWeight?: number;
+}
+
+export interface ILineConfig {
+    w?: number;
+    color?: string;
+    radius?: number;
+}
+
+export interface IBtnConfig {
+    lineWidth?: number;
+    radius?: number;
 }
 
 export interface IConfig {
@@ -30,20 +44,11 @@ export interface IConfig {
     h?: number;
     cx?: number;
     cy?: number;
-    textFill?: string;
-    textPadding?: number;
-    fontFamily?: string;
-    fontWeight?: number;
-    fontSize?: number;
-    rootRect?: IRectConfig;
-    normalRect?: IRectConfig;
-    radius?: number;
+    rootNode?: IRectConfig;
+    normalNode?: IRectConfig;
     space?: { x?: number; y?: number };
-    lineWidth?: number;
-    lineColor?: string;
-    symbolLineWidth?: number;
-    symbolRadius?: number;
-    nodeAreaHeight?: number;
+    line?: ILineConfig;
+    btn?: IBtnConfig;
     animation?: {
         switch?: boolean;
         time?: number;

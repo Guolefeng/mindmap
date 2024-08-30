@@ -26,12 +26,11 @@ export default class Line {
         this.x2 = x2;
         this.y2 = y2;
         this.config = config;
-        this._init();
+        this.init();
     }
 
-    _init() {
-        const { lineWidth, lineColor, radius } = this.config;
-        // @ts-ignore
+    private init() {
+        const { line } = this.config;
         const Line = zrender.Path.extend({
             shape: {
                 x1: 0,
@@ -71,12 +70,12 @@ export default class Line {
                 y1: this.y1,
                 x2: this.x2,
                 y2: this.y2,
-                radius,
+                radius: line.radius,
             },
             style: {
-                lineWidth,
+                lineWidth: line.w,
                 fill: "transparent",
-                stroke: lineColor,
+                stroke: line.color,
             },
             z: 1,
         });

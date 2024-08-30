@@ -1,37 +1,49 @@
-import { default as Node } from './node';
-import { default as Line } from './line';
-import { default as Btn } from './btn';
-import { ITree, IRect, IConfig, IBtnType, IPoint2 } from './types';
+import { default as Node } from "./node";
+import { default as Line } from "./line";
+import { default as Btn } from "./btn";
+import { INode, IRect, IConfig, IBtnType, IPoint2 } from "./types";
 interface IParams {
     container: HTMLElement;
-    data: ITree;
+    data: INode;
     readonly?: boolean;
-    onNodeClick?: (data: ITree) => void;
+    onNodeClick?: (data: INode) => void;
     onZoom?: (scale: number) => void;
     onError?: (msg: string) => void;
 }
 export default class Mindmap {
     container: HTMLElement;
-    data: ITree;
+    data: INode;
     readonly: boolean;
-    onNodeClick: (data: ITree) => void;
+    onNodeClick: (data: INode) => void;
     onZoom: (scale: number) => void;
     onError: (msg: string) => void;
     config: IConfig;
-    selectedNodes: ITree[];
-    dragSourceNode: ITree | null;
-    dragTargetNode: ITree | null;
+    selectedNodes: INode[];
+    dragSourceNode: INode | null;
+    dragTargetNode: INode | null;
     isEditingText: boolean;
     rootGroup: any;
     zr: any;
     viewport: any;
-    constructor({ container, data, readonly, onNodeClick, onZoom, onError, }: IParams);
+    constructor({
+        container,
+        data,
+        readonly,
+        onNodeClick,
+        onZoom,
+        onError,
+    }: IParams);
     _setConfig(): void;
     _init(): void;
     _onKeyDown: (e: any) => void;
     _onMouseDown: () => void;
-    _resetChildPosition(n: ITree, dx: number, dy: number, notTrans: boolean): void;
-    _resetSlibingPosition(data: ITree, dy: number): void;
+    _resetChildPosition(
+        n: INode,
+        dx: number,
+        dy: number,
+        notTrans: boolean
+    ): void;
+    _resetSlibingPosition(data: INode, dy: number): void;
     /**
      * 新增节点
      * @param {*} targetData 目标节点信息，要在此节点新增子节点
@@ -39,7 +51,7 @@ export default class Mindmap {
      * @param {*} newD 将要新增的节点数据
      * @returns 新节点数据
      */
-    _addNode(targetData: ITree, isSilbing: boolean, newD: ITree | null): any;
+    _addNode(targetData: INode, isSilbing: boolean, newD: INode | null): any;
     addSilbingNode(): void;
     addChildNode(): void;
     /**
@@ -47,22 +59,22 @@ export default class Mindmap {
      * @param {*} nodes 删除节点列表
      * @returns
      */
-    removeNode(nodes?: ITree[]): void;
-    onRectNodeClick(e: any, data: ITree): void;
-    onTextChange(data: ITree): void;
-    onMouseOver(e: any, data: ITree): void;
+    removeNode(nodes?: INode[]): void;
+    onRectNodeClick(e: any, data: INode): void;
+    onTextChange(data: INode): void;
+    onMouseOver(e: any, data: INode): void;
     onMouseOut(): void;
-    onNodeMouseDown(e: any, data: ITree): void;
-    onNodeMouseUp(data: ITree): void;
-    addNode(source: ITree, target: ITree): void;
-    _onNodeDoubleClick(e: any, data: ITree): void;
+    onNodeMouseDown(e: any, data: INode): void;
+    onNodeMouseUp(data: INode): void;
+    addNode(source: INode, target: INode): void;
+    _onNodeDoubleClick(e: any, data: INode): void;
     _getNode({ x, y, w, h, data }: IRect): Node;
-    _getBtn(x: number, y: number, data: ITree, type?: IBtnType): Btn;
+    _getBtn(x: number, y: number, data: INode, type?: IBtnType): Btn;
     _getLine({ x1, y1, x2, y2 }: IPoint2): Line;
-    _getTextWidth(data: ITree, level: number): number;
+    _getTextWidth(data: INode, level: number): number;
     _generateMap(): void;
     render(): void;
-    findData: (id: number) => ITree;
+    findData: (id: number) => INode;
     cancelSelected(): void;
     editName(): void;
     zoomMap(scale: number): void;
