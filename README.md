@@ -1,4 +1,8 @@
-## mode：
+## Online
+
+[在线地址, 可调整生成配置项](https://playground.guolefeng.com)
+
+## Mode：
 
 -   **ES Module**: `build/mindmap.es.js`
 -   **UMD**: `build/mindmap.umd.js`
