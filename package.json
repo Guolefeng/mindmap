@@ -1,7 +1,7 @@
 {
     "name": "mindmaple",
     "private": false,
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "mindmap, 脑图, 思维导图, 脑图, 思维导图, 思维导图",
     "scripts": {
         "dev": "vite",

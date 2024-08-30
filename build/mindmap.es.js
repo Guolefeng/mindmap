@@ -1,10 +1,10 @@
 var zrender$1 = {};
 var zrender = {};
 var idStart = 2311;
-function _default$o() {
+function _default$p() {
   return idStart++;
 }
-var guid$2 = _default$o;
+var guid$2 = _default$p;
 var env$6 = {};
 if (typeof wx === "object" && typeof wx.getSystemInfoSync === "function") {
   env$6 = {
@@ -41,7 +41,7 @@ if (typeof wx === "object" && typeof wx.getSystemInfoSync === "function") {
 } else {
   env$6 = detect(navigator.userAgent);
 }
-var _default$n = env$6;
+var _default$o = env$6;
 function detect(ua) {
   var os = {};
   var browser = {};
@@ -92,7 +92,7 @@ function detect(ua) {
     domSupported: typeof document !== "undefined"
   };
 }
-var env_1 = _default$n;
+var env_1 = _default$o;
 var util$6 = {};
 var BUILTIN_OBJECT = {
   "[object Function]": 1,
@@ -709,8 +709,8 @@ function param(target, e) {
     topTarget: e && e.topTarget
   };
 }
-var _default$m = Draggable$1;
-var Draggable_1 = _default$m;
+var _default$n = Draggable$1;
+var Draggable_1 = _default$n;
 var arrySlice = Array.prototype.slice;
 var Eventful$4 = function(eventProcessor) {
   this._$handlers = {};
@@ -916,8 +916,8 @@ function on(eventful, event2, query, handler, context, isOnce) {
   lastWrap && lastWrap.callAtLast ? _h[event2].splice(lastIndex, 0, wrap) : _h[event2].push(wrap);
   return eventful;
 }
-var _default$l = Eventful$4;
-var Eventful_1 = _default$l;
+var _default$m = Eventful$4;
+var Eventful_1 = _default$m;
 var event = {};
 var dom = {};
 var fourPointsTransform = {};
@@ -1227,8 +1227,8 @@ var recognizers = {
   }
   // Only pinch currently.
 };
-var _default$k = GestureMgr$1;
-var GestureMgr_1 = _default$k;
+var _default$l = GestureMgr$1;
+var GestureMgr_1 = _default$l;
 var util$5 = util$6;
 var vec2$1 = vector$1;
 var Draggable = Draggable_1;
@@ -1490,8 +1490,8 @@ function isOutsideBoundary(handlerInstance, x, y) {
 }
 util$5.mixin(Handler$1, Eventful$2);
 util$5.mixin(Handler$1, Draggable);
-var _default$j = Handler$1;
-var Handler_1 = _default$j;
+var _default$k = Handler$1;
+var Handler_1 = _default$k;
 var matrix$2 = {};
 var hasRequiredMatrix;
 function requireMatrix() {
@@ -1795,8 +1795,8 @@ Transformable$1.getLocalTransform = function(target, m) {
   m[5] += position[1];
   return m;
 };
-var _default$i = Transformable$1;
-var Transformable_1 = _default$i;
+var _default$j = Transformable$1;
+var Transformable_1 = _default$j;
 var easing = {
   /**
   * @param {number} k
@@ -2114,8 +2114,8 @@ var easing = {
     return easing.bounceOut(k * 2 - 1) * 0.5 + 0.5;
   }
 };
-var _default$h = easing;
-var easing_1 = _default$h;
+var _default$i = easing;
+var easing_1 = _default$i;
 var easingFuncs = easing_1;
 function Clip$1(options) {
   this._target = options.target;
@@ -2180,113 +2180,120 @@ Clip$1.prototype = {
     this._paused = false;
   }
 };
-var _default$g = Clip$1;
-var Clip_1 = _default$g;
+var _default$h = Clip$1;
+var Clip_1 = _default$h;
 var color$1 = {};
-var LinkedList = function() {
-  this.head = null;
-  this.tail = null;
-  this._len = 0;
-};
-var linkedListProto = LinkedList.prototype;
-linkedListProto.insert = function(val) {
-  var entry = new Entry(val);
-  this.insertEntry(entry);
-  return entry;
-};
-linkedListProto.insertEntry = function(entry) {
-  if (!this.head) {
-    this.head = this.tail = entry;
-  } else {
-    this.tail.next = entry;
-    entry.prev = this.tail;
-    entry.next = null;
-    this.tail = entry;
-  }
-  this._len++;
-};
-linkedListProto.remove = function(entry) {
-  var prev = entry.prev;
-  var next = entry.next;
-  if (prev) {
-    prev.next = next;
-  } else {
-    this.head = next;
-  }
-  if (next) {
-    next.prev = prev;
-  } else {
-    this.tail = prev;
-  }
-  entry.next = entry.prev = null;
-  this._len--;
-};
-linkedListProto.len = function() {
-  return this._len;
-};
-linkedListProto.clear = function() {
-  this.head = this.tail = null;
-  this._len = 0;
-};
-var Entry = function(val) {
-  this.value = val;
-  this.next;
-  this.prev;
-};
-var LRU$1 = function(maxSize) {
-  this._list = new LinkedList();
-  this._map = {};
-  this._maxSize = maxSize || 10;
-  this._lastRemovedEntry = null;
-};
-var LRUProto = LRU$1.prototype;
-LRUProto.put = function(key, value) {
-  var list = this._list;
-  var map2 = this._map;
-  var removed = null;
-  if (map2[key] == null) {
-    var len2 = list.len();
-    var entry = this._lastRemovedEntry;
-    if (len2 >= this._maxSize && len2 > 0) {
-      var leastUsedEntry = list.head;
-      list.remove(leastUsedEntry);
-      delete map2[leastUsedEntry.key];
-      removed = leastUsedEntry.value;
-      this._lastRemovedEntry = leastUsedEntry;
-    }
-    if (entry) {
-      entry.value = value;
+var LRU_1;
+var hasRequiredLRU;
+function requireLRU() {
+  if (hasRequiredLRU) return LRU_1;
+  hasRequiredLRU = 1;
+  var LinkedList = function() {
+    this.head = null;
+    this.tail = null;
+    this._len = 0;
+  };
+  var linkedListProto = LinkedList.prototype;
+  linkedListProto.insert = function(val) {
+    var entry = new Entry(val);
+    this.insertEntry(entry);
+    return entry;
+  };
+  linkedListProto.insertEntry = function(entry) {
+    if (!this.head) {
+      this.head = this.tail = entry;
     } else {
-      entry = new Entry(value);
+      this.tail.next = entry;
+      entry.prev = this.tail;
+      entry.next = null;
+      this.tail = entry;
     }
-    entry.key = key;
-    list.insertEntry(entry);
-    map2[key] = entry;
-  }
-  return removed;
-};
-LRUProto.get = function(key) {
-  var entry = this._map[key];
-  var list = this._list;
-  if (entry != null) {
-    if (entry !== list.tail) {
-      list.remove(entry);
+    this._len++;
+  };
+  linkedListProto.remove = function(entry) {
+    var prev = entry.prev;
+    var next = entry.next;
+    if (prev) {
+      prev.next = next;
+    } else {
+      this.head = next;
+    }
+    if (next) {
+      next.prev = prev;
+    } else {
+      this.tail = prev;
+    }
+    entry.next = entry.prev = null;
+    this._len--;
+  };
+  linkedListProto.len = function() {
+    return this._len;
+  };
+  linkedListProto.clear = function() {
+    this.head = this.tail = null;
+    this._len = 0;
+  };
+  var Entry = function(val) {
+    this.value = val;
+    this.next;
+    this.prev;
+  };
+  var LRU2 = function(maxSize) {
+    this._list = new LinkedList();
+    this._map = {};
+    this._maxSize = maxSize || 10;
+    this._lastRemovedEntry = null;
+  };
+  var LRUProto = LRU2.prototype;
+  LRUProto.put = function(key, value) {
+    var list = this._list;
+    var map2 = this._map;
+    var removed = null;
+    if (map2[key] == null) {
+      var len2 = list.len();
+      var entry = this._lastRemovedEntry;
+      if (len2 >= this._maxSize && len2 > 0) {
+        var leastUsedEntry = list.head;
+        list.remove(leastUsedEntry);
+        delete map2[leastUsedEntry.key];
+        removed = leastUsedEntry.value;
+        this._lastRemovedEntry = leastUsedEntry;
+      }
+      if (entry) {
+        entry.value = value;
+      } else {
+        entry = new Entry(value);
+      }
+      entry.key = key;
       list.insertEntry(entry);
+      map2[key] = entry;
     }
-    return entry.value;
-  }
-};
-LRUProto.clear = function() {
-  this._list.clear();
-  this._map = {};
-};
-var _default$f = LRU$1;
-var LRU_1 = _default$f;
+    return removed;
+  };
+  LRUProto.get = function(key) {
+    var entry = this._map[key];
+    var list = this._list;
+    if (entry != null) {
+      if (entry !== list.tail) {
+        list.remove(entry);
+        list.insertEntry(entry);
+      }
+      return entry.value;
+    }
+  };
+  LRUProto.clear = function() {
+    this._list.clear();
+    this._map = {};
+  };
+  var _default2 = LRU2;
+  LRU_1 = _default2;
+  return LRU_1;
+}
 var hasRequiredColor;
 function requireColor() {
   if (hasRequiredColor) return color$1;
   hasRequiredColor = 1;
-  var LRU2 = LRU_1;
+  var LRU2 = requireLRU();
   var kCSSColorTable = {
     "transparent": [0, 0, 0, 0],
     "aliceblue": [240, 248, 255, 1],
@@ -3181,8 +3188,8 @@ Animator$2.prototype = {
     return this._clipList;
   }
 };
-var _default$e = Animator$2;
-var Animator_1 = _default$e;
+var _default$g = Animator$2;
+var Animator_1 = _default$g;
 var config = {};
 var dpr = 1;
 if (typeof window !== "undefined") {
@@ -3199,8 +3206,8 @@ var logError$2 = function() {
 if (debugMode === 1) {
   logError$2 = console.error;
 }
-var _default$d = logError$2;
-var log = _default$d;
+var _default$f = logError$2;
+var log = _default$f;
 var Animator$1 = Animator_1;
 var logError$1 = log;
 var _util = util$6;
@@ -3390,8 +3397,8 @@ function setAttrByPath(el, path2, name, value) {
     el.attr(props);
   }
 }
-var _default$c = Animatable$1;
-var Animatable_1 = _default$c;
+var _default$e = Animatable$1;
+var Animatable_1 = _default$e;
 var guid$1 = guid$2;
 var Eventful$1 = Eventful_1;
 var Transformable = Transformable_1;
@@ -3605,8 +3612,8 @@ Element$2.prototype = {
 zrUtil$5.mixin(Element$2, Animatable);
 zrUtil$5.mixin(Element$2, Transformable);
 zrUtil$5.mixin(Element$2, Eventful$1);
-var _default$b = Element$2;
-var Element_1 = _default$b;
+var _default$d = Element$2;
+var Element_1 = _default$d;
 var vec2 = vector$1;
 var matrix = requireMatrix();
 var v2ApplyTransform = vec2.applyTransform;
@@ -3736,8 +3743,8 @@ BoundingRect$4.prototype = {
 BoundingRect$4.create = function(rect) {
   return new BoundingRect$4(rect.x, rect.y, rect.width, rect.height);
 };
-var _default$a = BoundingRect$4;
-var BoundingRect_1 = _default$a;
+var _default$c = BoundingRect$4;
+var BoundingRect_1 = _default$c;
 var zrUtil$4 = util$6;
 var Element$1 = Element_1;
 var BoundingRect$3 = BoundingRect_1;
@@ -3966,8 +3973,8 @@ Group$1.prototype = {
   }
 };
 zrUtil$4.inherits(Group$1, Element$1);
-var _default$9 = Group$1;
-var Group_1 = _default$9;
+var _default$b = Group$1;
+var Group_1 = _default$b;
 var DEFAULT_MIN_MERGE = 32;
 var DEFAULT_MIN_GALLOPING = 7;
 function minRunLength(n) {
@@ -4643,449 +4650,429 @@ Storage$1.prototype = {
   },
   displayableSortFunc: shapeCompareFunc
 };
-var _default$8 = Storage$1;
-var Storage_1 = _default$8;
-var fixShadow;
-var hasRequiredFixShadow;
-function requireFixShadow() {
-  if (hasRequiredFixShadow) return fixShadow;
-  hasRequiredFixShadow = 1;
-  var SHADOW_PROPS = {
-    "shadowBlur": 1,
-    "shadowOffsetX": 1,
-    "shadowOffsetY": 1,
-    "textShadowBlur": 1,
-    "textShadowOffsetX": 1,
-    "textShadowOffsetY": 1,
-    "textBoxShadowBlur": 1,
-    "textBoxShadowOffsetX": 1,
-    "textBoxShadowOffsetY": 1
-  };
-  function _default2(ctx, propName, value) {
-    if (SHADOW_PROPS.hasOwnProperty(propName)) {
-      return value *= ctx.dpr;
-    }
-    return value;
+var _default$a = Storage$1;
+var Storage_1 = _default$a;
+var SHADOW_PROPS = {
+  "shadowBlur": 1,
+  "shadowOffsetX": 1,
+  "shadowOffsetY": 1,
+  "textShadowBlur": 1,
+  "textShadowOffsetX": 1,
+  "textShadowOffsetY": 1,
+  "textBoxShadowBlur": 1,
+  "textBoxShadowOffsetX": 1,
+  "textBoxShadowOffsetY": 1
+};
+function _default$9(ctx, propName, value) {
+  if (SHADOW_PROPS.hasOwnProperty(propName)) {
+    return value *= ctx.dpr;
   }
-  fixShadow = _default2;
-  return fixShadow;
+  return value;
 }
+var fixShadow$1 = _default$9;
 var constant = {};
-var hasRequiredConstant;
-function requireConstant() {
-  if (hasRequiredConstant) return constant;
-  hasRequiredConstant = 1;
-  var ContextCachedBy = {
-    NONE: 0,
-    STYLE_BIND: 1,
-    PLAIN_TEXT: 2
-  };
-  var WILL_BE_RESTORED2 = 9;
-  constant.ContextCachedBy = ContextCachedBy;
-  constant.WILL_BE_RESTORED = WILL_BE_RESTORED2;
-  return constant;
+var ContextCachedBy$1 = {
+  NONE: 0,
+  STYLE_BIND: 1,
+  PLAIN_TEXT: 2
+};
+var WILL_BE_RESTORED$1 = 9;
+constant.ContextCachedBy = ContextCachedBy$1;
+constant.WILL_BE_RESTORED = WILL_BE_RESTORED$1;
+var fixShadow = fixShadow$1;
+var _constant$1 = constant;
+var ContextCachedBy = _constant$1.ContextCachedBy;
+var STYLE_COMMON_PROPS = [["shadowBlur", 0], ["shadowOffsetX", 0], ["shadowOffsetY", 0], ["shadowColor", "#000"], ["lineCap", "butt"], ["lineJoin", "miter"], ["miterLimit", 10]];
+var Style$2 = function(opts) {
+  this.extendFrom(opts, false);
+};
+function createLinearGradient(ctx, obj, rect) {
+  var x = obj.x == null ? 0 : obj.x;
+  var x2 = obj.x2 == null ? 1 : obj.x2;
+  var y = obj.y == null ? 0 : obj.y;
+  var y2 = obj.y2 == null ? 0 : obj.y2;
+  if (!obj.global) {
+    x = x * rect.width + rect.x;
+    x2 = x2 * rect.width + rect.x;
+    y = y * rect.height + rect.y;
+    y2 = y2 * rect.height + rect.y;
+  }
+  x = isNaN(x) ? 0 : x;
+  x2 = isNaN(x2) ? 1 : x2;
+  y = isNaN(y) ? 0 : y;
+  y2 = isNaN(y2) ? 0 : y2;
+  var canvasGradient = ctx.createLinearGradient(x, y, x2, y2);
+  return canvasGradient;
 }
-var Style_1;
-var hasRequiredStyle;
-function requireStyle() {
-  if (hasRequiredStyle) return Style_1;
-  hasRequiredStyle = 1;
-  var fixShadow2 = requireFixShadow();
-  var _constant2 = requireConstant();
-  var ContextCachedBy = _constant2.ContextCachedBy;
-  var STYLE_COMMON_PROPS = [["shadowBlur", 0], ["shadowOffsetX", 0], ["shadowOffsetY", 0], ["shadowColor", "#000"], ["lineCap", "butt"], ["lineJoin", "miter"], ["miterLimit", 10]];
-  var Style2 = function(opts) {
-    this.extendFrom(opts, false);
-  };
-  function createLinearGradient(ctx, obj, rect) {
-    var x = obj.x == null ? 0 : obj.x;
-    var x2 = obj.x2 == null ? 1 : obj.x2;
-    var y = obj.y == null ? 0 : obj.y;
-    var y2 = obj.y2 == null ? 0 : obj.y2;
-    if (!obj.global) {
-      x = x * rect.width + rect.x;
-      x2 = x2 * rect.width + rect.x;
-      y = y * rect.height + rect.y;
-      y2 = y2 * rect.height + rect.y;
-    }
-    x = isNaN(x) ? 0 : x;
-    x2 = isNaN(x2) ? 1 : x2;
-    y = isNaN(y) ? 0 : y;
-    y2 = isNaN(y2) ? 0 : y2;
-    var canvasGradient = ctx.createLinearGradient(x, y, x2, y2);
-    return canvasGradient;
+function createRadialGradient(ctx, obj, rect) {
+  var width = rect.width;
+  var height = rect.height;
+  var min2 = Math.min(width, height);
+  var x = obj.x == null ? 0.5 : obj.x;
+  var y = obj.y == null ? 0.5 : obj.y;
+  var r = obj.r == null ? 0.5 : obj.r;
+  if (!obj.global) {
+    x = x * width + rect.x;
+    y = y * height + rect.y;
+    r = r * min2;
   }
-  function createRadialGradient(ctx, obj, rect) {
-    var width = rect.width;
-    var height = rect.height;
-    var min2 = Math.min(width, height);
-    var x = obj.x == null ? 0.5 : obj.x;
-    var y = obj.y == null ? 0.5 : obj.y;
-    var r = obj.r == null ? 0.5 : obj.r;
-    if (!obj.global) {
-      x = x * width + rect.x;
-      y = y * height + rect.y;
-      r = r * min2;
+  var canvasGradient = ctx.createRadialGradient(x, y, 0, x, y, r);
+  return canvasGradient;
+}
+Style$2.prototype = {
+  constructor: Style$2,
+  /**
+   * @type {string}
+   */
+  fill: "#000",
+  /**
+   * @type {string}
+   */
+  stroke: null,
+  /**
+   * @type {number}
+   */
+  opacity: 1,
+  /**
+   * @type {number}
+   */
+  fillOpacity: null,
+  /**
+   * @type {number}
+   */
+  strokeOpacity: null,
+  /**
+   * `true` is not supported.
+   * `false`/`null`/`undefined` are the same.
+   * `false` is used to remove lineDash in some
+   * case that `null`/`undefined` can not be set.
+   * (e.g., emphasis.lineStyle in echarts)
+   * @type {Array.<number>|boolean}
+   */
+  lineDash: null,
+  /**
+   * @type {number}
+   */
+  lineDashOffset: 0,
+  /**
+   * @type {number}
+   */
+  shadowBlur: 0,
+  /**
+   * @type {number}
+   */
+  shadowOffsetX: 0,
+  /**
+   * @type {number}
+   */
+  shadowOffsetY: 0,
+  /**
+   * @type {number}
+   */
+  lineWidth: 1,
+  /**
+   * If stroke ignore scale
+   * @type {Boolean}
+   */
+  strokeNoScale: false,
+  // Bounding rect text configuration
+  // Not affected by element transform
+  /**
+   * @type {string}
+   */
+  text: null,
+  /**
+   * If `fontSize` or `fontFamily` exists, `font` will be reset by
+   * `fontSize`, `fontStyle`, `fontWeight`, `fontFamily`.
+   * So do not visit it directly in upper application (like echarts),
+   * but use `contain/text#makeFont` instead.
+   * @type {string}
+   */
+  font: null,
+  /**
+   * The same as font. Use font please.
+   * @deprecated
+   * @type {string}
+   */
+  textFont: null,
+  /**
+   * It helps merging respectively, rather than parsing an entire font string.
+   * @type {string}
+   */
+  fontStyle: null,
+  /**
+   * It helps merging respectively, rather than parsing an entire font string.
+   * @type {string}
+   */
+  fontWeight: null,
+  /**
+   * It helps merging respectively, rather than parsing an entire font string.
+   * Should be 12 but not '12px'.
+   * @type {number}
+   */
+  fontSize: null,
+  /**
+   * It helps merging respectively, rather than parsing an entire font string.
+   * @type {string}
+   */
+  fontFamily: null,
+  /**
+   * Reserved for special functinality, like 'hr'.
+   * @type {string}
+   */
+  textTag: null,
+  /**
+   * @type {string}
+   */
+  textFill: "#000",
+  /**
+   * @type {string}
+   */
+  textStroke: null,
+  /**
+   * @type {number}
+   */
+  textWidth: null,
+  /**
+   * Only for textBackground.
+   * @type {number}
+   */
+  textHeight: null,
+  /**
+   * textStroke may be set as some color as a default
+   * value in upper applicaion, where the default value
+   * of textStrokeWidth should be 0 to make sure that
+   * user can choose to do not use text stroke.
+   * @type {number}
+   */
+  textStrokeWidth: 0,
+  /**
+   * @type {number}
+   */
+  textLineHeight: null,
+  /**
+   * 'inside', 'left', 'right', 'top', 'bottom'
+   * [x, y]
+   * Based on x, y of rect.
+   * @type {string|Array.<number>}
+   * @default 'inside'
+   */
+  textPosition: "inside",
+  /**
+   * If not specified, use the boundingRect of a `displayable`.
+   * @type {Object}
+   */
+  textRect: null,
+  /**
+   * [x, y]
+   * @type {Array.<number>}
+   */
+  textOffset: null,
+  /**
+   * @type {string}
+   */
+  textAlign: null,
+  /**
+   * @type {string}
+   */
+  textVerticalAlign: null,
+  /**
+   * @type {number}
+   */
+  textDistance: 5,
+  /**
+   * @type {string}
+   */
+  textShadowColor: "transparent",
+  /**
+   * @type {number}
+   */
+  textShadowBlur: 0,
+  /**
+   * @type {number}
+   */
+  textShadowOffsetX: 0,
+  /**
+   * @type {number}
+   */
+  textShadowOffsetY: 0,
+  /**
+   * @type {string}
+   */
+  textBoxShadowColor: "transparent",
+  /**
+   * @type {number}
+   */
+  textBoxShadowBlur: 0,
+  /**
+   * @type {number}
+   */
+  textBoxShadowOffsetX: 0,
+  /**
+   * @type {number}
+   */
+  textBoxShadowOffsetY: 0,
+  /**
+   * Whether transform text.
+   * Only available in Path and Image element,
+   * where the text is called as `RectText`.
+   * @type {boolean}
+   */
+  transformText: false,
+  /**
+   * Text rotate around position of Path or Image.
+   * The origin of the rotation can be specified by `textOrigin`.
+   * Only available in Path and Image element,
+   * where the text is called as `RectText`.
+   */
+  textRotation: 0,
+  /**
+   * Text origin of text rotation.
+   * Useful in the case like label rotation of circular symbol.
+   * Only available in Path and Image element, where the text is called
+   * as `RectText` and the element is called as "host element".
+   * The value can be:
+   * + If specified as a coordinate like `[10, 40]`, it is the `[x, y]`
+   * base on the left-top corner of the rect of its host element.
+   * + If specified as a string `center`, it is the center of the rect of
+   * its host element.
+   * + By default, this origin is the `textPosition`.
+   * @type {string|Array.<number>}
+   */
+  textOrigin: null,
+  /**
+   * @type {string}
+   */
+  textBackgroundColor: null,
+  /**
+   * @type {string}
+   */
+  textBorderColor: null,
+  /**
+   * @type {number}
+   */
+  textBorderWidth: 0,
+  /**
+   * @type {number}
+   */
+  textBorderRadius: 0,
+  /**
+   * Can be `2` or `[2, 4]` or `[2, 3, 4, 5]`
+   * @type {number|Array.<number>}
+   */
+  textPadding: null,
+  /**
+   * Text styles for rich text.
+   * @type {Object}
+   */
+  rich: null,
+  /**
+   * {outerWidth, outerHeight, ellipsis, placeholder}
+   * @type {Object}
+   */
+  truncate: null,
+  /**
+   * https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation
+   * @type {string}
+   */
+  blend: null,
+  /**
+   * @param {CanvasRenderingContext2D} ctx
+   */
+  bind: function(ctx, el, prevEl) {
+    var style = this;
+    var prevStyle = prevEl && prevEl.style;
+    var notCheckCache = !prevStyle || ctx.__attrCachedBy !== ContextCachedBy.STYLE_BIND;
+    ctx.__attrCachedBy = ContextCachedBy.STYLE_BIND;
+    for (var i = 0; i < STYLE_COMMON_PROPS.length; i++) {
+      var prop = STYLE_COMMON_PROPS[i];
+      var styleName = prop[0];
+      if (notCheckCache || style[styleName] !== prevStyle[styleName]) {
+        ctx[styleName] = fixShadow(ctx, styleName, style[styleName] || prop[1]);
+      }
     }
-    var canvasGradient = ctx.createRadialGradient(x, y, 0, x, y, r);
-    return canvasGradient;
-  }
-  Style2.prototype = {
-    constructor: Style2,
-    /**
-     * @type {string}
-     */
-    fill: "#000",
-    /**
-     * @type {string}
-     */
-    stroke: null,
-    /**
-     * @type {number}
-     */
-    opacity: 1,
-    /**
-     * @type {number}
-     */
-    fillOpacity: null,
-    /**
-     * @type {number}
-     */
-    strokeOpacity: null,
-    /**
-     * `true` is not supported.
-     * `false`/`null`/`undefined` are the same.
-     * `false` is used to remove lineDash in some
-     * case that `null`/`undefined` can not be set.
-     * (e.g., emphasis.lineStyle in echarts)
-     * @type {Array.<number>|boolean}
-     */
-    lineDash: null,
-    /**
-     * @type {number}
-     */
-    lineDashOffset: 0,
-    /**
-     * @type {number}
-     */
-    shadowBlur: 0,
-    /**
-     * @type {number}
-     */
-    shadowOffsetX: 0,
-    /**
-     * @type {number}
-     */
-    shadowOffsetY: 0,
-    /**
-     * @type {number}
-     */
-    lineWidth: 1,
-    /**
-     * If stroke ignore scale
-     * @type {Boolean}
-     */
-    strokeNoScale: false,
-    // Bounding rect text configuration
-    // Not affected by element transform
-    /**
-     * @type {string}
-     */
-    text: null,
-    /**
-     * If `fontSize` or `fontFamily` exists, `font` will be reset by
-     * `fontSize`, `fontStyle`, `fontWeight`, `fontFamily`.
-     * So do not visit it directly in upper application (like echarts),
-     * but use `contain/text#makeFont` instead.
-     * @type {string}
-     */
-    font: null,
-    /**
-     * The same as font. Use font please.
-     * @deprecated
-     * @type {string}
-     */
-    textFont: null,
-    /**
-     * It helps merging respectively, rather than parsing an entire font string.
-     * @type {string}
-     */
-    fontStyle: null,
-    /**
-     * It helps merging respectively, rather than parsing an entire font string.
-     * @type {string}
-     */
-    fontWeight: null,
-    /**
-     * It helps merging respectively, rather than parsing an entire font string.
-     * Should be 12 but not '12px'.
-     * @type {number}
-     */
-    fontSize: null,
-    /**
-     * It helps merging respectively, rather than parsing an entire font string.
-     * @type {string}
-     */
-    fontFamily: null,
-    /**
-     * Reserved for special functinality, like 'hr'.
-     * @type {string}
-     */
-    textTag: null,
-    /**
-     * @type {string}
-     */
-    textFill: "#000",
-    /**
-     * @type {string}
-     */
-    textStroke: null,
-    /**
-     * @type {number}
-     */
-    textWidth: null,
-    /**
-     * Only for textBackground.
-     * @type {number}
-     */
-    textHeight: null,
-    /**
-     * textStroke may be set as some color as a default
-     * value in upper applicaion, where the default value
-     * of textStrokeWidth should be 0 to make sure that
-     * user can choose to do not use text stroke.
-     * @type {number}
-     */
-    textStrokeWidth: 0,
-    /**
-     * @type {number}
-     */
-    textLineHeight: null,
-    /**
-     * 'inside', 'left', 'right', 'top', 'bottom'
-     * [x, y]
-     * Based on x, y of rect.
-     * @type {string|Array.<number>}
-     * @default 'inside'
-     */
-    textPosition: "inside",
-    /**
-     * If not specified, use the boundingRect of a `displayable`.
-     * @type {Object}
-     */
-    textRect: null,
-    /**
-     * [x, y]
-     * @type {Array.<number>}
-     */
-    textOffset: null,
-    /**
-     * @type {string}
-     */
-    textAlign: null,
-    /**
-     * @type {string}
-     */
-    textVerticalAlign: null,
-    /**
-     * @type {number}
-     */
-    textDistance: 5,
-    /**
-     * @type {string}
-     */
-    textShadowColor: "transparent",
-    /**
-     * @type {number}
-     */
-    textShadowBlur: 0,
-    /**
-     * @type {number}
-     */
-    textShadowOffsetX: 0,
-    /**
-     * @type {number}
-     */
-    textShadowOffsetY: 0,
-    /**
-     * @type {string}
-     */
-    textBoxShadowColor: "transparent",
-    /**
-     * @type {number}
-     */
-    textBoxShadowBlur: 0,
-    /**
-     * @type {number}
-     */
-    textBoxShadowOffsetX: 0,
-    /**
-     * @type {number}
-     */
-    textBoxShadowOffsetY: 0,
-    /**
-     * Whether transform text.
-     * Only available in Path and Image element,
-     * where the text is called as `RectText`.
-     * @type {boolean}
-     */
-    transformText: false,
-    /**
-     * Text rotate around position of Path or Image.
-     * The origin of the rotation can be specified by `textOrigin`.
-     * Only available in Path and Image element,
-     * where the text is called as `RectText`.
-     */
-    textRotation: 0,
-    /**
-     * Text origin of text rotation.
-     * Useful in the case like label rotation of circular symbol.
-     * Only available in Path and Image element, where the text is called
-     * as `RectText` and the element is called as "host element".
-     * The value can be:
-     * + If specified as a coordinate like `[10, 40]`, it is the `[x, y]`
-     * base on the left-top corner of the rect of its host element.
-     * + If specified as a string `center`, it is the center of the rect of
-     * its host element.
-     * + By default, this origin is the `textPosition`.
-     * @type {string|Array.<number>}
-     */
-    textOrigin: null,
-    /**
-     * @type {string}
-     */
-    textBackgroundColor: null,
-    /**
-     * @type {string}
-     */
-    textBorderColor: null,
-    /**
-     * @type {number}
-     */
-    textBorderWidth: 0,
-    /**
-     * @type {number}
-     */
-    textBorderRadius: 0,
-    /**
-     * Can be `2` or `[2, 4]` or `[2, 3, 4, 5]`
-     * @type {number|Array.<number>}
-     */
-    textPadding: null,
-    /**
-     * Text styles for rich text.
-     * @type {Object}
-     */
-    rich: null,
-    /**
-     * {outerWidth, outerHeight, ellipsis, placeholder}
-     * @type {Object}
-     */
-    truncate: null,
-    /**
-     * https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation
-     * @type {string}
-     */
-    blend: null,
-    /**
-     * @param {CanvasRenderingContext2D} ctx
-     */
-    bind: function(ctx, el, prevEl) {
-      var style = this;
-      var prevStyle = prevEl && prevEl.style;
-      var notCheckCache = !prevStyle || ctx.__attrCachedBy !== ContextCachedBy.STYLE_BIND;
-      ctx.__attrCachedBy = ContextCachedBy.STYLE_BIND;
-      for (var i2 = 0; i2 < STYLE_COMMON_PROPS.length; i2++) {
-        var prop2 = STYLE_COMMON_PROPS[i2];
-        var styleName = prop2[0];
-        if (notCheckCache || style[styleName] !== prevStyle[styleName]) {
-          ctx[styleName] = fixShadow2(ctx, styleName, style[styleName] || prop2[1]);
+    if (notCheckCache || style.fill !== prevStyle.fill) {
+      ctx.fillStyle = style.fill;
+    }
+    if (notCheckCache || style.stroke !== prevStyle.stroke) {
+      ctx.strokeStyle = style.stroke;
+    }
+    if (notCheckCache || style.opacity !== prevStyle.opacity) {
+      ctx.globalAlpha = style.opacity == null ? 1 : style.opacity;
+    }
+    if (notCheckCache || style.blend !== prevStyle.blend) {
+      ctx.globalCompositeOperation = style.blend || "source-over";
+    }
+    if (this.hasStroke()) {
+      var lineWidth = style.lineWidth;
+      ctx.lineWidth = lineWidth / (this.strokeNoScale && el && el.getLineScale ? el.getLineScale() : 1);
+    }
+  },
+  hasFill: function() {
+    var fill = this.fill;
+    return fill != null && fill !== "none";
+  },
+  hasStroke: function() {
+    var stroke = this.stroke;
+    return stroke != null && stroke !== "none" && this.lineWidth > 0;
+  },
+  /**
+   * Extend from other style
+   * @param {zrender/graphic/Style} otherStyle
+   * @param {boolean} overwrite true: overwrirte any way.
+   *                            false: overwrite only when !target.hasOwnProperty
+   *                            others: overwrite when property is not null/undefined.
+   */
+  extendFrom: function(otherStyle, overwrite) {
+    if (otherStyle) {
+      for (var name in otherStyle) {
+        if (otherStyle.hasOwnProperty(name) && (overwrite === true || (overwrite === false ? !this.hasOwnProperty(name) : otherStyle[name] != null))) {
+          this[name] = otherStyle[name];
         }
       }
-      if (notCheckCache || style.fill !== prevStyle.fill) {
-        ctx.fillStyle = style.fill;
-      }
-      if (notCheckCache || style.stroke !== prevStyle.stroke) {
-        ctx.strokeStyle = style.stroke;
-      }
-      if (notCheckCache || style.opacity !== prevStyle.opacity) {
-        ctx.globalAlpha = style.opacity == null ? 1 : style.opacity;
-      }
-      if (notCheckCache || style.blend !== prevStyle.blend) {
-        ctx.globalCompositeOperation = style.blend || "source-over";
-      }
-      if (this.hasStroke()) {
-        var lineWidth = style.lineWidth;
-        ctx.lineWidth = lineWidth / (this.strokeNoScale && el && el.getLineScale ? el.getLineScale() : 1);
-      }
-    },
-    hasFill: function() {
-      var fill = this.fill;
-      return fill != null && fill !== "none";
-    },
-    hasStroke: function() {
-      var stroke = this.stroke;
-      return stroke != null && stroke !== "none" && this.lineWidth > 0;
-    },
-    /**
-     * Extend from other style
-     * @param {zrender/graphic/Style} otherStyle
-     * @param {boolean} overwrite true: overwrirte any way.
-     *                            false: overwrite only when !target.hasOwnProperty
-     *                            others: overwrite when property is not null/undefined.
-     */
-    extendFrom: function(otherStyle, overwrite) {
-      if (otherStyle) {
-        for (var name in otherStyle) {
-          if (otherStyle.hasOwnProperty(name) && (overwrite === true || (overwrite === false ? !this.hasOwnProperty(name) : otherStyle[name] != null))) {
-            this[name] = otherStyle[name];
-          }
-        }
-      }
-    },
-    /**
-     * Batch setting style with a given object
-     * @param {Object|string} obj
-     * @param {*} [obj]
-     */
-    set: function(obj, value) {
-      if (typeof obj === "string") {
-        this[obj] = value;
-      } else {
-        this.extendFrom(obj, true);
-      }
-    },
-    /**
-     * Clone
-     * @return {zrender/graphic/Style} [description]
-     */
-    clone: function() {
-      var newStyle = new this.constructor();
-      newStyle.extendFrom(this, true);
-      return newStyle;
-    },
-    getGradient: function(ctx, obj, rect) {
-      var method = obj.type === "radial" ? createRadialGradient : createLinearGradient;
-      var canvasGradient = method(ctx, obj, rect);
-      var colorStops = obj.colorStops;
-      for (var i2 = 0; i2 < colorStops.length; i2++) {
-        canvasGradient.addColorStop(colorStops[i2].offset, colorStops[i2].color);
-      }
-      return canvasGradient;
     }
-  };
-  var styleProto = Style2.prototype;
-  for (var i = 0; i < STYLE_COMMON_PROPS.length; i++) {
-    var prop = STYLE_COMMON_PROPS[i];
-    if (!(prop[0] in styleProto)) {
-      styleProto[prop[0]] = prop[1];
+  },
+  /**
+   * Batch setting style with a given object
+   * @param {Object|string} obj
+   * @param {*} [obj]
+   */
+  set: function(obj, value) {
+    if (typeof obj === "string") {
+      this[obj] = value;
+    } else {
+      this.extendFrom(obj, true);
     }
+  },
+  /**
+   * Clone
+   * @return {zrender/graphic/Style} [description]
+   */
+  clone: function() {
+    var newStyle = new this.constructor();
+    newStyle.extendFrom(this, true);
+    return newStyle;
+  },
+  getGradient: function(ctx, obj, rect) {
+    var method = obj.type === "radial" ? createRadialGradient : createLinearGradient;
+    var canvasGradient = method(ctx, obj, rect);
+    var colorStops = obj.colorStops;
+    for (var i = 0; i < colorStops.length; i++) {
+      canvasGradient.addColorStop(colorStops[i].offset, colorStops[i].color);
+    }
+    return canvasGradient;
   }
-  Style2.getGradient = styleProto.getGradient;
-  var _default2 = Style2;
-  Style_1 = _default2;
-  return Style_1;
+};
+var styleProto = Style$2.prototype;
+for (var i = 0; i < STYLE_COMMON_PROPS.length; i++) {
+  var prop = STYLE_COMMON_PROPS[i];
+  if (!(prop[0] in styleProto)) {
+    styleProto[prop[0]] = prop[1];
+  }
 }
+Style$2.getGradient = styleProto.getGradient;
+var _default$8 = Style$2;
+var Style_1 = _default$8;
 var Pattern_1;
 var hasRequiredPattern;
 function requirePattern() {
@@ -5106,7 +5093,7 @@ function requirePattern() {
 var util$3 = util$6;
 var _config$1 = config;
 var devicePixelRatio$1 = _config$1.devicePixelRatio;
-var Style$1 = requireStyle();
+var Style$1 = Style_1;
 var Pattern = requirePattern();
 function returnFalse() {
   return false;
@@ -5264,7 +5251,7 @@ var requestAnimationFrame$2 = _default$6;
 var text$1 = {};
 var text = {};
 var image = {};
-var LRU = LRU_1;
+var LRU = requireLRU();
 var globalImageCache = new LRU(50);
 function findExistImage(newImageOrSrc) {
   if (typeof newImageOrSrc === "string") {
@@ -5885,9 +5872,9 @@ function requireText$1() {
   var textContain = requireText$2();
   var roundRectHelper = requireRoundRect();
   var imageHelper2 = image;
-  var fixShadow2 = requireFixShadow();
-  var _constant2 = requireConstant();
-  var ContextCachedBy = _constant2.ContextCachedBy;
+  var fixShadow2 = fixShadow$1;
+  var _constant2 = constant;
+  var ContextCachedBy2 = _constant2.ContextCachedBy;
   var WILL_BE_RESTORED2 = _constant2.WILL_BE_RESTORED;
   var DEFAULT_FONT = textContain.DEFAULT_FONT;
   var VALID_TEXT_ALIGN = {
@@ -5930,15 +5917,15 @@ function requireText$1() {
     var needDrawBg = needDrawBackground(style);
     var prevStyle;
     var checkCache = false;
-    var cachedByMe = ctx.__attrCachedBy === ContextCachedBy.PLAIN_TEXT;
+    var cachedByMe = ctx.__attrCachedBy === ContextCachedBy2.PLAIN_TEXT;
     if (prevEl !== WILL_BE_RESTORED2) {
       if (prevEl) {
         prevStyle = prevEl.style;
         checkCache = !needDrawBg && cachedByMe && prevStyle;
       }
-      ctx.__attrCachedBy = needDrawBg ? ContextCachedBy.NONE : ContextCachedBy.PLAIN_TEXT;
+      ctx.__attrCachedBy = needDrawBg ? ContextCachedBy2.NONE : ContextCachedBy2.PLAIN_TEXT;
     } else if (cachedByMe) {
-      ctx.__attrCachedBy = ContextCachedBy.NONE;
+      ctx.__attrCachedBy = ContextCachedBy2.NONE;
     }
     var styleFont = style.font || DEFAULT_FONT;
     if (!checkCache || styleFont !== (prevStyle.font || DEFAULT_FONT)) {
@@ -6023,7 +6010,7 @@ function requireText$1() {
   }
   function renderRichText(hostEl, ctx, text2, style, rect, prevEl) {
     if (prevEl !== WILL_BE_RESTORED2) {
-      ctx.__attrCachedBy = ContextCachedBy.NONE;
+      ctx.__attrCachedBy = ContextCachedBy2.NONE;
     }
     var contentBlock = hostEl.__textCotentBlock;
     if (!contentBlock || hostEl.__dirtyText) {
@@ -6263,7 +6250,7 @@ function requireText$1() {
 }
 var textHelper = requireText$1();
 var BoundingRect$2 = BoundingRect_1;
-var _constant = requireConstant();
+var _constant = constant;
 var WILL_BE_RESTORED = _constant.WILL_BE_RESTORED;
 var tmpRect$1 = new BoundingRect$2();
 var RectText$1 = function() {
@@ -6302,7 +6289,7 @@ RectText$1.prototype = {
 var _default$5 = RectText$1;
 var RectText_1 = _default$5;
 var zrUtil$3 = util$6;
-var Style = requireStyle();
+var Style = Style_1;
 var Element = Element_1;
 var RectText = RectText_1;
 function Displayable$1(opts) {
@@ -6313,7 +6300,7 @@ function Displayable$1(opts) {
       this[name] = opts[name];
     }
   }
-  this.style = new Style(opts.style, this);
+  this.style = new Style(opts.style);
   this._rect = null;
   this.__clipPaths = null;
 }
@@ -6502,7 +6489,7 @@ Displayable$1.prototype = {
    * @param  {Object} obj
    */
   useStyle: function(obj) {
-    this.style = new Style(obj, this);
+    this.style = new Style(obj);
     this.dirty(false);
     return this;
   },
@@ -10336,8 +10323,8 @@ function requireText() {
   var zrUtil2 = util$6;
   var textContain = requireText$2();
   var textHelper2 = requireText$1();
-  var _constant2 = requireConstant();
-  var ContextCachedBy = _constant2.ContextCachedBy;
+  var _constant2 = constant;
+  var ContextCachedBy2 = _constant2.ContextCachedBy;
   var Text = function(opts) {
     Displayable2.call(this, opts);
   };
@@ -10351,7 +10338,7 @@ function requireText() {
       var text2 = style.text;
       text2 != null && (text2 += "");
       if (!textHelper2.needDrawText(text2, style)) {
-        ctx.__attrCachedBy = ContextCachedBy.NONE;
+        ctx.__attrCachedBy = ContextCachedBy2.NONE;
         return;
       }
       this.setTransform(ctx);
@@ -10886,7 +10873,7 @@ function requireParseSVG() {
   var Polygon2 = requirePolygon();
   var Polyline2 = requirePolyline();
   var LinearGradient = requireLinearGradient();
-  var Style2 = requireStyle();
+  var Style2 = Style_1;
   var matrix2 = requireMatrix();
   var _path = requirePath();
   var createFromString = _path.createFromString;
