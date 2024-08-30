@@ -14,7 +14,7 @@ export default class Line {
     config: IConfig;
     line: any;
     constructor({ x1, y1, x2, y2, config }: IParams);
-    _init(): void;
+    private init;
     setConfig(config: IConfig): void;
     translate(dx1: number, dy1: number, dx2: number, dy2: number): void;
     setColor(color: string): void;

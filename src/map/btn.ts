@@ -19,7 +19,7 @@ export default class Btn {
     data: INode;
     type: IBtnType; // 0 收起 1 展开
     config: IConfig;
-    btn: zrender.Path;
+    btn: any;
 
     constructor({ x, y, data, type = 0, config }: IParams) {
         this.x = x;
@@ -32,6 +32,7 @@ export default class Btn {
 
     private init() {
         const { btn, line, normalNode } = this.config;
+        // @ts-ignore
         const Button = zrender.Path.extend({
             shape: {
                 x: 0,

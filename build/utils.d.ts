@@ -1,4 +1,4 @@
-import { INode, IRect } from "./types.ts";
+import { INode, IRect } from './types.ts';
 /**
  * Uses canvas.measureText to compute and return the width of the given text of given font in pixels.
  *
@@ -20,4 +20,5 @@ export declare const getEndNodeNum: (tree: INode) => number;
  * @return {bool} true 交叉 false 没有交叉
  */
 export declare const isIntersect: (rect1: IRect, rect2: IRect) => boolean;
-export declare const uuid: () => number;
+export declare const uuid: () => string;
+export declare const mergeObjects: (obj1: any, obj2: any) => {};

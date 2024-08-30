@@ -1,4 +1,4 @@
-import { INode, IConfig, IRect } from "./types";
+import { INode, IConfig, IRect } from './types';
 interface IParams {
     container: HTMLElement;
     rootGroup: any;
@@ -24,7 +24,6 @@ export default class Node {
     y: number;
     w: number;
     h: number;
-    level: number;
     data: INode;
     readonly: boolean;
     config: IConfig;
@@ -42,28 +41,11 @@ export default class Node {
     onNodeMouseUp: (e: any, data: INode) => void;
     onNodeMouseEnter: (e: any, data: INode) => void;
     onNodeMouseLeave: (e: any, data: INode) => void;
-    constructor({
-        container,
-        rootGroup,
-        x,
-        y,
-        w,
-        h,
-        data,
-        readonly,
-        config,
-        onNodeClick,
-        onTextChange,
-        onNodeDoubleClick,
-        onNodeMouseDown,
-        onNodeMouseUp,
-        onNodeMouseEnter,
-        onNodeMouseLeave,
-    }: IParams);
-    _init(): void;
+    constructor({ container, rootGroup, x, y, w, h, data, readonly, config, onNodeClick, onTextChange, onNodeDoubleClick, onNodeMouseDown, onNodeMouseUp, onNodeMouseEnter, onNodeMouseLeave, }: IParams);
+    private init;
     onMouseUp(): void;
-    _getPlaceholderRect(): any;
-    _generateInputDom({ x, y, w, h }: IRect): void;
+    getPlaceholderRect(): any;
+    generateInputDom({ x, y, w, h }: IRect): void;
     selectNode(): void;
     cancelNode(): void;
     translate(dx?: number, dy?: number): void;

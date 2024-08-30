@@ -9,6 +9,11 @@ lerna-debug.log*
 
 node_modules
 src
+.editorconfig
+index.html
+tsconfig.json
+vite.config.js
+vite.lib.config.js
 .DS_Store
 dist-ssr
 coverage

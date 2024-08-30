@@ -123,11 +123,11 @@ export default class Mindmap {
 
     private init() {
         const { cx, cy } = this.config;
-
+        // @ts-ignore
         this.zr = new zrender.init(this.container, {
             // renderer: "svg",
         });
-
+        // @ts-ignore
         this.rootGroup = new zrender.Group({
             position: [0, 0],
             origin: [cx, cy],
@@ -253,6 +253,7 @@ export default class Mindmap {
             newData.pid = targetData.fatherNode.id;
         } else {
             if (!targetData.group) {
+                // @ts-ignore
                 targetData.group = new zrender.Group({
                     origin: targetData.childOrigin,
                 });
@@ -759,7 +760,7 @@ export default class Mindmap {
         this.rootGroup.add(lineBeforeBtn.getLine());
         this.data.lineBeforeBtn = lineBeforeBtn;
         // 根节点下所有其他节点和连线所属的group
-
+        // @ts-ignore
         this.data.group = new zrender.Group({
             scale: animation.switch ? [0, 0] : [1, 1],
             origin: this.data.childOrigin,
@@ -851,6 +852,7 @@ export default class Mindmap {
                 n.childStartY =
                     y + h / 2 - (nodeEndNum * this.nodeAreaHeight) / 2;
                 if (n.children.length > 0) {
+                    // @ts-ignore
                     const branchGroup = new zrender.Group({
                         origin: n.childOrigin,
                     });
@@ -894,8 +896,10 @@ export default class Mindmap {
     }
 
     rerender(config: IConfig) {
-        this.setConfig(config);
-        this.zr && this.zr.clear();
+        this.rootGroup && this.rootGroup.removeAll();
+        this.config = mergeObjects(this.config, config);
+        this.nodeAreaHeight =
+            this.config.normalNode.h + this.config.space.y * 2; // 节点区域高度
         this.render();
     }
 
@@ -950,6 +954,7 @@ export default class Mindmap {
     // 移除监听事件, 释放内存
     dispose() {
         this.data = [];
+        this.rootGroup && this.rootGroup.removeAll();
         this.zr && this.zr.clear();
         this.zr && this.zr.dispose();
         this.viewport && this.viewport.dispose();

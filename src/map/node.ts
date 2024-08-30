@@ -6,7 +6,7 @@ import type { INode, IConfig, IRect } from "./types";
 
 interface IParams {
     container: HTMLElement;
-    rootGroup: zrender.Group;
+    rootGroup: any;
     x: number;
     y: number;
     w: number;
@@ -25,7 +25,7 @@ interface IParams {
 
 export default class Node {
     container: HTMLElement;
-    rootGroup: zrender.Group;
+    rootGroup: any;
     x: number;
     y: number;
     w: number;
@@ -35,7 +35,7 @@ export default class Node {
     config: IConfig;
     group: any;
     rect: any;
-    placeholderRect: zrender.Rect;
+    placeholderRect: any;
     moveable: boolean;
     isSelected: boolean;
     timer: any;
@@ -89,10 +89,12 @@ export default class Node {
     private init() {
         const { rootNode, normalNode } = this.config;
 
+        // @ts-ignore
         this.group = new zrender.Group({
             draggable: false,
         });
         const r = this.data.level === 0 ? rootNode : normalNode;
+        // @ts-ignore
         this.rect = new zrender.Rect({
             shape: {
                 r: r.radius,
@@ -235,7 +237,7 @@ export default class Node {
 
     getPlaceholderRect() {
         const { rootNode, normalNode } = this.config;
-
+        // @ts-ignore
         return new zrender.Rect({
             shape: {
                 r: normalNode.radius,

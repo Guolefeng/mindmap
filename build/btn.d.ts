@@ -1,4 +1,4 @@
-import { INode, IConfig, IBtnType } from "./types";
+import { INode, IConfig, IBtnType } from './types';
 interface IParams {
     x: number;
     y: number;
@@ -10,11 +10,11 @@ export default class Btn {
     x: number;
     y: number;
     data: INode;
-    type: number;
+    type: IBtnType;
     config: IConfig;
     btn: any;
     constructor({ x, y, data, type, config }: IParams);
-    _init(): void;
+    private init;
     setType(type: IBtnType): void;
     translate(dx: number, dy: number): void;
     getBtn(): any;

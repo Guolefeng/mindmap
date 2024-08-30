@@ -21,28 +21,32 @@ export interface IRectConfig {
     hoverBorderColor?: string;
     clickBorderColor?: string;
     radius?: number;
+    textPadding?: number;
+    fontFamily?: string;
+    fontWeight?: number;
+}
+export interface ILineConfig {
+    w?: number;
+    color?: string;
+    radius?: number;
+}
+export interface IBtnConfig {
+    lineWidth?: number;
+    radius?: number;
 }
 export interface IConfig {
     w?: number;
     h?: number;
     cx?: number;
     cy?: number;
-    textPadding?: number;
-    fontFamily?: string;
-    fontWeight?: number;
-    fontSize?: number;
     rootNode?: IRectConfig;
     normalNode?: IRectConfig;
-    radius?: number;
     space?: {
         x?: number;
         y?: number;
     };
-    lineWidth?: number;
-    lineColor?: string;
-    symbolLineWidth?: number;
-    symbolRadius?: number;
-    nodeAreaHeight?: number;
+    line?: ILineConfig;
+    btn?: IBtnConfig;
     animation?: {
         switch?: boolean;
         time?: number;

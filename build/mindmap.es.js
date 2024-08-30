@@ -1,10 +1,10 @@
 var zrender$1 = {};
 var zrender = {};
 var idStart = 2311;
-function _default$f() {
+function _default$o() {
   return idStart++;
 }
-var guid$1 = _default$f;
+var guid$2 = _default$o;
 var env$6 = {};
 if (typeof wx === "object" && typeof wx.getSystemInfoSync === "function") {
   env$6 = {
@@ -41,7 +41,7 @@ if (typeof wx === "object" && typeof wx.getSystemInfoSync === "function") {
 } else {
   env$6 = detect(navigator.userAgent);
 }
-var _default$e = env$6;
+var _default$n = env$6;
 function detect(ua) {
   var os = {};
   var browser = {};
@@ -92,7 +92,7 @@ function detect(ua) {
     domSupported: typeof document !== "undefined"
   };
 }
-var env_1 = _default$e;
+var env_1 = _default$n;
 var util$6 = {};
 var BUILTIN_OBJECT = {
   "[object Function]": 1,
@@ -130,7 +130,7 @@ function $override(name, fn) {
   }
   methods[name] = fn;
 }
-function clone(source) {
+function clone$1(source) {
   if (source == null || typeof source !== "object") {
     return source;
   }
@@ -139,8 +139,8 @@ function clone(source) {
   if (typeStr === "[object Array]") {
     if (!isPrimitive(source)) {
       result = [];
-      for (var i = 0, len = source.length; i < len; i++) {
-        result[i] = clone(source[i]);
+      for (var i = 0, len2 = source.length; i < len2; i++) {
+        result[i] = clone$1(source[i]);
       }
     }
   } else if (TYPED_ARRAY[typeStr]) {
@@ -150,8 +150,8 @@ function clone(source) {
         result = Ctor.from(source);
       } else {
         result = new Ctor(source.length);
-        for (var i = 0, len = source.length; i < len; i++) {
-          result[i] = clone(source[i]);
+        for (var i = 0, len2 = source.length; i < len2; i++) {
+          result[i] = clone$1(source[i]);
         }
       }
     }
@@ -159,24 +159,24 @@ function clone(source) {
     result = {};
     for (var key in source) {
       if (source.hasOwnProperty(key)) {
-        result[key] = clone(source[key]);
+        result[key] = clone$1(source[key]);
       }
     }
   }
   return result;
 }
 function merge(target, source, overwrite) {
-  if (!isObject(source) || !isObject(target)) {
-    return overwrite ? clone(source) : target;
+  if (!isObject$1(source) || !isObject$1(target)) {
+    return overwrite ? clone$1(source) : target;
   }
   for (var key in source) {
     if (source.hasOwnProperty(key)) {
       var targetProp = target[key];
       var sourceProp = source[key];
-      if (isObject(sourceProp) && isObject(targetProp) && !isArray(sourceProp) && !isArray(targetProp) && !isDom(sourceProp) && !isDom(targetProp) && !isBuiltInObject(sourceProp) && !isBuiltInObject(targetProp) && !isPrimitive(sourceProp) && !isPrimitive(targetProp)) {
+      if (isObject$1(sourceProp) && isObject$1(targetProp) && !isArray(sourceProp) && !isArray(targetProp) && !isDom(sourceProp) && !isDom(targetProp) && !isBuiltInObject(sourceProp) && !isBuiltInObject(targetProp) && !isPrimitive(sourceProp) && !isPrimitive(targetProp)) {
         merge(targetProp, sourceProp, overwrite);
       } else if (overwrite || !(key in target)) {
-        target[key] = clone(source[key]);
+        target[key] = clone$1(source[key]);
       }
     }
   }
@@ -184,7 +184,7 @@ function merge(target, source, overwrite) {
 }
 function mergeAll(targetAndSources, overwrite) {
   var result = targetAndSources[0];
-  for (var i = 1, len = targetAndSources.length; i < len; i++) {
+  for (var i = 1, len2 = targetAndSources.length; i < len2; i++) {
     result = merge(result, targetAndSources[i], overwrite);
   }
   return result;
@@ -218,12 +218,12 @@ function getContext() {
   }
   return _ctx;
 }
-function indexOf(array, value) {
+function indexOf$1(array, value) {
   if (array) {
     if (array.indexOf) {
       return array.indexOf(value);
     }
-    for (var i = 0, len = array.length; i < len; i++) {
+    for (var i = 0, len2 = array.length; i < len2; i++) {
       if (array[i] === value) {
         return i;
       }
@@ -250,7 +250,7 @@ function mixin(target, source, overlay) {
   source = "prototype" in source ? source.prototype : source;
   defaults(target, source, overlay);
 }
-function isArrayLike$1(data) {
+function isArrayLike$2(data) {
   if (!data) {
     return;
   }
@@ -266,7 +266,7 @@ function each(obj, cb, context) {
   if (obj.forEach && obj.forEach === nativeForEach) {
     obj.forEach(cb, context);
   } else if (obj.length === +obj.length) {
-    for (var i = 0, len = obj.length; i < len; i++) {
+    for (var i = 0, len2 = obj.length; i < len2; i++) {
       cb.call(context, obj[i], i, obj);
     }
   } else {
@@ -285,7 +285,7 @@ function map(obj, cb, context) {
     return obj.map(cb, context);
   } else {
     var result = [];
-    for (var i = 0, len = obj.length; i < len; i++) {
+    for (var i = 0, len2 = obj.length; i < len2; i++) {
       result.push(cb.call(context, obj[i], i, obj));
     }
     return result;
@@ -298,7 +298,7 @@ function reduce(obj, cb, memo, context) {
   if (obj.reduce && obj.reduce === nativeReduce) {
     return obj.reduce(cb, memo, context);
   } else {
-    for (var i = 0, len = obj.length; i < len; i++) {
+    for (var i = 0, len2 = obj.length; i < len2; i++) {
       memo = cb.call(context, memo, obj[i], i, obj);
     }
     return memo;
@@ -312,7 +312,7 @@ function filter(obj, cb, context) {
     return obj.filter(cb, context);
   } else {
     var result = [];
-    for (var i = 0, len = obj.length; i < len; i++) {
+    for (var i = 0, len2 = obj.length; i < len2; i++) {
       if (cb.call(context, obj[i], i, obj)) {
         result.push(obj[i]);
       }
@@ -324,7 +324,7 @@ function find(obj, cb, context) {
   if (!(obj && cb)) {
     return;
   }
-  for (var i = 0, len = obj.length; i < len; i++) {
+  for (var i = 0, len2 = obj.length; i < len2; i++) {
     if (cb.call(context, obj[i], i, obj)) {
       return obj[i];
     }
@@ -345,13 +345,13 @@ function curry(func) {
 function isArray(value) {
   return objToString.call(value) === "[object Array]";
 }
-function isFunction(value) {
+function isFunction$1(value) {
   return typeof value === "function";
 }
-function isString(value) {
+function isString$1(value) {
   return objToString.call(value) === "[object String]";
 }
-function isObject(value) {
+function isObject$1(value) {
   var type = typeof value;
   return type === "function" || !!value && type === "object";
 }
@@ -368,7 +368,7 @@ function eqNaN(value) {
   return value !== value;
 }
 function retrieve(values) {
-  for (var i = 0, len = arguments.length; i < len; i++) {
+  for (var i = 0, len2 = arguments.length; i < len2; i++) {
     if (arguments[i] != null) {
       return arguments[i];
     }
@@ -387,10 +387,10 @@ function normalizeCssArray(val) {
   if (typeof val === "number") {
     return [val, val, val, val];
   }
-  var len = val.length;
-  if (len === 2) {
+  var len2 = val.length;
+  if (len2 === 2) {
     return [val[0], val[1], val[0], val[1]];
-  } else if (len === 3) {
+  } else if (len2 === 3) {
     return [val[0], val[1], val[2], val[1]];
   }
   return val;
@@ -466,17 +466,17 @@ function concatArray(a, b) {
 function noop() {
 }
 util$6.$override = $override;
-util$6.clone = clone;
+util$6.clone = clone$1;
 util$6.merge = merge;
 util$6.mergeAll = mergeAll;
 util$6.extend = extend;
 util$6.defaults = defaults;
 util$6.createCanvas = createCanvas;
 util$6.getContext = getContext;
-util$6.indexOf = indexOf;
+util$6.indexOf = indexOf$1;
 util$6.inherits = inherits;
 util$6.mixin = mixin;
-util$6.isArrayLike = isArrayLike$1;
+util$6.isArrayLike = isArrayLike$2;
 util$6.each = each;
 util$6.map = map;
 util$6.reduce = reduce;
@@ -485,9 +485,9 @@ util$6.find = find;
 util$6.bind = bind;
 util$6.curry = curry;
 util$6.isArray = isArray;
-util$6.isFunction = isFunction;
-util$6.isString = isString;
-util$6.isObject = isObject;
+util$6.isFunction = isFunction$1;
+util$6.isString = isString$1;
+util$6.isObject = isObject$1;
 util$6.isBuiltInObject = isBuiltInObject;
 util$6.isTypedArray = isTypedArray;
 util$6.isDom = isDom;
@@ -504,154 +504,148 @@ util$6.isPrimitive = isPrimitive;
 util$6.createHashMap = createHashMap;
 util$6.concatArray = concatArray;
 util$6.noop = noop;
-var vector = {};
-var hasRequiredVector;
-function requireVector() {
-  if (hasRequiredVector) return vector;
-  hasRequiredVector = 1;
-  var ArrayCtor = typeof Float32Array === "undefined" ? Array : Float32Array;
-  function create(x, y) {
-    var out = new ArrayCtor(2);
-    if (x == null) {
-      x = 0;
-    }
-    if (y == null) {
-      y = 0;
-    }
-    out[0] = x;
-    out[1] = y;
-    return out;
+var vector$1 = {};
+var ArrayCtor = typeof Float32Array === "undefined" ? Array : Float32Array;
+function create(x, y) {
+  var out = new ArrayCtor(2);
+  if (x == null) {
+    x = 0;
   }
-  function copy(out, v) {
-    out[0] = v[0];
-    out[1] = v[1];
-    return out;
+  if (y == null) {
+    y = 0;
   }
-  function clone2(v) {
-    var out = new ArrayCtor(2);
-    out[0] = v[0];
-    out[1] = v[1];
-    return out;
-  }
-  function set(out, a, b) {
-    out[0] = a;
-    out[1] = b;
-    return out;
-  }
-  function add(out, v1, v2) {
-    out[0] = v1[0] + v2[0];
-    out[1] = v1[1] + v2[1];
-    return out;
-  }
-  function scaleAndAdd(out, v1, v2, a) {
-    out[0] = v1[0] + v2[0] * a;
-    out[1] = v1[1] + v2[1] * a;
-    return out;
-  }
-  function sub(out, v1, v2) {
-    out[0] = v1[0] - v2[0];
-    out[1] = v1[1] - v2[1];
-    return out;
-  }
-  function len(v) {
-    return Math.sqrt(lenSquare(v));
-  }
-  var length = len;
-  function lenSquare(v) {
-    return v[0] * v[0] + v[1] * v[1];
-  }
-  var lengthSquare = lenSquare;
-  function mul(out, v1, v2) {
-    out[0] = v1[0] * v2[0];
-    out[1] = v1[1] * v2[1];
-    return out;
-  }
-  function div(out, v1, v2) {
-    out[0] = v1[0] / v2[0];
-    out[1] = v1[1] / v2[1];
-    return out;
-  }
-  function dot(v1, v2) {
-    return v1[0] * v2[0] + v1[1] * v2[1];
-  }
-  function scale(out, v, s) {
-    out[0] = v[0] * s;
-    out[1] = v[1] * s;
-    return out;
-  }
-  function normalize(out, v) {
-    var d = len(v);
-    if (d === 0) {
-      out[0] = 0;
-      out[1] = 0;
-    } else {
-      out[0] = v[0] / d;
-      out[1] = v[1] / d;
-    }
-    return out;
-  }
-  function distance(v1, v2) {
-    return Math.sqrt((v1[0] - v2[0]) * (v1[0] - v2[0]) + (v1[1] - v2[1]) * (v1[1] - v2[1]));
-  }
-  var dist2 = distance;
-  function distanceSquare(v1, v2) {
-    return (v1[0] - v2[0]) * (v1[0] - v2[0]) + (v1[1] - v2[1]) * (v1[1] - v2[1]);
-  }
-  var distSquare = distanceSquare;
-  function negate(out, v) {
-    out[0] = -v[0];
-    out[1] = -v[1];
-    return out;
-  }
-  function lerp(out, v1, v2, t) {
-    out[0] = v1[0] + t * (v2[0] - v1[0]);
-    out[1] = v1[1] + t * (v2[1] - v1[1]);
-    return out;
-  }
-  function applyTransform(out, v, m) {
-    var x = v[0];
-    var y = v[1];
-    out[0] = m[0] * x + m[2] * y + m[4];
-    out[1] = m[1] * x + m[3] * y + m[5];
-    return out;
-  }
-  function min(out, v1, v2) {
-    out[0] = Math.min(v1[0], v2[0]);
-    out[1] = Math.min(v1[1], v2[1]);
-    return out;
-  }
-  function max(out, v1, v2) {
-    out[0] = Math.max(v1[0], v2[0]);
-    out[1] = Math.max(v1[1], v2[1]);
-    return out;
-  }
-  vector.create = create;
-  vector.copy = copy;
-  vector.clone = clone2;
-  vector.set = set;
-  vector.add = add;
-  vector.scaleAndAdd = scaleAndAdd;
-  vector.sub = sub;
-  vector.len = len;
-  vector.length = length;
-  vector.lenSquare = lenSquare;
-  vector.lengthSquare = lengthSquare;
-  vector.mul = mul;
-  vector.div = div;
-  vector.dot = dot;
-  vector.scale = scale;
-  vector.normalize = normalize;
-  vector.distance = distance;
-  vector.dist = dist2;
-  vector.distanceSquare = distanceSquare;
-  vector.distSquare = distSquare;
-  vector.negate = negate;
-  vector.lerp = lerp;
-  vector.applyTransform = applyTransform;
-  vector.min = min;
-  vector.max = max;
-  return vector;
+  out[0] = x;
+  out[1] = y;
+  return out;
 }
+function copy(out, v) {
+  out[0] = v[0];
+  out[1] = v[1];
+  return out;
+}
+function clone(v) {
+  var out = new ArrayCtor(2);
+  out[0] = v[0];
+  out[1] = v[1];
+  return out;
+}
+function set(out, a, b) {
+  out[0] = a;
+  out[1] = b;
+  return out;
+}
+function add(out, v1, v2) {
+  out[0] = v1[0] + v2[0];
+  out[1] = v1[1] + v2[1];
+  return out;
+}
+function scaleAndAdd(out, v1, v2, a) {
+  out[0] = v1[0] + v2[0] * a;
+  out[1] = v1[1] + v2[1] * a;
+  return out;
+}
+function sub(out, v1, v2) {
+  out[0] = v1[0] - v2[0];
+  out[1] = v1[1] - v2[1];
+  return out;
+}
+function len(v) {
+  return Math.sqrt(lenSquare(v));
+}
+var length = len;
+function lenSquare(v) {
+  return v[0] * v[0] + v[1] * v[1];
+}
+var lengthSquare = lenSquare;
+function mul(out, v1, v2) {
+  out[0] = v1[0] * v2[0];
+  out[1] = v1[1] * v2[1];
+  return out;
+}
+function div(out, v1, v2) {
+  out[0] = v1[0] / v2[0];
+  out[1] = v1[1] / v2[1];
+  return out;
+}
+function dot(v1, v2) {
+  return v1[0] * v2[0] + v1[1] * v2[1];
+}
+function scale(out, v, s) {
+  out[0] = v[0] * s;
+  out[1] = v[1] * s;
+  return out;
+}
+function normalize(out, v) {
+  var d = len(v);
+  if (d === 0) {
+    out[0] = 0;
+    out[1] = 0;
+  } else {
+    out[0] = v[0] / d;
+    out[1] = v[1] / d;
+  }
+  return out;
+}
+function distance(v1, v2) {
+  return Math.sqrt((v1[0] - v2[0]) * (v1[0] - v2[0]) + (v1[1] - v2[1]) * (v1[1] - v2[1]));
+}
+var dist$1 = distance;
+function distanceSquare(v1, v2) {
+  return (v1[0] - v2[0]) * (v1[0] - v2[0]) + (v1[1] - v2[1]) * (v1[1] - v2[1]);
+}
+var distSquare = distanceSquare;
+function negate(out, v) {
+  out[0] = -v[0];
+  out[1] = -v[1];
+  return out;
+}
+function lerp(out, v1, v2, t) {
+  out[0] = v1[0] + t * (v2[0] - v1[0]);
+  out[1] = v1[1] + t * (v2[1] - v1[1]);
+  return out;
+}
+function applyTransform(out, v, m) {
+  var x = v[0];
+  var y = v[1];
+  out[0] = m[0] * x + m[2] * y + m[4];
+  out[1] = m[1] * x + m[3] * y + m[5];
+  return out;
+}
+function min(out, v1, v2) {
+  out[0] = Math.min(v1[0], v2[0]);
+  out[1] = Math.min(v1[1], v2[1]);
+  return out;
+}
+function max(out, v1, v2) {
+  out[0] = Math.max(v1[0], v2[0]);
+  out[1] = Math.max(v1[1], v2[1]);
+  return out;
+}
+vector$1.create = create;
+vector$1.copy = copy;
+vector$1.clone = clone;
+vector$1.set = set;
+vector$1.add = add;
+vector$1.scaleAndAdd = scaleAndAdd;
+vector$1.sub = sub;
+vector$1.len = len;
+vector$1.length = length;
+vector$1.lenSquare = lenSquare;
+vector$1.lengthSquare = lengthSquare;
+vector$1.mul = mul;
+vector$1.div = div;
+vector$1.dot = dot;
+vector$1.scale = scale;
+vector$1.normalize = normalize;
+vector$1.distance = distance;
+vector$1.dist = dist$1;
+vector$1.distanceSquare = distanceSquare;
+vector$1.distSquare = distSquare;
+vector$1.negate = negate;
+vector$1.lerp = lerp;
+vector$1.applyTransform = applyTransform;
+vector$1.min = min;
+vector$1.max = max;
 function Draggable$1() {
   this.on("mousedown", this._dragStart, this);
   this.on("mousemove", this._drag, this);
@@ -715,15 +709,15 @@ function param(target, e) {
     topTarget: e && e.topTarget
   };
 }
-var _default$d = Draggable$1;
-var Draggable_1 = _default$d;
+var _default$m = Draggable$1;
+var Draggable_1 = _default$m;
 var arrySlice = Array.prototype.slice;
-var Eventful$3 = function(eventProcessor) {
+var Eventful$4 = function(eventProcessor) {
   this._$handlers = {};
   this._$eventProcessor = eventProcessor;
 };
-Eventful$3.prototype = {
-  constructor: Eventful$3,
+Eventful$4.prototype = {
+  constructor: Eventful$4,
   /**
    * The handler can only be triggered once, then removed.
    *
@@ -802,8 +796,8 @@ Eventful$3.prototype = {
       if (argLen > 3) {
         args = arrySlice.call(args, 1);
       }
-      var len = _h.length;
-      for (var i = 0; i < len; ) {
+      var len2 = _h.length;
+      for (var i = 0; i < len2; ) {
         var hItem = _h[i];
         if (eventProcessor && eventProcessor.filter && hItem.query != null && !eventProcessor.filter(type, hItem.query)) {
           i++;
@@ -825,7 +819,7 @@ Eventful$3.prototype = {
         }
         if (hItem.one) {
           _h.splice(i, 1);
-          len--;
+          len2--;
         } else {
           i++;
         }
@@ -849,8 +843,8 @@ Eventful$3.prototype = {
         args = arrySlice.call(args, 1, args.length - 1);
       }
       var ctx = args[args.length - 1];
-      var len = _h.length;
-      for (var i = 0; i < len; ) {
+      var len2 = _h.length;
+      for (var i = 0; i < len2; ) {
         var hItem = _h[i];
         if (eventProcessor && eventProcessor.filter && hItem.query != null && !eventProcessor.filter(type, hItem.query)) {
           i++;
@@ -872,7 +866,7 @@ Eventful$3.prototype = {
         }
         if (hItem.one) {
           _h.splice(i, 1);
-          len--;
+          len2--;
         } else {
           i++;
         }
@@ -922,8 +916,8 @@ function on(eventful, event2, query, handler, context, isOnce) {
   lastWrap && lastWrap.callAtLast ? _h[event2].splice(lastIndex, 0, wrap) : _h[event2].push(wrap);
   return eventful;
 }
-var _default$c = Eventful$3;
-var Eventful_1 = _default$c;
+var _default$l = Eventful$4;
+var Eventful_1 = _default$l;
 var event = {};
 var dom = {};
 var fourPointsTransform = {};
@@ -1055,8 +1049,8 @@ function isCanvasEl$1(el) {
 dom.transformLocalCoord = transformLocalCoord;
 dom.transformCoordWithViewport = transformCoordWithViewport$1;
 dom.isCanvasEl = isCanvasEl$1;
-var Eventful$2 = Eventful_1;
-event.Dispatcher = Eventful$2;
+var Eventful$3 = Eventful_1;
+event.Dispatcher = Eventful$3;
 var env$4 = env_1;
 var _dom = dom;
 var isCanvasEl = _dom.isCanvasEl;
@@ -1182,7 +1176,7 @@ GestureMgr$1.prototype = {
       target,
       event: event2
     };
-    for (var i = 0, len = touches.length; i < len; i++) {
+    for (var i = 0, len2 = touches.length; i < len2; i++) {
       var touch = touches[i];
       var pos = eventUtil.clientToLocal(root, touch, {});
       trackItem.points.push([pos.zrX, pos.zrY]);
@@ -1233,12 +1227,12 @@ var recognizers = {
   }
   // Only pinch currently.
 };
-var _default$b = GestureMgr$1;
-var GestureMgr_1 = _default$b;
+var _default$k = GestureMgr$1;
+var GestureMgr_1 = _default$k;
 var util$5 = util$6;
-var vec2 = requireVector();
+var vec2$1 = vector$1;
 var Draggable = Draggable_1;
-var Eventful$1 = Eventful_1;
+var Eventful$2 = Eventful_1;
 var eventTool = event;
 var GestureMgr = GestureMgr_1;
 var SILENT = "silent";
@@ -1272,7 +1266,7 @@ EmptyProxy.prototype.dispose = function() {
 };
 var handlerNames = ["click", "dblclick", "mousewheel", "mouseout", "mouseup", "mousedown", "mousemove", "contextmenu"];
 var Handler$1 = function(storage, painter, proxy, painterRoot) {
-  Eventful$1.call(this);
+  Eventful$2.call(this);
   this.storage = storage;
   this.painter = painter;
   this.painterRoot = painterRoot;
@@ -1465,7 +1459,7 @@ util$5.each(["click", "mousedown", "mouseup", "mousewheel", "dblclick", "context
     } else if (name === "mouseup") {
       this._upEl = hoveredTarget;
     } else if (name === "click") {
-      if (this._downEl !== this._upEl || !this._downPoint || vec2.dist(this._downPoint, [event2.zrX, event2.zrY]) > 4) {
+      if (this._downEl !== this._upEl || !this._downPoint || vec2$1.dist(this._downPoint, [event2.zrX, event2.zrY]) > 4) {
         return;
       }
       this._downPoint = null;
@@ -1494,18 +1488,18 @@ function isOutsideBoundary(handlerInstance, x, y) {
   var painter = handlerInstance.painter;
   return x < 0 || x > painter.getWidth() || y < 0 || y > painter.getHeight();
 }
-util$5.mixin(Handler$1, Eventful$1);
+util$5.mixin(Handler$1, Eventful$2);
 util$5.mixin(Handler$1, Draggable);
-var _default$a = Handler$1;
-var Handler_1 = _default$a;
-var matrix = {};
+var _default$j = Handler$1;
+var Handler_1 = _default$j;
+var matrix$2 = {};
 var hasRequiredMatrix;
 function requireMatrix() {
-  if (hasRequiredMatrix) return matrix;
+  if (hasRequiredMatrix) return matrix$2;
   hasRequiredMatrix = 1;
-  var ArrayCtor = typeof Float32Array === "undefined" ? Array : Float32Array;
-  function create() {
-    var out = new ArrayCtor(6);
+  var ArrayCtor2 = typeof Float32Array === "undefined" ? Array : Float32Array;
+  function create2() {
+    var out = new ArrayCtor2(6);
     identity(out);
     return out;
   }
@@ -1518,7 +1512,7 @@ function requireMatrix() {
     out[5] = 0;
     return out;
   }
-  function copy(out, m) {
+  function copy2(out, m) {
     out[0] = m[0];
     out[1] = m[1];
     out[2] = m[2];
@@ -1527,7 +1521,7 @@ function requireMatrix() {
     out[5] = m[5];
     return out;
   }
-  function mul(out, m1, m2) {
+  function mul2(out, m1, m2) {
     var out0 = m1[0] * m2[0] + m1[2] * m2[1];
     var out1 = m1[1] * m2[0] + m1[3] * m2[1];
     var out2 = m1[0] * m2[2] + m1[2] * m2[3];
@@ -1568,7 +1562,7 @@ function requireMatrix() {
     out[5] = ct * aty - st * atx;
     return out;
   }
-  function scale(out, a, v) {
+  function scale2(out, a, v) {
     var vx = v[0];
     var vy = v[1];
     out[0] = a[0] * vx;
@@ -1600,216 +1594,209 @@ function requireMatrix() {
     return out;
   }
   function clone2(a) {
-    var b = create();
-    copy(b, a);
+    var b = create2();
+    copy2(b, a);
     return b;
   }
-  matrix.create = create;
-  matrix.identity = identity;
-  matrix.copy = copy;
-  matrix.mul = mul;
-  matrix.translate = translate;
-  matrix.rotate = rotate;
-  matrix.scale = scale;
-  matrix.invert = invert;
-  matrix.clone = clone2;
-  return matrix;
+  matrix$2.create = create2;
+  matrix$2.identity = identity;
+  matrix$2.copy = copy2;
+  matrix$2.mul = mul2;
+  matrix$2.translate = translate;
+  matrix$2.rotate = rotate;
+  matrix$2.scale = scale2;
+  matrix$2.invert = invert;
+  matrix$2.clone = clone2;
+  return matrix$2;
 }
-var Transformable_1;
-var hasRequiredTransformable;
-function requireTransformable() {
-  if (hasRequiredTransformable) return Transformable_1;
-  hasRequiredTransformable = 1;
-  var matrix2 = requireMatrix();
-  var vector2 = requireVector();
-  var mIdentity = matrix2.identity;
-  var EPSILON = 5e-5;
-  function isNotAroundZero(val) {
-    return val > EPSILON || val < -EPSILON;
+var matrix$1 = requireMatrix();
+var vector = vector$1;
+var mIdentity = matrix$1.identity;
+var EPSILON = 5e-5;
+function isNotAroundZero(val) {
+  return val > EPSILON || val < -EPSILON;
+}
+var Transformable$1 = function(opts) {
+  opts = opts || {};
+  if (!opts.position) {
+    this.position = [0, 0];
   }
-  var Transformable = function(opts) {
-    opts = opts || {};
-    if (!opts.position) {
-      this.position = [0, 0];
-    }
-    if (opts.rotation == null) {
-      this.rotation = 0;
-    }
-    if (!opts.scale) {
-      this.scale = [1, 1];
-    }
-    this.origin = this.origin || null;
-  };
-  var transformableProto = Transformable.prototype;
-  transformableProto.transform = null;
-  transformableProto.needLocalTransform = function() {
-    return isNotAroundZero(this.rotation) || isNotAroundZero(this.position[0]) || isNotAroundZero(this.position[1]) || isNotAroundZero(this.scale[0] - 1) || isNotAroundZero(this.scale[1] - 1);
-  };
-  var scaleTmp = [];
-  transformableProto.updateTransform = function() {
-    var parent = this.parent;
-    var parentHasTransform = parent && parent.transform;
-    var needLocalTransform = this.needLocalTransform();
-    var m = this.transform;
-    if (!(needLocalTransform || parentHasTransform)) {
-      m && mIdentity(m);
-      return;
-    }
-    m = m || matrix2.create();
-    if (needLocalTransform) {
-      this.getLocalTransform(m);
-    } else {
-      mIdentity(m);
-    }
-    if (parentHasTransform) {
-      if (needLocalTransform) {
-        matrix2.mul(m, parent.transform, m);
-      } else {
-        matrix2.copy(m, parent.transform);
-      }
-    }
-    this.transform = m;
-    var globalScaleRatio = this.globalScaleRatio;
-    if (globalScaleRatio != null && globalScaleRatio !== 1) {
-      this.getGlobalScale(scaleTmp);
-      var relX = scaleTmp[0] < 0 ? -1 : 1;
-      var relY = scaleTmp[1] < 0 ? -1 : 1;
-      var sx = ((scaleTmp[0] - relX) * globalScaleRatio + relX) / scaleTmp[0] || 0;
-      var sy = ((scaleTmp[1] - relY) * globalScaleRatio + relY) / scaleTmp[1] || 0;
-      m[0] *= sx;
-      m[1] *= sx;
-      m[2] *= sy;
-      m[3] *= sy;
-    }
-    this.invTransform = this.invTransform || matrix2.create();
-    matrix2.invert(this.invTransform, m);
-  };
-  transformableProto.getLocalTransform = function(m) {
-    return Transformable.getLocalTransform(this, m);
-  };
-  transformableProto.setTransform = function(ctx) {
-    var m = this.transform;
-    var dpr2 = ctx.dpr || 1;
-    if (m) {
-      ctx.setTransform(dpr2 * m[0], dpr2 * m[1], dpr2 * m[2], dpr2 * m[3], dpr2 * m[4], dpr2 * m[5]);
-    } else {
-      ctx.setTransform(dpr2, 0, 0, dpr2, 0, 0);
-    }
-  };
-  transformableProto.restoreTransform = function(ctx) {
-    var dpr2 = ctx.dpr || 1;
-    ctx.setTransform(dpr2, 0, 0, dpr2, 0, 0);
-  };
-  var tmpTransform = [];
-  var originTransform = matrix2.create();
-  transformableProto.setLocalTransform = function(m) {
-    if (!m) {
-      return;
-    }
-    var sx = m[0] * m[0] + m[1] * m[1];
-    var sy = m[2] * m[2] + m[3] * m[3];
-    var position = this.position;
-    var scale = this.scale;
-    if (isNotAroundZero(sx - 1)) {
-      sx = Math.sqrt(sx);
-    }
-    if (isNotAroundZero(sy - 1)) {
-      sy = Math.sqrt(sy);
-    }
-    if (m[0] < 0) {
-      sx = -sx;
-    }
-    if (m[3] < 0) {
-      sy = -sy;
-    }
-    position[0] = m[4];
-    position[1] = m[5];
-    scale[0] = sx;
-    scale[1] = sy;
-    this.rotation = Math.atan2(-m[1] / sy, m[0] / sx);
-  };
-  transformableProto.decomposeTransform = function() {
-    if (!this.transform) {
-      return;
-    }
-    var parent = this.parent;
-    var m = this.transform;
-    if (parent && parent.transform) {
-      matrix2.mul(tmpTransform, parent.invTransform, m);
-      m = tmpTransform;
-    }
-    var origin = this.origin;
-    if (origin && (origin[0] || origin[1])) {
-      originTransform[4] = origin[0];
-      originTransform[5] = origin[1];
-      matrix2.mul(tmpTransform, m, originTransform);
-      tmpTransform[4] -= origin[0];
-      tmpTransform[5] -= origin[1];
-      m = tmpTransform;
-    }
-    this.setLocalTransform(m);
-  };
-  transformableProto.getGlobalScale = function(out) {
-    var m = this.transform;
-    out = out || [];
-    if (!m) {
-      out[0] = 1;
-      out[1] = 1;
-      return out;
-    }
-    out[0] = Math.sqrt(m[0] * m[0] + m[1] * m[1]);
-    out[1] = Math.sqrt(m[2] * m[2] + m[3] * m[3]);
-    if (m[0] < 0) {
-      out[0] = -out[0];
-    }
-    if (m[3] < 0) {
-      out[1] = -out[1];
-    }
-    return out;
-  };
-  transformableProto.transformCoordToLocal = function(x, y) {
-    var v2 = [x, y];
-    var invTransform = this.invTransform;
-    if (invTransform) {
-      vector2.applyTransform(v2, v2, invTransform);
-    }
-    return v2;
-  };
-  transformableProto.transformCoordToGlobal = function(x, y) {
-    var v2 = [x, y];
-    var transform = this.transform;
-    if (transform) {
-      vector2.applyTransform(v2, v2, transform);
-    }
-    return v2;
-  };
-  Transformable.getLocalTransform = function(target, m) {
-    m = m || [];
+  if (opts.rotation == null) {
+    this.rotation = 0;
+  }
+  if (!opts.scale) {
+    this.scale = [1, 1];
+  }
+  this.origin = this.origin || null;
+};
+var transformableProto = Transformable$1.prototype;
+transformableProto.transform = null;
+transformableProto.needLocalTransform = function() {
+  return isNotAroundZero(this.rotation) || isNotAroundZero(this.position[0]) || isNotAroundZero(this.position[1]) || isNotAroundZero(this.scale[0] - 1) || isNotAroundZero(this.scale[1] - 1);
+};
+var scaleTmp = [];
+transformableProto.updateTransform = function() {
+  var parent = this.parent;
+  var parentHasTransform = parent && parent.transform;
+  var needLocalTransform = this.needLocalTransform();
+  var m = this.transform;
+  if (!(needLocalTransform || parentHasTransform)) {
+    m && mIdentity(m);
+    return;
+  }
+  m = m || matrix$1.create();
+  if (needLocalTransform) {
+    this.getLocalTransform(m);
+  } else {
     mIdentity(m);
-    var origin = target.origin;
-    var scale = target.scale || [1, 1];
-    var rotation = target.rotation || 0;
-    var position = target.position || [0, 0];
-    if (origin) {
-      m[4] -= origin[0];
-      m[5] -= origin[1];
+  }
+  if (parentHasTransform) {
+    if (needLocalTransform) {
+      matrix$1.mul(m, parent.transform, m);
+    } else {
+      matrix$1.copy(m, parent.transform);
     }
-    matrix2.scale(m, m, scale);
-    if (rotation) {
-      matrix2.rotate(m, m, rotation);
-    }
-    if (origin) {
-      m[4] += origin[0];
-      m[5] += origin[1];
-    }
-    m[4] += position[0];
-    m[5] += position[1];
-    return m;
-  };
-  var _default2 = Transformable;
-  Transformable_1 = _default2;
-  return Transformable_1;
-}
+  }
+  this.transform = m;
+  var globalScaleRatio = this.globalScaleRatio;
+  if (globalScaleRatio != null && globalScaleRatio !== 1) {
+    this.getGlobalScale(scaleTmp);
+    var relX = scaleTmp[0] < 0 ? -1 : 1;
+    var relY = scaleTmp[1] < 0 ? -1 : 1;
+    var sx = ((scaleTmp[0] - relX) * globalScaleRatio + relX) / scaleTmp[0] || 0;
+    var sy = ((scaleTmp[1] - relY) * globalScaleRatio + relY) / scaleTmp[1] || 0;
+    m[0] *= sx;
+    m[1] *= sx;
+    m[2] *= sy;
+    m[3] *= sy;
+  }
+  this.invTransform = this.invTransform || matrix$1.create();
+  matrix$1.invert(this.invTransform, m);
+};
+transformableProto.getLocalTransform = function(m) {
+  return Transformable$1.getLocalTransform(this, m);
+};
+transformableProto.setTransform = function(ctx) {
+  var m = this.transform;
+  var dpr2 = ctx.dpr || 1;
+  if (m) {
+    ctx.setTransform(dpr2 * m[0], dpr2 * m[1], dpr2 * m[2], dpr2 * m[3], dpr2 * m[4], dpr2 * m[5]);
+  } else {
+    ctx.setTransform(dpr2, 0, 0, dpr2, 0, 0);
+  }
+};
+transformableProto.restoreTransform = function(ctx) {
+  var dpr2 = ctx.dpr || 1;
+  ctx.setTransform(dpr2, 0, 0, dpr2, 0, 0);
+};
+var tmpTransform = [];
+var originTransform = matrix$1.create();
+transformableProto.setLocalTransform = function(m) {
+  if (!m) {
+    return;
+  }
+  var sx = m[0] * m[0] + m[1] * m[1];
+  var sy = m[2] * m[2] + m[3] * m[3];
+  var position = this.position;
+  var scale2 = this.scale;
+  if (isNotAroundZero(sx - 1)) {
+    sx = Math.sqrt(sx);
+  }
+  if (isNotAroundZero(sy - 1)) {
+    sy = Math.sqrt(sy);
+  }
+  if (m[0] < 0) {
+    sx = -sx;
+  }
+  if (m[3] < 0) {
+    sy = -sy;
+  }
+  position[0] = m[4];
+  position[1] = m[5];
+  scale2[0] = sx;
+  scale2[1] = sy;
+  this.rotation = Math.atan2(-m[1] / sy, m[0] / sx);
+};
+transformableProto.decomposeTransform = function() {
+  if (!this.transform) {
+    return;
+  }
+  var parent = this.parent;
+  var m = this.transform;
+  if (parent && parent.transform) {
+    matrix$1.mul(tmpTransform, parent.invTransform, m);
+    m = tmpTransform;
+  }
+  var origin = this.origin;
+  if (origin && (origin[0] || origin[1])) {
+    originTransform[4] = origin[0];
+    originTransform[5] = origin[1];
+    matrix$1.mul(tmpTransform, m, originTransform);
+    tmpTransform[4] -= origin[0];
+    tmpTransform[5] -= origin[1];
+    m = tmpTransform;
+  }
+  this.setLocalTransform(m);
+};
+transformableProto.getGlobalScale = function(out) {
+  var m = this.transform;
+  out = out || [];
+  if (!m) {
+    out[0] = 1;
+    out[1] = 1;
+    return out;
+  }
+  out[0] = Math.sqrt(m[0] * m[0] + m[1] * m[1]);
+  out[1] = Math.sqrt(m[2] * m[2] + m[3] * m[3]);
+  if (m[0] < 0) {
+    out[0] = -out[0];
+  }
+  if (m[3] < 0) {
+    out[1] = -out[1];
+  }
+  return out;
+};
+transformableProto.transformCoordToLocal = function(x, y) {
+  var v2 = [x, y];
+  var invTransform = this.invTransform;
+  if (invTransform) {
+    vector.applyTransform(v2, v2, invTransform);
+  }
+  return v2;
+};
+transformableProto.transformCoordToGlobal = function(x, y) {
+  var v2 = [x, y];
+  var transform = this.transform;
+  if (transform) {
+    vector.applyTransform(v2, v2, transform);
+  }
+  return v2;
+};
+Transformable$1.getLocalTransform = function(target, m) {
+  m = m || [];
+  mIdentity(m);
+  var origin = target.origin;
+  var scale2 = target.scale || [1, 1];
+  var rotation = target.rotation || 0;
+  var position = target.position || [0, 0];
+  if (origin) {
+    m[4] -= origin[0];
+    m[5] -= origin[1];
+  }
+  matrix$1.scale(m, m, scale2);
+  if (rotation) {
+    matrix$1.rotate(m, m, rotation);
+  }
+  if (origin) {
+    m[4] += origin[0];
+    m[5] += origin[1];
+  }
+  m[4] += position[0];
+  m[5] += position[1];
+  return m;
+};
+var _default$i = Transformable$1;
+var Transformable_1 = _default$i;
 var easing = {
   /**
   * @param {number} k
@@ -2127,8 +2114,8 @@ var easing = {
     return easing.bounceOut(k * 2 - 1) * 0.5 + 0.5;
   }
 };
-var _default$9 = easing;
-var easing_1 = _default$9;
+var _default$h = easing;
+var easing_1 = _default$h;
 var easingFuncs = easing_1;
 function Clip$1(options) {
   this._target = options.target;
@@ -2193,120 +2180,113 @@ Clip$1.prototype = {
     this._paused = false;
   }
 };
-var _default$8 = Clip$1;
-var Clip_1 = _default$8;
+var _default$g = Clip$1;
+var Clip_1 = _default$g;
 var color$1 = {};
-var LRU_1;
-var hasRequiredLRU;
-function requireLRU() {
-  if (hasRequiredLRU) return LRU_1;
-  hasRequiredLRU = 1;
-  var LinkedList = function() {
-    this.head = null;
-    this.tail = null;
-    this._len = 0;
-  };
-  var linkedListProto = LinkedList.prototype;
-  linkedListProto.insert = function(val) {
-    var entry = new Entry(val);
-    this.insertEntry(entry);
-    return entry;
-  };
-  linkedListProto.insertEntry = function(entry) {
-    if (!this.head) {
-      this.head = this.tail = entry;
-    } else {
-      this.tail.next = entry;
-      entry.prev = this.tail;
-      entry.next = null;
-      this.tail = entry;
+var LinkedList = function() {
+  this.head = null;
+  this.tail = null;
+  this._len = 0;
+};
+var linkedListProto = LinkedList.prototype;
+linkedListProto.insert = function(val) {
+  var entry = new Entry(val);
+  this.insertEntry(entry);
+  return entry;
+};
+linkedListProto.insertEntry = function(entry) {
+  if (!this.head) {
+    this.head = this.tail = entry;
+  } else {
+    this.tail.next = entry;
+    entry.prev = this.tail;
+    entry.next = null;
+    this.tail = entry;
+  }
+  this._len++;
+};
+linkedListProto.remove = function(entry) {
+  var prev = entry.prev;
+  var next = entry.next;
+  if (prev) {
+    prev.next = next;
+  } else {
+    this.head = next;
+  }
+  if (next) {
+    next.prev = prev;
+  } else {
+    this.tail = prev;
+  }
+  entry.next = entry.prev = null;
+  this._len--;
+};
+linkedListProto.len = function() {
+  return this._len;
+};
+linkedListProto.clear = function() {
+  this.head = this.tail = null;
+  this._len = 0;
+};
+var Entry = function(val) {
+  this.value = val;
+  this.next;
+  this.prev;
+};
+var LRU$1 = function(maxSize) {
+  this._list = new LinkedList();
+  this._map = {};
+  this._maxSize = maxSize || 10;
+  this._lastRemovedEntry = null;
+};
+var LRUProto = LRU$1.prototype;
+LRUProto.put = function(key, value) {
+  var list = this._list;
+  var map2 = this._map;
+  var removed = null;
+  if (map2[key] == null) {
+    var len2 = list.len();
+    var entry = this._lastRemovedEntry;
+    if (len2 >= this._maxSize && len2 > 0) {
+      var leastUsedEntry = list.head;
+      list.remove(leastUsedEntry);
+      delete map2[leastUsedEntry.key];
+      removed = leastUsedEntry.value;
+      this._lastRemovedEntry = leastUsedEntry;
     }
-    this._len++;
-  };
-  linkedListProto.remove = function(entry) {
-    var prev = entry.prev;
-    var next = entry.next;
-    if (prev) {
-      prev.next = next;
+    if (entry) {
+      entry.value = value;
     } else {
-      this.head = next;
+      entry = new Entry(value);
     }
-    if (next) {
-      next.prev = prev;
-    } else {
-      this.tail = prev;
-    }
-    entry.next = entry.prev = null;
-    this._len--;
-  };
-  linkedListProto.len = function() {
-    return this._len;
-  };
-  linkedListProto.clear = function() {
-    this.head = this.tail = null;
-    this._len = 0;
-  };
-  var Entry = function(val) {
-    this.value = val;
-    this.next;
-    this.prev;
-  };
-  var LRU = function(maxSize) {
-    this._list = new LinkedList();
-    this._map = {};
-    this._maxSize = maxSize || 10;
-    this._lastRemovedEntry = null;
-  };
-  var LRUProto = LRU.prototype;
-  LRUProto.put = function(key, value) {
-    var list = this._list;
-    var map2 = this._map;
-    var removed = null;
-    if (map2[key] == null) {
-      var len = list.len();
-      var entry = this._lastRemovedEntry;
-      if (len >= this._maxSize && len > 0) {
-        var leastUsedEntry = list.head;
-        list.remove(leastUsedEntry);
-        delete map2[leastUsedEntry.key];
-        removed = leastUsedEntry.value;
-        this._lastRemovedEntry = leastUsedEntry;
-      }
-      if (entry) {
-        entry.value = value;
-      } else {
-        entry = new Entry(value);
-      }
-      entry.key = key;
+    entry.key = key;
+    list.insertEntry(entry);
+    map2[key] = entry;
+  }
+  return removed;
+};
+LRUProto.get = function(key) {
+  var entry = this._map[key];
+  var list = this._list;
+  if (entry != null) {
+    if (entry !== list.tail) {
+      list.remove(entry);
       list.insertEntry(entry);
-      map2[key] = entry;
     }
-    return removed;
-  };
-  LRUProto.get = function(key) {
-    var entry = this._map[key];
-    var list = this._list;
-    if (entry != null) {
-      if (entry !== list.tail) {
-        list.remove(entry);
-        list.insertEntry(entry);
-      }
-      return entry.value;
-    }
-  };
-  LRUProto.clear = function() {
-    this._list.clear();
-    this._map = {};
-  };
-  var _default2 = LRU;
-  LRU_1 = _default2;
-  return LRU_1;
-}
+    return entry.value;
+  }
+};
+LRUProto.clear = function() {
+  this._list.clear();
+  this._map = {};
+};
+var _default$f = LRU$1;
+var LRU_1 = _default$f;
 var hasRequiredColor;
 function requireColor() {
   if (hasRequiredColor) return color$1;
   hasRequiredColor = 1;
-  var LRU = requireLRU();
+  var LRU2 = LRU_1;
   var kCSSColorTable = {
     "transparent": [0, 0, 0, 0],
     "aliceblue": [240, 248, 255, 1],
@@ -2514,7 +2494,7 @@ function requireColor() {
     out[3] = a[3];
     return out;
   }
-  var colorCache = new LRU(20);
+  var colorCache = new LRU2(20);
   var lastRemovedArr = null;
   function putToCache(colorStr, rgbaArr) {
     if (lastRemovedArr) {
@@ -2705,7 +2685,7 @@ function requireColor() {
     return out;
   }
   var fastMapToColor = fastLerp;
-  function lerp(normalizedValue, colors, fullOutput) {
+  function lerp2(normalizedValue, colors, fullOutput) {
     if (!(colors && colors.length) || !(normalizedValue >= 0 && normalizedValue <= 1)) {
       return;
     }
@@ -2723,7 +2703,7 @@ function requireColor() {
       value
     } : color2;
   }
-  var mapToColor = lerp;
+  var mapToColor = lerp2;
   function modifyHSL(color2, h, s, l) {
     color2 = parse(color2);
     if (color2) {
@@ -2756,7 +2736,7 @@ function requireColor() {
   color$1.toHex = toHex;
   color$1.fastLerp = fastLerp;
   color$1.fastMapToColor = fastMapToColor;
-  color$1.lerp = lerp;
+  color$1.lerp = lerp2;
   color$1.mapToColor = mapToColor;
   color$1.modifyHSL = modifyHSL;
   color$1.modifyAlpha = modifyAlpha;
@@ -2765,8 +2745,8 @@ function requireColor() {
 }
 var Clip = Clip_1;
 var color = requireColor();
-var _util = util$6;
-var isArrayLike = _util.isArrayLike;
+var _util$1 = util$6;
+var isArrayLike$1 = _util$1.isArrayLike;
 var arraySlice = Array.prototype.slice;
 function defaultGetter(target, key) {
   return target[key];
@@ -2781,15 +2761,15 @@ function interpolateString(p0, p1, percent) {
   return percent > 0.5 ? p1 : p0;
 }
 function interpolateArray(p0, p1, percent, out, arrDim) {
-  var len = p0.length;
+  var len2 = p0.length;
   if (arrDim === 1) {
-    for (var i = 0; i < len; i++) {
+    for (var i = 0; i < len2; i++) {
       out[i] = interpolateNumber(p0[i], p1[i], percent);
     }
   } else {
-    var len2 = len && p0[0].length;
-    for (var i = 0; i < len; i++) {
-      for (var j = 0; j < len2; j++) {
+    var len22 = len2 && p0[0].length;
+    for (var i = 0; i < len2; i++) {
+      for (var j = 0; j < len22; j++) {
         out[i][j] = interpolateNumber(p0[i][j], p1[i][j], percent);
       }
     }
@@ -2827,20 +2807,20 @@ function isArraySame(arr0, arr1, arrDim) {
   if (arr0 === arr1) {
     return true;
   }
-  var len = arr0.length;
-  if (len !== arr1.length) {
+  var len2 = arr0.length;
+  if (len2 !== arr1.length) {
     return false;
   }
   if (arrDim === 1) {
-    for (var i = 0; i < len; i++) {
+    for (var i = 0; i < len2; i++) {
       if (arr0[i] !== arr1[i]) {
         return false;
       }
     }
   } else {
-    var len2 = arr0[0].length;
-    for (var i = 0; i < len; i++) {
-      for (var j = 0; j < len2; j++) {
+    var len22 = arr0[0].length;
+    for (var i = 0; i < len2; i++) {
+      for (var j = 0; j < len22; j++) {
         if (arr0[i][j] !== arr1[i][j]) {
           return false;
         }
@@ -2850,15 +2830,15 @@ function isArraySame(arr0, arr1, arrDim) {
   return true;
 }
 function catmullRomInterpolateArray(p0, p1, p2, p3, t, t2, t3, out, arrDim) {
-  var len = p0.length;
+  var len2 = p0.length;
   if (arrDim === 1) {
-    for (var i = 0; i < len; i++) {
+    for (var i = 0; i < len2; i++) {
       out[i] = catmullRomInterpolate(p0[i], p1[i], p2[i], p3[i], t, t2, t3);
     }
   } else {
-    var len2 = p0[0].length;
-    for (var i = 0; i < len; i++) {
-      for (var j = 0; j < len2; j++) {
+    var len22 = p0[0].length;
+    for (var i = 0; i < len2; i++) {
+      for (var j = 0; j < len22; j++) {
         out[i][j] = catmullRomInterpolate(p0[i][j], p1[i][j], p2[i][j], p3[i][j], t, t2, t3);
       }
     }
@@ -2870,11 +2850,11 @@ function catmullRomInterpolate(p0, p1, p2, p3, t, t2, t3) {
   return (2 * (p1 - p2) + v0 + v1) * t3 + (-3 * (p1 - p2) - 2 * v0 - v1) * t2 + v0 * t + p1;
 }
 function cloneValue(value) {
-  if (isArrayLike(value)) {
-    var len = value.length;
-    if (isArrayLike(value[0])) {
+  if (isArrayLike$1(value)) {
+    var len2 = value.length;
+    if (isArrayLike$1(value[0])) {
       var ret = [];
-      for (var i = 0; i < len; i++) {
+      for (var i = 0; i < len2; i++) {
         ret.push(arraySlice.call(value[i]));
       }
       return ret;
@@ -2891,7 +2871,7 @@ function rgba2String(rgba) {
 }
 function getArrayDim(keyframes) {
   var lastValue = keyframes[keyframes.length - 1].value;
-  return isArrayLike(lastValue && lastValue[0]) ? 2 : 1;
+  return isArrayLike$1(lastValue && lastValue[0]) ? 2 : 1;
 }
 function createTrackClip(animator, easing2, oneTrackDone, keyframes, propName, forceAnimate) {
   var getter = animator._getter;
@@ -2902,7 +2882,7 @@ function createTrackClip(animator, easing2, oneTrackDone, keyframes, propName, f
     return;
   }
   var firstVal = keyframes[0].value;
-  var isValueArray = isArrayLike(firstVal);
+  var isValueArray = isArrayLike$1(firstVal);
   var isValueColor = false;
   var isValueString = false;
   var arrDim = isValueArray ? getArrayDim(keyframes) : 0;
@@ -3035,7 +3015,7 @@ function createTrackClip(animator, easing2, oneTrackDone, keyframes, propName, f
   }
   return clip;
 }
-var Animator$1 = function(target, loop, getter, setter) {
+var Animator$2 = function(target, loop, getter, setter) {
   this._tracks = {};
   this._target = target;
   this._loop = loop || false;
@@ -3047,7 +3027,7 @@ var Animator$1 = function(target, loop, getter, setter) {
   this._onframeList = [];
   this._clipList = [];
 };
-Animator$1.prototype = {
+Animator$2.prototype = {
   /**
    * Set Animation keyframe
    * @param  {number} time 关键帧时间，单位是ms
@@ -3108,8 +3088,8 @@ Animator$1.prototype = {
     this._tracks = {};
     this._clipList.length = 0;
     var doneList = this._doneList;
-    var len = doneList.length;
-    for (var i = 0; i < len; i++) {
+    var len2 = doneList.length;
+    for (var i = 0; i < len2; i++) {
       doneList[i].call(this);
     }
   },
@@ -3201,8 +3181,8 @@ Animator$1.prototype = {
     return this._clipList;
   }
 };
-var _default$7 = Animator$1;
-var Animator_1 = _default$7;
+var _default$e = Animator$2;
+var Animator_1 = _default$e;
 var config = {};
 var dpr = 1;
 if (typeof window !== "undefined") {
@@ -3214,808 +3194,780 @@ config.debugMode = debugMode$1;
 config.devicePixelRatio = devicePixelRatio$2;
 var _config$2 = config;
 var debugMode = _config$2.debugMode;
-var logError$1 = function() {
+var logError$2 = function() {
 };
 if (debugMode === 1) {
-  logError$1 = console.error;
+  logError$2 = console.error;
 }
-var _default$6 = logError$1;
-var log = _default$6;
-var Animatable_1;
-var hasRequiredAnimatable;
-function requireAnimatable() {
-  if (hasRequiredAnimatable) return Animatable_1;
-  hasRequiredAnimatable = 1;
-  var Animator2 = Animator_1;
-  var logError2 = log;
-  var _util2 = util$6;
-  var isString2 = _util2.isString;
-  var isFunction2 = _util2.isFunction;
-  var isObject2 = _util2.isObject;
-  var isArrayLike2 = _util2.isArrayLike;
-  var indexOf2 = _util2.indexOf;
-  var Animatable = function() {
-    this.animators = [];
-  };
-  Animatable.prototype = {
-    constructor: Animatable,
-    /**
-     * 动画
-     *
-     * @param {string} path The path to fetch value from object, like 'a.b.c'.
-     * @param {boolean} [loop] Whether to loop animation.
-     * @return {module:zrender/animation/Animator}
-     * @example:
-     *     el.animate('style', false)
-     *         .when(1000, {x: 10} )
-     *         .done(function(){ // Animation done })
-     *         .start()
-     */
-    animate: function(path2, loop) {
-      var target;
-      var animatingShape = false;
-      var el = this;
-      var zr = this.__zr;
-      if (path2) {
-        var pathSplitted = path2.split(".");
-        var prop = el;
-        animatingShape = pathSplitted[0] === "shape";
-        for (var i = 0, l = pathSplitted.length; i < l; i++) {
-          if (!prop) {
-            continue;
-          }
-          prop = prop[pathSplitted[i]];
+var _default$d = logError$2;
+var log = _default$d;
+var Animator$1 = Animator_1;
+var logError$1 = log;
+var _util = util$6;
+var isString = _util.isString;
+var isFunction = _util.isFunction;
+var isObject = _util.isObject;
+var isArrayLike = _util.isArrayLike;
+var indexOf = _util.indexOf;
+var Animatable$1 = function() {
+  this.animators = [];
+};
+Animatable$1.prototype = {
+  constructor: Animatable$1,
+  /**
+   * 动画
+   *
+   * @param {string} path The path to fetch value from object, like 'a.b.c'.
+   * @param {boolean} [loop] Whether to loop animation.
+   * @return {module:zrender/animation/Animator}
+   * @example:
+   *     el.animate('style', false)
+   *         .when(1000, {x: 10} )
+   *         .done(function(){ // Animation done })
+   *         .start()
+   */
+  animate: function(path2, loop) {
+    var target;
+    var animatingShape = false;
+    var el = this;
+    var zr = this.__zr;
+    if (path2) {
+      var pathSplitted = path2.split(".");
+      var prop = el;
+      animatingShape = pathSplitted[0] === "shape";
+      for (var i = 0, l = pathSplitted.length; i < l; i++) {
+        if (!prop) {
+          continue;
         }
-        if (prop) {
-          target = prop;
-        }
-      } else {
-        target = el;
+        prop = prop[pathSplitted[i]];
       }
-      if (!target) {
-        logError2('Property "' + path2 + '" is not existed in element ' + el.id);
-        return;
+      if (prop) {
+        target = prop;
       }
-      var animators = el.animators;
-      var animator = new Animator2(target, loop);
-      animator.during(function(target2) {
-        el.dirty(animatingShape);
-      }).done(function() {
-        animators.splice(indexOf2(animators, animator), 1);
-      });
-      animators.push(animator);
-      if (zr) {
-        zr.animation.addAnimator(animator);
-      }
-      return animator;
-    },
-    /**
-     * 停止动画
-     * @param {boolean} forwardToLast If move to last frame before stop
-     */
-    stopAnimation: function(forwardToLast) {
-      var animators = this.animators;
-      var len = animators.length;
-      for (var i = 0; i < len; i++) {
-        animators[i].stop(forwardToLast);
-      }
-      animators.length = 0;
-      return this;
-    },
-    /**
-     * Caution: this method will stop previous animation.
-     * So do not use this method to one element twice before
-     * animation starts, unless you know what you are doing.
-     * @param {Object} target
-     * @param {number} [time=500] Time in ms
-     * @param {string} [easing='linear']
-     * @param {number} [delay=0]
-     * @param {Function} [callback]
-     * @param {Function} [forceAnimate] Prevent stop animation and callback
-     *        immediently when target values are the same as current values.
-     *
-     * @example
-     *  // Animate position
-     *  el.animateTo({
-     *      position: [10, 10]
-     *  }, function () { // done })
-     *
-     *  // Animate shape, style and position in 100ms, delayed 100ms, with cubicOut easing
-     *  el.animateTo({
-     *      shape: {
-     *          width: 500
-     *      },
-     *      style: {
-     *          fill: 'red'
-     *      }
-     *      position: [10, 10]
-     *  }, 100, 100, 'cubicOut', function () { // done })
-     */
-    // TODO Return animation key
-    animateTo: function(target, time, delay, easing2, callback, forceAnimate) {
-      animateTo(this, target, time, delay, easing2, callback, forceAnimate);
-    },
-    /**
-     * Animate from the target state to current state.
-     * The params and the return value are the same as `this.animateTo`.
-     */
-    animateFrom: function(target, time, delay, easing2, callback, forceAnimate) {
-      animateTo(this, target, time, delay, easing2, callback, forceAnimate, true);
+    } else {
+      target = el;
     }
-  };
-  function animateTo(animatable, target, time, delay, easing2, callback, forceAnimate, reverse) {
-    if (isString2(delay)) {
-      callback = easing2;
-      easing2 = delay;
-      delay = 0;
-    } else if (isFunction2(easing2)) {
-      callback = easing2;
-      easing2 = "linear";
-      delay = 0;
-    } else if (isFunction2(delay)) {
-      callback = delay;
-      delay = 0;
-    } else if (isFunction2(time)) {
-      callback = time;
-      time = 500;
-    } else if (!time) {
-      time = 500;
+    if (!target) {
+      logError$1('Property "' + path2 + '" is not existed in element ' + el.id);
+      return;
     }
-    animatable.stopAnimation();
-    animateToShallow(animatable, "", animatable, target, time, delay, reverse);
-    var animators = animatable.animators.slice();
-    var count = animators.length;
-    function done() {
-      count--;
-      if (!count) {
-        callback && callback();
-      }
+    var animators = el.animators;
+    var animator = new Animator$1(target, loop);
+    animator.during(function(target2) {
+      el.dirty(animatingShape);
+    }).done(function() {
+      animators.splice(indexOf(animators, animator), 1);
+    });
+    animators.push(animator);
+    if (zr) {
+      zr.animation.addAnimator(animator);
     }
+    return animator;
+  },
+  /**
+   * 停止动画
+   * @param {boolean} forwardToLast If move to last frame before stop
+   */
+  stopAnimation: function(forwardToLast) {
+    var animators = this.animators;
+    var len2 = animators.length;
+    for (var i = 0; i < len2; i++) {
+      animators[i].stop(forwardToLast);
+    }
+    animators.length = 0;
+    return this;
+  },
+  /**
+   * Caution: this method will stop previous animation.
+   * So do not use this method to one element twice before
+   * animation starts, unless you know what you are doing.
+   * @param {Object} target
+   * @param {number} [time=500] Time in ms
+   * @param {string} [easing='linear']
+   * @param {number} [delay=0]
+   * @param {Function} [callback]
+   * @param {Function} [forceAnimate] Prevent stop animation and callback
+   *        immediently when target values are the same as current values.
+   *
+   * @example
+   *  // Animate position
+   *  el.animateTo({
+   *      position: [10, 10]
+   *  }, function () { // done })
+   *
+   *  // Animate shape, style and position in 100ms, delayed 100ms, with cubicOut easing
+   *  el.animateTo({
+   *      shape: {
+   *          width: 500
+   *      },
+   *      style: {
+   *          fill: 'red'
+   *      }
+   *      position: [10, 10]
+   *  }, 100, 100, 'cubicOut', function () { // done })
+   */
+  // TODO Return animation key
+  animateTo: function(target, time, delay, easing2, callback, forceAnimate) {
+    animateTo(this, target, time, delay, easing2, callback, forceAnimate);
+  },
+  /**
+   * Animate from the target state to current state.
+   * The params and the return value are the same as `this.animateTo`.
+   */
+  animateFrom: function(target, time, delay, easing2, callback, forceAnimate) {
+    animateTo(this, target, time, delay, easing2, callback, forceAnimate, true);
+  }
+};
+function animateTo(animatable, target, time, delay, easing2, callback, forceAnimate, reverse) {
+  if (isString(delay)) {
+    callback = easing2;
+    easing2 = delay;
+    delay = 0;
+  } else if (isFunction(easing2)) {
+    callback = easing2;
+    easing2 = "linear";
+    delay = 0;
+  } else if (isFunction(delay)) {
+    callback = delay;
+    delay = 0;
+  } else if (isFunction(time)) {
+    callback = time;
+    time = 500;
+  } else if (!time) {
+    time = 500;
+  }
+  animatable.stopAnimation();
+  animateToShallow(animatable, "", animatable, target, time, delay, reverse);
+  var animators = animatable.animators.slice();
+  var count = animators.length;
+  function done() {
+    count--;
     if (!count) {
       callback && callback();
     }
-    for (var i = 0; i < animators.length; i++) {
-      animators[i].done(done).start(easing2, forceAnimate);
-    }
   }
-  function animateToShallow(animatable, path2, source, target, time, delay, reverse) {
-    var objShallow = {};
-    var propertyCount = 0;
-    for (var name in target) {
-      if (!target.hasOwnProperty(name)) {
-        continue;
-      }
-      if (source[name] != null) {
-        if (isObject2(target[name]) && !isArrayLike2(target[name])) {
-          animateToShallow(animatable, path2 ? path2 + "." + name : name, source[name], target[name], time, delay, reverse);
-        } else {
-          if (reverse) {
-            objShallow[name] = source[name];
-            setAttrByPath(animatable, path2, name, target[name]);
-          } else {
-            objShallow[name] = target[name];
-          }
-          propertyCount++;
-        }
-      } else if (target[name] != null && !reverse) {
-        setAttrByPath(animatable, path2, name, target[name]);
-      }
-    }
-    if (propertyCount > 0) {
-      animatable.animate(path2, false).when(time == null ? 500 : time, objShallow).delay(delay || 0);
-    }
+  if (!count) {
+    callback && callback();
   }
-  function setAttrByPath(el, path2, name, value) {
-    if (!path2) {
-      el.attr(name, value);
-    } else {
-      var props = {};
-      props[path2] = {};
-      props[path2][name] = value;
-      el.attr(props);
-    }
+  for (var i = 0; i < animators.length; i++) {
+    animators[i].done(done).start(easing2, forceAnimate);
   }
-  var _default2 = Animatable;
-  Animatable_1 = _default2;
-  return Animatable_1;
 }
-var Element_1;
-var hasRequiredElement;
-function requireElement() {
-  if (hasRequiredElement) return Element_1;
-  hasRequiredElement = 1;
-  var guid2 = guid$1;
-  var Eventful2 = Eventful_1;
-  var Transformable = requireTransformable();
-  var Animatable = requireAnimatable();
-  var zrUtil2 = util$6;
-  var Element = function(opts) {
-    Transformable.call(this, opts);
-    Eventful2.call(this, opts);
-    Animatable.call(this, opts);
-    this.id = opts.id || guid2();
-  };
-  Element.prototype = {
-    /**
-     * 元素类型
-     * Element type
-     * @type {string}
-     */
-    type: "element",
-    /**
-     * 元素名字
-     * Element name
-     * @type {string}
-     */
-    name: "",
-    /**
-     * ZRender 实例对象，会在 element 添加到 zrender 实例中后自动赋值
-     * ZRender instance will be assigned when element is associated with zrender
-     * @name module:/zrender/Element#__zr
-     * @type {module:zrender/ZRender}
-     */
-    __zr: null,
-    /**
-     * 图形是否忽略，为true时忽略图形的绘制以及事件触发
-     * If ignore drawing and events of the element object
-     * @name module:/zrender/Element#ignore
-     * @type {boolean}
-     * @default false
-     */
-    ignore: false,
-    /**
-     * 用于裁剪的路径(shape)，所有 Group 内的路径在绘制时都会被这个路径裁剪
-     * 该路径会继承被裁减对象的变换
-     * @type {module:zrender/graphic/Path}
-     * @see http://www.w3.org/TR/2dcontext/#clipping-region
-     * @readOnly
-     */
-    clipPath: null,
-    /**
-     * 是否是 Group
-     * @type {boolean}
-     */
-    isGroup: false,
-    /**
-     * Drift element
-     * @param  {number} dx dx on the global space
-     * @param  {number} dy dy on the global space
-     */
-    drift: function(dx, dy) {
-      switch (this.draggable) {
-        case "horizontal":
-          dy = 0;
-          break;
-        case "vertical":
-          dx = 0;
-          break;
-      }
-      var m = this.transform;
-      if (!m) {
-        m = this.transform = [1, 0, 0, 1, 0, 0];
-      }
-      m[4] += dx;
-      m[5] += dy;
-      this.decomposeTransform();
-      this.dirty(false);
-    },
-    /**
-     * Hook before update
-     */
-    beforeUpdate: function() {
-    },
-    /**
-     * Hook after update
-     */
-    afterUpdate: function() {
-    },
-    /**
-     * Update each frame
-     */
-    update: function() {
-      this.updateTransform();
-    },
-    /**
-     * @param  {Function} cb
-     * @param  {}   context
-     */
-    traverse: function(cb, context) {
-    },
-    /**
-     * @protected
-     */
-    attrKV: function(key, value) {
-      if (key === "position" || key === "scale" || key === "origin") {
-        if (value) {
-          var target = this[key];
-          if (!target) {
-            target = this[key] = [];
-          }
-          target[0] = value[0];
-          target[1] = value[1];
-        }
+function animateToShallow(animatable, path2, source, target, time, delay, reverse) {
+  var objShallow = {};
+  var propertyCount = 0;
+  for (var name in target) {
+    if (!target.hasOwnProperty(name)) {
+      continue;
+    }
+    if (source[name] != null) {
+      if (isObject(target[name]) && !isArrayLike(target[name])) {
+        animateToShallow(animatable, path2 ? path2 + "." + name : name, source[name], target[name], time, delay, reverse);
       } else {
-        this[key] = value;
-      }
-    },
-    /**
-     * Hide the element
-     */
-    hide: function() {
-      this.ignore = true;
-      this.__zr && this.__zr.refresh();
-    },
-    /**
-     * Show the element
-     */
-    show: function() {
-      this.ignore = false;
-      this.__zr && this.__zr.refresh();
-    },
-    /**
-     * @param {string|Object} key
-     * @param {*} value
-     */
-    attr: function(key, value) {
-      if (typeof key === "string") {
-        this.attrKV(key, value);
-      } else if (zrUtil2.isObject(key)) {
-        for (var name in key) {
-          if (key.hasOwnProperty(name)) {
-            this.attrKV(name, key[name]);
-          }
+        if (reverse) {
+          objShallow[name] = source[name];
+          setAttrByPath(animatable, path2, name, target[name]);
+        } else {
+          objShallow[name] = target[name];
         }
+        propertyCount++;
       }
-      this.dirty(false);
-      return this;
-    },
-    /**
-     * @param {module:zrender/graphic/Path} clipPath
-     */
-    setClipPath: function(clipPath) {
-      var zr = this.__zr;
-      if (zr) {
-        clipPath.addSelfToZr(zr);
-      }
-      if (this.clipPath && this.clipPath !== clipPath) {
-        this.removeClipPath();
-      }
-      this.clipPath = clipPath;
-      clipPath.__zr = zr;
-      clipPath.__clipTarget = this;
-      this.dirty(false);
-    },
-    /**
-     */
-    removeClipPath: function() {
-      var clipPath = this.clipPath;
-      if (clipPath) {
-        if (clipPath.__zr) {
-          clipPath.removeSelfFromZr(clipPath.__zr);
-        }
-        clipPath.__zr = null;
-        clipPath.__clipTarget = null;
-        this.clipPath = null;
-        this.dirty(false);
-      }
-    },
-    /**
-     * Add self from zrender instance.
-     * Not recursively because it will be invoked when element added to storage.
-     * @param {module:zrender/ZRender} zr
-     */
-    addSelfToZr: function(zr) {
-      this.__zr = zr;
-      var animators = this.animators;
-      if (animators) {
-        for (var i = 0; i < animators.length; i++) {
-          zr.animation.addAnimator(animators[i]);
-        }
-      }
-      if (this.clipPath) {
-        this.clipPath.addSelfToZr(zr);
-      }
-    },
-    /**
-     * Remove self from zrender instance.
-     * Not recursively because it will be invoked when element added to storage.
-     * @param {module:zrender/ZRender} zr
-     */
-    removeSelfFromZr: function(zr) {
-      this.__zr = null;
-      var animators = this.animators;
-      if (animators) {
-        for (var i = 0; i < animators.length; i++) {
-          zr.animation.removeAnimator(animators[i]);
-        }
-      }
-      if (this.clipPath) {
-        this.clipPath.removeSelfFromZr(zr);
-      }
+    } else if (target[name] != null && !reverse) {
+      setAttrByPath(animatable, path2, name, target[name]);
     }
-  };
-  zrUtil2.mixin(Element, Animatable);
-  zrUtil2.mixin(Element, Transformable);
-  zrUtil2.mixin(Element, Eventful2);
-  var _default2 = Element;
-  Element_1 = _default2;
-  return Element_1;
+  }
+  if (propertyCount > 0) {
+    animatable.animate(path2, false).when(time == null ? 500 : time, objShallow).delay(delay || 0);
+  }
 }
-var BoundingRect_1;
-var hasRequiredBoundingRect;
-function requireBoundingRect() {
-  if (hasRequiredBoundingRect) return BoundingRect_1;
-  hasRequiredBoundingRect = 1;
-  var vec22 = requireVector();
-  var matrix2 = requireMatrix();
-  var v2ApplyTransform = vec22.applyTransform;
-  var mathMin = Math.min;
-  var mathMax = Math.max;
-  function BoundingRect2(x, y, width, height) {
-    if (width < 0) {
-      x = x + width;
-      width = -width;
+function setAttrByPath(el, path2, name, value) {
+  if (!path2) {
+    el.attr(name, value);
+  } else {
+    var props = {};
+    props[path2] = {};
+    props[path2][name] = value;
+    el.attr(props);
+  }
+}
+var _default$c = Animatable$1;
+var Animatable_1 = _default$c;
+var guid$1 = guid$2;
+var Eventful$1 = Eventful_1;
+var Transformable = Transformable_1;
+var Animatable = Animatable_1;
+var zrUtil$5 = util$6;
+var Element$2 = function(opts) {
+  Transformable.call(this, opts);
+  Eventful$1.call(this, opts);
+  Animatable.call(this, opts);
+  this.id = opts.id || guid$1();
+};
+Element$2.prototype = {
+  /**
+   * 元素类型
+   * Element type
+   * @type {string}
+   */
+  type: "element",
+  /**
+   * 元素名字
+   * Element name
+   * @type {string}
+   */
+  name: "",
+  /**
+   * ZRender 实例对象，会在 element 添加到 zrender 实例中后自动赋值
+   * ZRender instance will be assigned when element is associated with zrender
+   * @name module:/zrender/Element#__zr
+   * @type {module:zrender/ZRender}
+   */
+  __zr: null,
+  /**
+   * 图形是否忽略，为true时忽略图形的绘制以及事件触发
+   * If ignore drawing and events of the element object
+   * @name module:/zrender/Element#ignore
+   * @type {boolean}
+   * @default false
+   */
+  ignore: false,
+  /**
+   * 用于裁剪的路径(shape)，所有 Group 内的路径在绘制时都会被这个路径裁剪
+   * 该路径会继承被裁减对象的变换
+   * @type {module:zrender/graphic/Path}
+   * @see http://www.w3.org/TR/2dcontext/#clipping-region
+   * @readOnly
+   */
+  clipPath: null,
+  /**
+   * 是否是 Group
+   * @type {boolean}
+   */
+  isGroup: false,
+  /**
+   * Drift element
+   * @param  {number} dx dx on the global space
+   * @param  {number} dy dy on the global space
+   */
+  drift: function(dx, dy) {
+    switch (this.draggable) {
+      case "horizontal":
+        dy = 0;
+        break;
+      case "vertical":
+        dx = 0;
+        break;
     }
-    if (height < 0) {
-      y = y + height;
-      height = -height;
+    var m = this.transform;
+    if (!m) {
+      m = this.transform = [1, 0, 0, 1, 0, 0];
     }
+    m[4] += dx;
+    m[5] += dy;
+    this.decomposeTransform();
+    this.dirty(false);
+  },
+  /**
+   * Hook before update
+   */
+  beforeUpdate: function() {
+  },
+  /**
+   * Hook after update
+   */
+  afterUpdate: function() {
+  },
+  /**
+   * Update each frame
+   */
+  update: function() {
+    this.updateTransform();
+  },
+  /**
+   * @param  {Function} cb
+   * @param  {}   context
+   */
+  traverse: function(cb, context) {
+  },
+  /**
+   * @protected
+   */
+  attrKV: function(key, value) {
+    if (key === "position" || key === "scale" || key === "origin") {
+      if (value) {
+        var target = this[key];
+        if (!target) {
+          target = this[key] = [];
+        }
+        target[0] = value[0];
+        target[1] = value[1];
+      }
+    } else {
+      this[key] = value;
+    }
+  },
+  /**
+   * Hide the element
+   */
+  hide: function() {
+    this.ignore = true;
+    this.__zr && this.__zr.refresh();
+  },
+  /**
+   * Show the element
+   */
+  show: function() {
+    this.ignore = false;
+    this.__zr && this.__zr.refresh();
+  },
+  /**
+   * @param {string|Object} key
+   * @param {*} value
+   */
+  attr: function(key, value) {
+    if (typeof key === "string") {
+      this.attrKV(key, value);
+    } else if (zrUtil$5.isObject(key)) {
+      for (var name in key) {
+        if (key.hasOwnProperty(name)) {
+          this.attrKV(name, key[name]);
+        }
+      }
+    }
+    this.dirty(false);
+    return this;
+  },
+  /**
+   * @param {module:zrender/graphic/Path} clipPath
+   */
+  setClipPath: function(clipPath) {
+    var zr = this.__zr;
+    if (zr) {
+      clipPath.addSelfToZr(zr);
+    }
+    if (this.clipPath && this.clipPath !== clipPath) {
+      this.removeClipPath();
+    }
+    this.clipPath = clipPath;
+    clipPath.__zr = zr;
+    clipPath.__clipTarget = this;
+    this.dirty(false);
+  },
+  /**
+   */
+  removeClipPath: function() {
+    var clipPath = this.clipPath;
+    if (clipPath) {
+      if (clipPath.__zr) {
+        clipPath.removeSelfFromZr(clipPath.__zr);
+      }
+      clipPath.__zr = null;
+      clipPath.__clipTarget = null;
+      this.clipPath = null;
+      this.dirty(false);
+    }
+  },
+  /**
+   * Add self from zrender instance.
+   * Not recursively because it will be invoked when element added to storage.
+   * @param {module:zrender/ZRender} zr
+   */
+  addSelfToZr: function(zr) {
+    this.__zr = zr;
+    var animators = this.animators;
+    if (animators) {
+      for (var i = 0; i < animators.length; i++) {
+        zr.animation.addAnimator(animators[i]);
+      }
+    }
+    if (this.clipPath) {
+      this.clipPath.addSelfToZr(zr);
+    }
+  },
+  /**
+   * Remove self from zrender instance.
+   * Not recursively because it will be invoked when element added to storage.
+   * @param {module:zrender/ZRender} zr
+   */
+  removeSelfFromZr: function(zr) {
+    this.__zr = null;
+    var animators = this.animators;
+    if (animators) {
+      for (var i = 0; i < animators.length; i++) {
+        zr.animation.removeAnimator(animators[i]);
+      }
+    }
+    if (this.clipPath) {
+      this.clipPath.removeSelfFromZr(zr);
+    }
+  }
+};
+zrUtil$5.mixin(Element$2, Animatable);
+zrUtil$5.mixin(Element$2, Transformable);
+zrUtil$5.mixin(Element$2, Eventful$1);
+var _default$b = Element$2;
+var Element_1 = _default$b;
+var vec2 = vector$1;
+var matrix = requireMatrix();
+var v2ApplyTransform = vec2.applyTransform;
+var mathMin = Math.min;
+var mathMax = Math.max;
+function BoundingRect$4(x, y, width, height) {
+  if (width < 0) {
+    x = x + width;
+    width = -width;
+  }
+  if (height < 0) {
+    y = y + height;
+    height = -height;
+  }
+  this.x = x;
+  this.y = y;
+  this.width = width;
+  this.height = height;
+}
+BoundingRect$4.prototype = {
+  constructor: BoundingRect$4,
+  /**
+   * @param {module:echarts/core/BoundingRect} other
+   */
+  union: function(other) {
+    var x = mathMin(other.x, this.x);
+    var y = mathMin(other.y, this.y);
+    this.width = mathMax(other.x + other.width, this.x + this.width) - x;
+    this.height = mathMax(other.y + other.height, this.y + this.height) - y;
     this.x = x;
     this.y = y;
-    this.width = width;
-    this.height = height;
+  },
+  /**
+   * @param {Array.<number>} m
+   * @methods
+   */
+  applyTransform: /* @__PURE__ */ function() {
+    var lt = [];
+    var rb = [];
+    var lb = [];
+    var rt = [];
+    return function(m) {
+      if (!m) {
+        return;
+      }
+      lt[0] = lb[0] = this.x;
+      lt[1] = rt[1] = this.y;
+      rb[0] = rt[0] = this.x + this.width;
+      rb[1] = lb[1] = this.y + this.height;
+      v2ApplyTransform(lt, lt, m);
+      v2ApplyTransform(rb, rb, m);
+      v2ApplyTransform(lb, lb, m);
+      v2ApplyTransform(rt, rt, m);
+      this.x = mathMin(lt[0], rb[0], lb[0], rt[0]);
+      this.y = mathMin(lt[1], rb[1], lb[1], rt[1]);
+      var maxX = mathMax(lt[0], rb[0], lb[0], rt[0]);
+      var maxY = mathMax(lt[1], rb[1], lb[1], rt[1]);
+      this.width = maxX - this.x;
+      this.height = maxY - this.y;
+    };
+  }(),
+  /**
+   * Calculate matrix of transforming from self to target rect
+   * @param  {module:zrender/core/BoundingRect} b
+   * @return {Array.<number>}
+   */
+  calculateTransform: function(b) {
+    var a = this;
+    var sx = b.width / a.width;
+    var sy = b.height / a.height;
+    var m = matrix.create();
+    matrix.translate(m, m, [-a.x, -a.y]);
+    matrix.scale(m, m, [sx, sy]);
+    matrix.translate(m, m, [b.x, b.y]);
+    return m;
+  },
+  /**
+   * @param {(module:echarts/core/BoundingRect|Object)} b
+   * @return {boolean}
+   */
+  intersect: function(b) {
+    if (!b) {
+      return false;
+    }
+    if (!(b instanceof BoundingRect$4)) {
+      b = BoundingRect$4.create(b);
+    }
+    var a = this;
+    var ax0 = a.x;
+    var ax1 = a.x + a.width;
+    var ay0 = a.y;
+    var ay1 = a.y + a.height;
+    var bx0 = b.x;
+    var bx1 = b.x + b.width;
+    var by0 = b.y;
+    var by1 = b.y + b.height;
+    return !(ax1 < bx0 || bx1 < ax0 || ay1 < by0 || by1 < ay0);
+  },
+  contain: function(x, y) {
+    var rect = this;
+    return x >= rect.x && x <= rect.x + rect.width && y >= rect.y && y <= rect.y + rect.height;
+  },
+  /**
+   * @return {module:echarts/core/BoundingRect}
+   */
+  clone: function() {
+    return new BoundingRect$4(this.x, this.y, this.width, this.height);
+  },
+  /**
+   * Copy from another rect
+   */
+  copy: function(other) {
+    this.x = other.x;
+    this.y = other.y;
+    this.width = other.width;
+    this.height = other.height;
+  },
+  plain: function() {
+    return {
+      x: this.x,
+      y: this.y,
+      width: this.width,
+      height: this.height
+    };
   }
-  BoundingRect2.prototype = {
-    constructor: BoundingRect2,
-    /**
-     * @param {module:echarts/core/BoundingRect} other
-     */
-    union: function(other) {
-      var x = mathMin(other.x, this.x);
-      var y = mathMin(other.y, this.y);
-      this.width = mathMax(other.x + other.width, this.x + this.width) - x;
-      this.height = mathMax(other.y + other.height, this.y + this.height) - y;
-      this.x = x;
-      this.y = y;
-    },
-    /**
-     * @param {Array.<number>} m
-     * @methods
-     */
-    applyTransform: /* @__PURE__ */ function() {
-      var lt = [];
-      var rb = [];
-      var lb = [];
-      var rt = [];
-      return function(m) {
-        if (!m) {
-          return;
-        }
-        lt[0] = lb[0] = this.x;
-        lt[1] = rt[1] = this.y;
-        rb[0] = rt[0] = this.x + this.width;
-        rb[1] = lb[1] = this.y + this.height;
-        v2ApplyTransform(lt, lt, m);
-        v2ApplyTransform(rb, rb, m);
-        v2ApplyTransform(lb, lb, m);
-        v2ApplyTransform(rt, rt, m);
-        this.x = mathMin(lt[0], rb[0], lb[0], rt[0]);
-        this.y = mathMin(lt[1], rb[1], lb[1], rt[1]);
-        var maxX = mathMax(lt[0], rb[0], lb[0], rt[0]);
-        var maxY = mathMax(lt[1], rb[1], lb[1], rt[1]);
-        this.width = maxX - this.x;
-        this.height = maxY - this.y;
-      };
-    }(),
-    /**
-     * Calculate matrix of transforming from self to target rect
-     * @param  {module:zrender/core/BoundingRect} b
-     * @return {Array.<number>}
-     */
-    calculateTransform: function(b) {
-      var a = this;
-      var sx = b.width / a.width;
-      var sy = b.height / a.height;
-      var m = matrix2.create();
-      matrix2.translate(m, m, [-a.x, -a.y]);
-      matrix2.scale(m, m, [sx, sy]);
-      matrix2.translate(m, m, [b.x, b.y]);
-      return m;
-    },
-    /**
-     * @param {(module:echarts/core/BoundingRect|Object)} b
-     * @return {boolean}
-     */
-    intersect: function(b) {
-      if (!b) {
-        return false;
-      }
-      if (!(b instanceof BoundingRect2)) {
-        b = BoundingRect2.create(b);
-      }
-      var a = this;
-      var ax0 = a.x;
-      var ax1 = a.x + a.width;
-      var ay0 = a.y;
-      var ay1 = a.y + a.height;
-      var bx0 = b.x;
-      var bx1 = b.x + b.width;
-      var by0 = b.y;
-      var by1 = b.y + b.height;
-      return !(ax1 < bx0 || bx1 < ax0 || ay1 < by0 || by1 < ay0);
-    },
-    contain: function(x, y) {
-      var rect = this;
-      return x >= rect.x && x <= rect.x + rect.width && y >= rect.y && y <= rect.y + rect.height;
-    },
-    /**
-     * @return {module:echarts/core/BoundingRect}
-     */
-    clone: function() {
-      return new BoundingRect2(this.x, this.y, this.width, this.height);
-    },
-    /**
-     * Copy from another rect
-     */
-    copy: function(other) {
-      this.x = other.x;
-      this.y = other.y;
-      this.width = other.width;
-      this.height = other.height;
-    },
-    plain: function() {
-      return {
-        x: this.x,
-        y: this.y,
-        width: this.width,
-        height: this.height
-      };
+};
+BoundingRect$4.create = function(rect) {
+  return new BoundingRect$4(rect.x, rect.y, rect.width, rect.height);
+};
+var _default$a = BoundingRect$4;
+var BoundingRect_1 = _default$a;
+var zrUtil$4 = util$6;
+var Element$1 = Element_1;
+var BoundingRect$3 = BoundingRect_1;
+var Group$1 = function(opts) {
+  opts = opts || {};
+  Element$1.call(this, opts);
+  for (var key in opts) {
+    if (opts.hasOwnProperty(key)) {
+      this[key] = opts[key];
     }
-  };
-  BoundingRect2.create = function(rect) {
-    return new BoundingRect2(rect.x, rect.y, rect.width, rect.height);
-  };
-  var _default2 = BoundingRect2;
-  BoundingRect_1 = _default2;
-  return BoundingRect_1;
-}
-var Group_1;
-var hasRequiredGroup;
-function requireGroup() {
-  if (hasRequiredGroup) return Group_1;
-  hasRequiredGroup = 1;
-  var zrUtil2 = util$6;
-  var Element = requireElement();
-  var BoundingRect2 = requireBoundingRect();
-  var Group2 = function(opts) {
-    opts = opts || {};
-    Element.call(this, opts);
-    for (var key in opts) {
-      if (opts.hasOwnProperty(key)) {
-        this[key] = opts[key];
+  }
+  this._children = [];
+  this.__storage = null;
+  this.__dirty = true;
+};
+Group$1.prototype = {
+  constructor: Group$1,
+  isGroup: true,
+  /**
+   * @type {string}
+   */
+  type: "group",
+  /**
+   * 所有子孙元素是否响应鼠标事件
+   * @name module:/zrender/container/Group#silent
+   * @type {boolean}
+   * @default false
+   */
+  silent: false,
+  /**
+   * @return {Array.<module:zrender/Element>}
+   */
+  children: function() {
+    return this._children.slice();
+  },
+  /**
+   * 获取指定 index 的儿子节点
+   * @param  {number} idx
+   * @return {module:zrender/Element}
+   */
+  childAt: function(idx) {
+    return this._children[idx];
+  },
+  /**
+   * 获取指定名字的儿子节点
+   * @param  {string} name
+   * @return {module:zrender/Element}
+   */
+  childOfName: function(name) {
+    var children = this._children;
+    for (var i = 0; i < children.length; i++) {
+      if (children[i].name === name) {
+        return children[i];
       }
     }
-    this._children = [];
-    this.__storage = null;
-    this.__dirty = true;
-  };
-  Group2.prototype = {
-    constructor: Group2,
-    isGroup: true,
-    /**
-     * @type {string}
-     */
-    type: "group",
-    /**
-     * 所有子孙元素是否响应鼠标事件
-     * @name module:/zrender/container/Group#silent
-     * @type {boolean}
-     * @default false
-     */
-    silent: false,
-    /**
-     * @return {Array.<module:zrender/Element>}
-     */
-    children: function() {
-      return this._children.slice();
-    },
-    /**
-     * 获取指定 index 的儿子节点
-     * @param  {number} idx
-     * @return {module:zrender/Element}
-     */
-    childAt: function(idx) {
-      return this._children[idx];
-    },
-    /**
-     * 获取指定名字的儿子节点
-     * @param  {string} name
-     * @return {module:zrender/Element}
-     */
-    childOfName: function(name) {
+  },
+  /**
+   * @return {number}
+   */
+  childCount: function() {
+    return this._children.length;
+  },
+  /**
+   * 添加子节点到最后
+   * @param {module:zrender/Element} child
+   */
+  add: function(child) {
+    if (child && child !== this && child.parent !== this) {
+      this._children.push(child);
+      this._doAdd(child);
+    }
+    return this;
+  },
+  /**
+   * 添加子节点在 nextSibling 之前
+   * @param {module:zrender/Element} child
+   * @param {module:zrender/Element} nextSibling
+   */
+  addBefore: function(child, nextSibling) {
+    if (child && child !== this && child.parent !== this && nextSibling && nextSibling.parent === this) {
       var children = this._children;
-      for (var i = 0; i < children.length; i++) {
-        if (children[i].name === name) {
-          return children[i];
-        }
-      }
-    },
-    /**
-     * @return {number}
-     */
-    childCount: function() {
-      return this._children.length;
-    },
-    /**
-     * 添加子节点到最后
-     * @param {module:zrender/Element} child
-     */
-    add: function(child) {
-      if (child && child !== this && child.parent !== this) {
-        this._children.push(child);
+      var idx = children.indexOf(nextSibling);
+      if (idx >= 0) {
+        children.splice(idx, 0, child);
         this._doAdd(child);
       }
+    }
+    return this;
+  },
+  _doAdd: function(child) {
+    if (child.parent) {
+      child.parent.remove(child);
+    }
+    child.parent = this;
+    var storage = this.__storage;
+    var zr = this.__zr;
+    if (storage && storage !== child.__storage) {
+      storage.addToStorage(child);
+      if (child instanceof Group$1) {
+        child.addChildrenToStorage(storage);
+      }
+    }
+    zr && zr.refresh();
+  },
+  /**
+   * 移除子节点
+   * @param {module:zrender/Element} child
+   */
+  remove: function(child) {
+    var zr = this.__zr;
+    var storage = this.__storage;
+    var children = this._children;
+    var idx = zrUtil$4.indexOf(children, child);
+    if (idx < 0) {
       return this;
-    },
-    /**
-     * 添加子节点在 nextSibling 之前
-     * @param {module:zrender/Element} child
-     * @param {module:zrender/Element} nextSibling
-     */
-    addBefore: function(child, nextSibling) {
-      if (child && child !== this && child.parent !== this && nextSibling && nextSibling.parent === this) {
-        var children = this._children;
-        var idx = children.indexOf(nextSibling);
-        if (idx >= 0) {
-          children.splice(idx, 0, child);
-          this._doAdd(child);
-        }
+    }
+    children.splice(idx, 1);
+    child.parent = null;
+    if (storage) {
+      storage.delFromStorage(child);
+      if (child instanceof Group$1) {
+        child.delChildrenFromStorage(storage);
       }
-      return this;
-    },
-    _doAdd: function(child) {
-      if (child.parent) {
-        child.parent.remove(child);
-      }
-      child.parent = this;
-      var storage = this.__storage;
-      var zr = this.__zr;
-      if (storage && storage !== child.__storage) {
-        storage.addToStorage(child);
-        if (child instanceof Group2) {
-          child.addChildrenToStorage(storage);
-        }
-      }
-      zr && zr.refresh();
-    },
-    /**
-     * 移除子节点
-     * @param {module:zrender/Element} child
-     */
-    remove: function(child) {
-      var zr = this.__zr;
-      var storage = this.__storage;
-      var children = this._children;
-      var idx = zrUtil2.indexOf(children, child);
-      if (idx < 0) {
-        return this;
-      }
-      children.splice(idx, 1);
-      child.parent = null;
+    }
+    zr && zr.refresh();
+    return this;
+  },
+  /**
+   * 移除所有子节点
+   */
+  removeAll: function() {
+    var children = this._children;
+    var storage = this.__storage;
+    var child;
+    var i;
+    for (i = 0; i < children.length; i++) {
+      child = children[i];
       if (storage) {
         storage.delFromStorage(child);
-        if (child instanceof Group2) {
+        if (child instanceof Group$1) {
           child.delChildrenFromStorage(storage);
         }
       }
-      zr && zr.refresh();
-      return this;
-    },
-    /**
-     * 移除所有子节点
-     */
-    removeAll: function() {
-      var children = this._children;
-      var storage = this.__storage;
-      var child;
-      var i;
-      for (i = 0; i < children.length; i++) {
-        child = children[i];
-        if (storage) {
-          storage.delFromStorage(child);
-          if (child instanceof Group2) {
-            child.delChildrenFromStorage(storage);
-          }
-        }
-        child.parent = null;
-      }
-      children.length = 0;
-      return this;
-    },
-    /**
-     * 遍历所有子节点
-     * @param  {Function} cb
-     * @param  {}   context
-     */
-    eachChild: function(cb, context) {
-      var children = this._children;
-      for (var i = 0; i < children.length; i++) {
-        var child = children[i];
-        cb.call(context, child, i);
-      }
-      return this;
-    },
-    /**
-     * 深度优先遍历所有子孙节点
-     * @param  {Function} cb
-     * @param  {}   context
-     */
-    traverse: function(cb, context) {
-      for (var i = 0; i < this._children.length; i++) {
-        var child = this._children[i];
-        cb.call(context, child);
-        if (child.type === "group") {
-          child.traverse(cb, context);
-        }
-      }
-      return this;
-    },
-    addChildrenToStorage: function(storage) {
-      for (var i = 0; i < this._children.length; i++) {
-        var child = this._children[i];
-        storage.addToStorage(child);
-        if (child instanceof Group2) {
-          child.addChildrenToStorage(storage);
-        }
-      }
-    },
-    delChildrenFromStorage: function(storage) {
-      for (var i = 0; i < this._children.length; i++) {
-        var child = this._children[i];
-        storage.delFromStorage(child);
-        if (child instanceof Group2) {
-          child.delChildrenFromStorage(storage);
-        }
-      }
-    },
-    dirty: function() {
-      this.__dirty = true;
-      this.__zr && this.__zr.refresh();
-      return this;
-    },
-    /**
-     * @return {module:zrender/core/BoundingRect}
-     */
-    getBoundingRect: function(includeChildren) {
-      var rect = null;
-      var tmpRect2 = new BoundingRect2(0, 0, 0, 0);
-      var children = includeChildren || this._children;
-      var tmpMat = [];
-      for (var i = 0; i < children.length; i++) {
-        var child = children[i];
-        if (child.ignore || child.invisible) {
-          continue;
-        }
-        var childRect = child.getBoundingRect();
-        var transform = child.getLocalTransform(tmpMat);
-        if (transform) {
-          tmpRect2.copy(childRect);
-          tmpRect2.applyTransform(transform);
-          rect = rect || tmpRect2.clone();
-          rect.union(tmpRect2);
-        } else {
-          rect = rect || childRect.clone();
-          rect.union(childRect);
-        }
-      }
-      return rect || tmpRect2;
+      child.parent = null;
     }
-  };
-  zrUtil2.inherits(Group2, Element);
-  var _default2 = Group2;
-  Group_1 = _default2;
-  return Group_1;
-}
+    children.length = 0;
+    return this;
+  },
+  /**
+   * 遍历所有子节点
+   * @param  {Function} cb
+   * @param  {}   context
+   */
+  eachChild: function(cb, context) {
+    var children = this._children;
+    for (var i = 0; i < children.length; i++) {
+      var child = children[i];
+      cb.call(context, child, i);
+    }
+    return this;
+  },
+  /**
+   * 深度优先遍历所有子孙节点
+   * @param  {Function} cb
+   * @param  {}   context
+   */
+  traverse: function(cb, context) {
+    for (var i = 0; i < this._children.length; i++) {
+      var child = this._children[i];
+      cb.call(context, child);
+      if (child.type === "group") {
+        child.traverse(cb, context);
+      }
+    }
+    return this;
+  },
+  addChildrenToStorage: function(storage) {
+    for (var i = 0; i < this._children.length; i++) {
+      var child = this._children[i];
+      storage.addToStorage(child);
+      if (child instanceof Group$1) {
+        child.addChildrenToStorage(storage);
+      }
+    }
+  },
+  delChildrenFromStorage: function(storage) {
+    for (var i = 0; i < this._children.length; i++) {
+      var child = this._children[i];
+      storage.delFromStorage(child);
+      if (child instanceof Group$1) {
+        child.delChildrenFromStorage(storage);
+      }
+    }
+  },
+  dirty: function() {
+    this.__dirty = true;
+    this.__zr && this.__zr.refresh();
+    return this;
+  },
+  /**
+   * @return {module:zrender/core/BoundingRect}
+   */
+  getBoundingRect: function(includeChildren) {
+    var rect = null;
+    var tmpRect2 = new BoundingRect$3(0, 0, 0, 0);
+    var children = includeChildren || this._children;
+    var tmpMat = [];
+    for (var i = 0; i < children.length; i++) {
+      var child = children[i];
+      if (child.ignore || child.invisible) {
+        continue;
+      }
+      var childRect = child.getBoundingRect();
+      var transform = child.getLocalTransform(tmpMat);
+      if (transform) {
+        tmpRect2.copy(childRect);
+        tmpRect2.applyTransform(transform);
+        rect = rect || tmpRect2.clone();
+        rect.union(tmpRect2);
+      } else {
+        rect = rect || childRect.clone();
+        rect.union(childRect);
+      }
+    }
+    return rect || tmpRect2;
+  }
+};
+zrUtil$4.inherits(Group$1, Element$1);
+var _default$9 = Group$1;
+var Group_1 = _default$9;
 var DEFAULT_MIN_MERGE = 32;
 var DEFAULT_MIN_GALLOPING = 7;
 function minRunLength(n) {
@@ -4086,12 +4038,12 @@ function binaryInsertionSort(array, lo, hi, start, compare) {
     array[left] = pivot;
   }
 }
-function gallopLeft(value, array, start, length, hint, compare) {
+function gallopLeft(value, array, start, length2, hint, compare) {
   var lastOffset = 0;
   var maxOffset = 0;
   var offset = 1;
   if (compare(value, array[start + hint]) > 0) {
-    maxOffset = length - hint;
+    maxOffset = length2 - hint;
     while (offset < maxOffset && compare(value, array[start + hint + offset]) > 0) {
       lastOffset = offset;
       offset = (offset << 1) + 1;
@@ -4131,7 +4083,7 @@ function gallopLeft(value, array, start, length, hint, compare) {
   }
   return offset;
 }
-function gallopRight(value, array, start, length, hint, compare) {
+function gallopRight(value, array, start, length2, hint, compare) {
   var lastOffset = 0;
   var maxOffset = 0;
   var offset = 1;
@@ -4151,7 +4103,7 @@ function gallopRight(value, array, start, length, hint, compare) {
     lastOffset = hint - offset;
     offset = hint - tmp;
   } else {
-    maxOffset = length - hint;
+    maxOffset = length2 - hint;
     while (offset < maxOffset && compare(value, array[start + hint + offset]) >= 0) {
       lastOffset = offset;
       offset = (offset << 1) + 1;
@@ -4525,7 +4477,7 @@ function sort(array, compare, lo, hi) {
 var timsort$2 = sort;
 var util$4 = util$6;
 var env$3 = env_1;
-var Group = requireGroup();
+var Group = Group_1;
 var timsort$1 = timsort$2;
 function shapeCompareFunc(a, b) {
   if (a.zlevel === b.zlevel) {
@@ -4577,7 +4529,7 @@ Storage$1.prototype = {
     this._displayListLen = 0;
     var roots = this._roots;
     var displayList = this._displayList;
-    for (var i = 0, len = roots.length; i < len; i++) {
+    for (var i = 0, len2 = roots.length; i < len2; i++) {
       this._updateAndAddDisplayable(roots[i], null, includeIgnore);
     }
     displayList.length = this._displayListLen;
@@ -4691,8 +4643,8 @@ Storage$1.prototype = {
   },
   displayableSortFunc: shapeCompareFunc
 };
-var _default$5 = Storage$1;
-var Storage_1 = _default$5;
+var _default$8 = Storage$1;
+var Storage_1 = _default$8;
 var fixShadow;
 var hasRequiredFixShadow;
 function requireFixShadow() {
@@ -4728,9 +4680,9 @@ function requireConstant() {
     STYLE_BIND: 1,
     PLAIN_TEXT: 2
   };
-  var WILL_BE_RESTORED = 9;
+  var WILL_BE_RESTORED2 = 9;
   constant.ContextCachedBy = ContextCachedBy;
-  constant.WILL_BE_RESTORED = WILL_BE_RESTORED;
+  constant.WILL_BE_RESTORED = WILL_BE_RESTORED2;
   return constant;
 }
 var Style_1;
@@ -4739,8 +4691,8 @@ function requireStyle() {
   if (hasRequiredStyle) return Style_1;
   hasRequiredStyle = 1;
   var fixShadow2 = requireFixShadow();
-  var _constant = requireConstant();
-  var ContextCachedBy = _constant.ContextCachedBy;
+  var _constant2 = requireConstant();
+  var ContextCachedBy = _constant2.ContextCachedBy;
   var STYLE_COMMON_PROPS = [["shadowBlur", 0], ["shadowOffsetX", 0], ["shadowOffsetY", 0], ["shadowColor", "#000"], ["lineCap", "butt"], ["lineJoin", "miter"], ["miterLimit", 10]];
   var Style2 = function(opts) {
     this.extendFrom(opts, false);
@@ -4766,14 +4718,14 @@ function requireStyle() {
   function createRadialGradient(ctx, obj, rect) {
     var width = rect.width;
     var height = rect.height;
-    var min = Math.min(width, height);
+    var min2 = Math.min(width, height);
     var x = obj.x == null ? 0.5 : obj.x;
     var y = obj.y == null ? 0.5 : obj.y;
     var r = obj.r == null ? 0.5 : obj.r;
     if (!obj.global) {
       x = x * width + rect.x;
       y = y * height + rect.y;
-      r = r * min;
+      r = r * min2;
     }
     var canvasGradient = ctx.createRadialGradient(x, y, 0, x, y, r);
     return canvasGradient;
@@ -5154,7 +5106,7 @@ function requirePattern() {
 var util$3 = util$6;
 var _config$1 = config;
 var devicePixelRatio$1 = _config$1.devicePixelRatio;
-var Style = requireStyle();
+var Style$1 = requireStyle();
 var Pattern = requirePattern();
 function returnFalse() {
   return false;
@@ -5278,7 +5230,7 @@ Layer$1.prototype = {
     if (clearColor && clearColor !== "transparent") {
       var clearColorGradientOrPattern;
       if (clearColor.colorStops) {
-        clearColorGradientOrPattern = clearColor.__canvasGradient || Style.getGradient(ctx, clearColor, {
+        clearColorGradientOrPattern = clearColor.__canvasGradient || Style$1.getGradient(ctx, clearColor, {
           x: 0,
           y: 0,
           width,
@@ -5302,85 +5254,79 @@ Layer$1.prototype = {
     }
   }
 };
-var _default$4 = Layer$1;
-var Layer_1 = _default$4;
-var _default$3 = typeof window !== "undefined" && (window.requestAnimationFrame && window.requestAnimationFrame.bind(window) || // https://github.com/ecomfe/zrender/issues/189#issuecomment-224919809
+var _default$7 = Layer$1;
+var Layer_1 = _default$7;
+var _default$6 = typeof window !== "undefined" && (window.requestAnimationFrame && window.requestAnimationFrame.bind(window) || // https://github.com/ecomfe/zrender/issues/189#issuecomment-224919809
 window.msRequestAnimationFrame && window.msRequestAnimationFrame.bind(window) || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame) || function(func) {
   setTimeout(func, 16);
 };
-var requestAnimationFrame$2 = _default$3;
+var requestAnimationFrame$2 = _default$6;
 var text$1 = {};
 var text = {};
 var image = {};
-var hasRequiredImage$1;
-function requireImage$1() {
-  if (hasRequiredImage$1) return image;
-  hasRequiredImage$1 = 1;
-  var LRU = requireLRU();
-  var globalImageCache = new LRU(50);
-  function findExistImage(newImageOrSrc) {
-    if (typeof newImageOrSrc === "string") {
-      var cachedImgObj = globalImageCache.get(newImageOrSrc);
-      return cachedImgObj && cachedImgObj.image;
-    } else {
-      return newImageOrSrc;
-    }
+var LRU = LRU_1;
+var globalImageCache = new LRU(50);
+function findExistImage(newImageOrSrc) {
+  if (typeof newImageOrSrc === "string") {
+    var cachedImgObj = globalImageCache.get(newImageOrSrc);
+    return cachedImgObj && cachedImgObj.image;
+  } else {
+    return newImageOrSrc;
   }
-  function createOrUpdateImage(newImageOrSrc, image2, hostEl, cb, cbPayload) {
-    if (!newImageOrSrc) {
-      return image2;
-    } else if (typeof newImageOrSrc === "string") {
-      if (image2 && image2.__zrImageSrc === newImageOrSrc || !hostEl) {
-        return image2;
-      }
-      var cachedImgObj = globalImageCache.get(newImageOrSrc);
-      var pendingWrap = {
-        hostEl,
-        cb,
-        cbPayload
-      };
-      if (cachedImgObj) {
-        image2 = cachedImgObj.image;
-        !isImageReady(image2) && cachedImgObj.pending.push(pendingWrap);
-      } else {
-        image2 = new Image();
-        image2.onload = image2.onerror = imageOnLoad;
-        globalImageCache.put(newImageOrSrc, image2.__cachedImgObj = {
-          image: image2,
-          pending: [pendingWrap]
-        });
-        image2.src = image2.__zrImageSrc = newImageOrSrc;
-      }
-      return image2;
-    } else {
-      return newImageOrSrc;
-    }
-  }
-  function imageOnLoad() {
-    var cachedImgObj = this.__cachedImgObj;
-    this.onload = this.onerror = this.__cachedImgObj = null;
-    for (var i = 0; i < cachedImgObj.pending.length; i++) {
-      var pendingWrap = cachedImgObj.pending[i];
-      var cb = pendingWrap.cb;
-      cb && cb(this, pendingWrap.cbPayload);
-      pendingWrap.hostEl.dirty();
-    }
-    cachedImgObj.pending.length = 0;
-  }
-  function isImageReady(image2) {
-    return image2 && image2.width && image2.height;
-  }
-  image.findExistImage = findExistImage;
-  image.createOrUpdateImage = createOrUpdateImage;
-  image.isImageReady = isImageReady;
-  return image;
 }
+function createOrUpdateImage(newImageOrSrc, image2, hostEl, cb, cbPayload) {
+  if (!newImageOrSrc) {
+    return image2;
+  } else if (typeof newImageOrSrc === "string") {
+    if (image2 && image2.__zrImageSrc === newImageOrSrc || !hostEl) {
+      return image2;
+    }
+    var cachedImgObj = globalImageCache.get(newImageOrSrc);
+    var pendingWrap = {
+      hostEl,
+      cb,
+      cbPayload
+    };
+    if (cachedImgObj) {
+      image2 = cachedImgObj.image;
+      !isImageReady(image2) && cachedImgObj.pending.push(pendingWrap);
+    } else {
+      image2 = new Image();
+      image2.onload = image2.onerror = imageOnLoad;
+      globalImageCache.put(newImageOrSrc, image2.__cachedImgObj = {
+        image: image2,
+        pending: [pendingWrap]
+      });
+      image2.src = image2.__zrImageSrc = newImageOrSrc;
+    }
+    return image2;
+  } else {
+    return newImageOrSrc;
+  }
+}
+function imageOnLoad() {
+  var cachedImgObj = this.__cachedImgObj;
+  this.onload = this.onerror = this.__cachedImgObj = null;
+  for (var i = 0; i < cachedImgObj.pending.length; i++) {
+    var pendingWrap = cachedImgObj.pending[i];
+    var cb = pendingWrap.cb;
+    cb && cb(this, pendingWrap.cbPayload);
+    pendingWrap.hostEl.dirty();
+  }
+  cachedImgObj.pending.length = 0;
+}
+function isImageReady(image2) {
+  return image2 && image2.width && image2.height;
+}
+image.findExistImage = findExistImage;
+image.createOrUpdateImage = createOrUpdateImage;
+image.isImageReady = isImageReady;
 var hasRequiredText$2;
 function requireText$2() {
   if (hasRequiredText$2) return text;
   hasRequiredText$2 = 1;
-  var BoundingRect2 = requireBoundingRect();
-  var imageHelper = requireImage$1();
+  var BoundingRect2 = BoundingRect_1;
+  var imageHelper2 = image;
   var _util2 = util$6;
   var getContext2 = _util2.getContext;
   var extend2 = _util2.extend;
@@ -5464,10 +5410,10 @@ function requireText$2() {
   }
   function calculateTextPosition(out, style, rect) {
     var textPosition = style.textPosition;
-    var distance = style.textDistance;
+    var distance2 = style.textDistance;
     var x = rect.x;
     var y = rect.y;
-    distance = distance || 0;
+    distance2 = distance2 || 0;
     var height = rect.height;
     var width = rect.width;
     var halfHeight = height / 2;
@@ -5475,25 +5421,25 @@ function requireText$2() {
     var textVerticalAlign = "top";
     switch (textPosition) {
       case "left":
-        x -= distance;
+        x -= distance2;
         y += halfHeight;
         textAlign = "right";
         textVerticalAlign = "middle";
         break;
       case "right":
-        x += distance + width;
+        x += distance2 + width;
         y += halfHeight;
         textVerticalAlign = "middle";
         break;
       case "top":
         x += width / 2;
-        y -= distance;
+        y -= distance2;
         textAlign = "center";
         textVerticalAlign = "bottom";
         break;
       case "bottom":
         x += width / 2;
-        y += height + distance;
+        y += height + distance2;
         textAlign = "center";
         break;
       case "inside":
@@ -5503,44 +5449,44 @@ function requireText$2() {
         textVerticalAlign = "middle";
         break;
       case "insideLeft":
-        x += distance;
+        x += distance2;
         y += halfHeight;
         textVerticalAlign = "middle";
         break;
       case "insideRight":
-        x += width - distance;
+        x += width - distance2;
         y += halfHeight;
         textAlign = "right";
         textVerticalAlign = "middle";
         break;
       case "insideTop":
         x += width / 2;
-        y += distance;
+        y += distance2;
         textAlign = "center";
         break;
       case "insideBottom":
         x += width / 2;
-        y += height - distance;
+        y += height - distance2;
         textAlign = "center";
         textVerticalAlign = "bottom";
         break;
       case "insideTopLeft":
-        x += distance;
-        y += distance;
+        x += distance2;
+        y += distance2;
         break;
       case "insideTopRight":
-        x += width - distance;
-        y += distance;
+        x += width - distance2;
+        y += distance2;
         textAlign = "right";
         break;
       case "insideBottomLeft":
-        x += distance;
-        y += height - distance;
+        x += distance2;
+        y += height - distance2;
         textVerticalAlign = "bottom";
         break;
       case "insideBottomRight":
-        x += width - distance;
-        y += height - distance;
+        x += width - distance2;
+        y += height - distance2;
         textAlign = "right";
         textVerticalAlign = "bottom";
         break;
@@ -5552,10 +5498,10 @@ function requireText$2() {
     out.textVerticalAlign = textVerticalAlign;
     return out;
   }
-  function adjustTextPositionOnRect(textPosition, rect, distance) {
+  function adjustTextPositionOnRect(textPosition, rect, distance2) {
     var dummyStyle = {
       textPosition,
-      textDistance: distance
+      textDistance: distance2
     };
     return calculateTextPosition({}, dummyStyle, rect);
   }
@@ -5565,7 +5511,7 @@ function requireText$2() {
     }
     var textLines = (text2 + "").split("\n");
     options = prepareTruncateOptions(containerWidth, font, ellipsis, options);
-    for (var i = 0, len = textLines.length; i < len; i++) {
+    for (var i = 0, len2 = textLines.length; i < len2; i++) {
       textLines[i] = truncateSingleLine(textLines[i], options);
     }
     return textLines.join("\n");
@@ -5623,7 +5569,7 @@ function requireText$2() {
   function estimateLength(text2, contentWidth, ascCharWidth, cnCharWidth) {
     var width = 0;
     var i = 0;
-    for (var len = text2.length; i < len && width < contentWidth; i++) {
+    for (var len2 = text2.length; i < len2 && width < contentWidth; i++) {
       var charCode = text2.charCodeAt(i);
       width += 0 <= charCode && charCode <= 127 ? ascCharWidth : cnCharWidth;
     }
@@ -5662,7 +5608,7 @@ function requireText$2() {
           minChar: truncate.minChar,
           placeholder: truncate.placeholder
         });
-        for (var i = 0, len = lines.length; i < len; i++) {
+        for (var i = 0, len2 = lines.length; i < len2; i++) {
           lines[i] = truncateSingleLine(lines[i], options);
         }
       }
@@ -5750,8 +5696,8 @@ function requireText$2() {
             var textBackgroundColor = tokenStyle.textBackgroundColor;
             var bgImg = textBackgroundColor && textBackgroundColor.image;
             if (bgImg) {
-              bgImg = imageHelper.findExistImage(bgImg);
-              if (imageHelper.isImageReady(bgImg)) {
+              bgImg = imageHelper2.findExistImage(bgImg);
+              if (imageHelper2.isImageReady(bgImg)) {
                 tokenWidth = Math.max(tokenWidth, bgImg.width * tokenHeight / bgImg.height);
               }
             }
@@ -5938,11 +5884,11 @@ function requireText$1() {
   var isObject2 = _util2.isObject;
   var textContain = requireText$2();
   var roundRectHelper = requireRoundRect();
-  var imageHelper = requireImage$1();
+  var imageHelper2 = image;
   var fixShadow2 = requireFixShadow();
-  var _constant = requireConstant();
-  var ContextCachedBy = _constant.ContextCachedBy;
-  var WILL_BE_RESTORED = _constant.WILL_BE_RESTORED;
+  var _constant2 = requireConstant();
+  var ContextCachedBy = _constant2.ContextCachedBy;
+  var WILL_BE_RESTORED2 = _constant2.WILL_BE_RESTORED;
   var DEFAULT_FONT = textContain.DEFAULT_FONT;
   var VALID_TEXT_ALIGN = {
     left: 1,
@@ -5985,7 +5931,7 @@ function requireText$1() {
     var prevStyle;
     var checkCache = false;
     var cachedByMe = ctx.__attrCachedBy === ContextCachedBy.PLAIN_TEXT;
-    if (prevEl !== WILL_BE_RESTORED) {
+    if (prevEl !== WILL_BE_RESTORED2) {
       if (prevEl) {
         prevStyle = prevEl.style;
         checkCache = !needDrawBg && cachedByMe && prevStyle;
@@ -6076,7 +6022,7 @@ function requireText$1() {
     }
   }
   function renderRichText(hostEl, ctx, text2, style, rect, prevEl) {
-    if (prevEl !== WILL_BE_RESTORED) {
+    if (prevEl !== WILL_BE_RESTORED2) {
       ctx.__attrCachedBy = ContextCachedBy.NONE;
     }
     var contentBlock = hostEl.__textCotentBlock;
@@ -6230,8 +6176,8 @@ function requireText$1() {
       }
     } else if (isObject2(textBackgroundColor)) {
       var image2 = textBackgroundColor.image;
-      image2 = imageHelper.createOrUpdateImage(image2, null, hostEl, onBgImageLoaded, textBackgroundColor);
-      if (image2 && imageHelper.isImageReady(image2)) {
+      image2 = imageHelper2.createOrUpdateImage(image2, null, hostEl, onBgImageLoaded, textBackgroundColor);
+      if (image2 && imageHelper2.isImageReady(image2)) {
         ctx.drawImage(image2, x, y, width, height);
       }
     }
@@ -6315,367 +6261,346 @@ function requireText$1() {
   text$1.needDrawText = needDrawText;
   return text$1;
 }
-var RectText_1;
-var hasRequiredRectText;
-function requireRectText() {
-  if (hasRequiredRectText) return RectText_1;
-  hasRequiredRectText = 1;
-  var textHelper = requireText$1();
-  var BoundingRect2 = requireBoundingRect();
-  var _constant = requireConstant();
-  var WILL_BE_RESTORED = _constant.WILL_BE_RESTORED;
-  var tmpRect2 = new BoundingRect2();
-  var RectText = function() {
-  };
-  RectText.prototype = {
-    constructor: RectText,
-    /**
-     * Draw text in a rect with specified position.
-     * @param  {CanvasRenderingContext2D} ctx
-     * @param  {Object} rect Displayable rect
-     */
-    drawRectText: function(ctx, rect) {
-      var style = this.style;
-      rect = style.textRect || rect;
-      this.__dirty && textHelper.normalizeTextStyle(style, true);
-      var text2 = style.text;
-      text2 != null && (text2 += "");
-      if (!textHelper.needDrawText(text2, style)) {
-        return;
-      }
-      ctx.save();
-      var transform = this.transform;
-      if (!style.transformText) {
-        if (transform) {
-          tmpRect2.copy(rect);
-          tmpRect2.applyTransform(transform);
-          rect = tmpRect2;
-        }
-      } else {
-        this.setTransform(ctx);
-      }
-      textHelper.renderText(this, ctx, text2, style, rect, WILL_BE_RESTORED);
-      ctx.restore();
+var textHelper = requireText$1();
+var BoundingRect$2 = BoundingRect_1;
+var _constant = requireConstant();
+var WILL_BE_RESTORED = _constant.WILL_BE_RESTORED;
+var tmpRect$1 = new BoundingRect$2();
+var RectText$1 = function() {
+};
+RectText$1.prototype = {
+  constructor: RectText$1,
+  /**
+   * Draw text in a rect with specified position.
+   * @param  {CanvasRenderingContext2D} ctx
+   * @param  {Object} rect Displayable rect
+   */
+  drawRectText: function(ctx, rect) {
+    var style = this.style;
+    rect = style.textRect || rect;
+    this.__dirty && textHelper.normalizeTextStyle(style, true);
+    var text2 = style.text;
+    text2 != null && (text2 += "");
+    if (!textHelper.needDrawText(text2, style)) {
+      return;
     }
-  };
-  var _default2 = RectText;
-  RectText_1 = _default2;
-  return RectText_1;
-}
-var Displayable_1;
-var hasRequiredDisplayable;
-function requireDisplayable() {
-  if (hasRequiredDisplayable) return Displayable_1;
-  hasRequiredDisplayable = 1;
-  var zrUtil2 = util$6;
-  var Style2 = requireStyle();
-  var Element = requireElement();
-  var RectText = requireRectText();
-  function Displayable(opts) {
-    opts = opts || {};
-    Element.call(this, opts);
-    for (var name in opts) {
-      if (opts.hasOwnProperty(name) && name !== "style") {
-        this[name] = opts[name];
+    ctx.save();
+    var transform = this.transform;
+    if (!style.transformText) {
+      if (transform) {
+        tmpRect$1.copy(rect);
+        tmpRect$1.applyTransform(transform);
+        rect = tmpRect$1;
       }
-    }
-    this.style = new Style2(opts.style, this);
-    this._rect = null;
-    this.__clipPaths = null;
-  }
-  Displayable.prototype = {
-    constructor: Displayable,
-    type: "displayable",
-    /**
-     * Dirty flag. From which painter will determine if this displayable object needs brush.
-     * @name module:zrender/graphic/Displayable#__dirty
-     * @type {boolean}
-     */
-    __dirty: true,
-    /**
-     * Whether the displayable object is visible. when it is true, the displayable object
-     * is not drawn, but the mouse event can still trigger the object.
-     * @name module:/zrender/graphic/Displayable#invisible
-     * @type {boolean}
-     * @default false
-     */
-    invisible: false,
-    /**
-     * @name module:/zrender/graphic/Displayable#z
-     * @type {number}
-     * @default 0
-     */
-    z: 0,
-    /**
-     * @name module:/zrender/graphic/Displayable#z
-     * @type {number}
-     * @default 0
-     */
-    z2: 0,
-    /**
-     * The z level determines the displayable object can be drawn in which layer canvas.
-     * @name module:/zrender/graphic/Displayable#zlevel
-     * @type {number}
-     * @default 0
-     */
-    zlevel: 0,
-    /**
-     * Whether it can be dragged.
-     * @name module:/zrender/graphic/Displayable#draggable
-     * @type {boolean}
-     * @default false
-     */
-    draggable: false,
-    /**
-     * Whether is it dragging.
-     * @name module:/zrender/graphic/Displayable#draggable
-     * @type {boolean}
-     * @default false
-     */
-    dragging: false,
-    /**
-     * Whether to respond to mouse events.
-     * @name module:/zrender/graphic/Displayable#silent
-     * @type {boolean}
-     * @default false
-     */
-    silent: false,
-    /**
-     * If enable culling
-     * @type {boolean}
-     * @default false
-     */
-    culling: false,
-    /**
-     * Mouse cursor when hovered
-     * @name module:/zrender/graphic/Displayable#cursor
-     * @type {string}
-     */
-    cursor: "pointer",
-    /**
-     * If hover area is bounding rect
-     * @name module:/zrender/graphic/Displayable#rectHover
-     * @type {string}
-     */
-    rectHover: false,
-    /**
-     * Render the element progressively when the value >= 0,
-     * usefull for large data.
-     * @type {boolean}
-     */
-    progressive: false,
-    /**
-     * @type {boolean}
-     */
-    incremental: false,
-    /**
-     * Scale ratio for global scale.
-     * @type {boolean}
-     */
-    globalScaleRatio: 1,
-    beforeBrush: function(ctx) {
-    },
-    afterBrush: function(ctx) {
-    },
-    /**
-     * Graphic drawing method.
-     * @param {CanvasRenderingContext2D} ctx
-     */
-    // Interface
-    brush: function(ctx, prevEl) {
-    },
-    /**
-     * Get the minimum bounding box.
-     * @return {module:zrender/core/BoundingRect}
-     */
-    // Interface
-    getBoundingRect: function() {
-    },
-    /**
-     * If displayable element contain coord x, y
-     * @param  {number} x
-     * @param  {number} y
-     * @return {boolean}
-     */
-    contain: function(x, y) {
-      return this.rectContain(x, y);
-    },
-    /**
-     * @param  {Function} cb
-     * @param  {}   context
-     */
-    traverse: function(cb, context) {
-      cb.call(context, this);
-    },
-    /**
-     * If bounding rect of element contain coord x, y
-     * @param  {number} x
-     * @param  {number} y
-     * @return {boolean}
-     */
-    rectContain: function(x, y) {
-      var coord = this.transformCoordToLocal(x, y);
-      var rect = this.getBoundingRect();
-      return rect.contain(coord[0], coord[1]);
-    },
-    /**
-     * Mark displayable element dirty and refresh next frame
-     */
-    dirty: function() {
-      this.__dirty = this.__dirtyText = true;
-      this._rect = null;
-      this.__zr && this.__zr.refresh();
-    },
-    /**
-     * If displayable object binded any event
-     * @return {boolean}
-     */
-    // TODO, events bound by bind
-    // isSilent: function () {
-    //     return !(
-    //         this.hoverable || this.draggable
-    //         || this.onmousemove || this.onmouseover || this.onmouseout
-    //         || this.onmousedown || this.onmouseup || this.onclick
-    //         || this.ondragenter || this.ondragover || this.ondragleave
-    //         || this.ondrop
-    //     );
-    // },
-    /**
-     * Alias for animate('style')
-     * @param {boolean} loop
-     */
-    animateStyle: function(loop) {
-      return this.animate("style", loop);
-    },
-    attrKV: function(key, value) {
-      if (key !== "style") {
-        Element.prototype.attrKV.call(this, key, value);
-      } else {
-        this.style.set(value);
-      }
-    },
-    /**
-     * @param {Object|string} key
-     * @param {*} value
-     */
-    setStyle: function(key, value) {
-      this.style.set(key, value);
-      this.dirty(false);
-      return this;
-    },
-    /**
-     * Use given style object
-     * @param  {Object} obj
-     */
-    useStyle: function(obj) {
-      this.style = new Style2(obj, this);
-      this.dirty(false);
-      return this;
-    },
-    /**
-     * The string value of `textPosition` needs to be calculated to a real postion.
-     * For example, `'inside'` is calculated to `[rect.width/2, rect.height/2]`
-     * by default. See `contain/text.js#calculateTextPosition` for more details.
-     * But some coutom shapes like "pin", "flag" have center that is not exactly
-     * `[width/2, height/2]`. So we provide this hook to customize the calculation
-     * for those shapes. It will be called if the `style.textPosition` is a string.
-     * @param {Obejct} [out] Prepared out object. If not provided, this method should
-     *        be responsible for creating one.
-     * @param {module:zrender/graphic/Style} style
-     * @param {Object} rect {x, y, width, height}
-     * @return {Obejct} out The same as the input out.
-     *         {
-     *             x: number. mandatory.
-     *             y: number. mandatory.
-     *             textAlign: string. optional. use style.textAlign by default.
-     *             textVerticalAlign: string. optional. use style.textVerticalAlign by default.
-     *         }
-     */
-    calculateTextPosition: null
-  };
-  zrUtil2.inherits(Displayable, Element);
-  zrUtil2.mixin(Displayable, RectText);
-  var _default2 = Displayable;
-  Displayable_1 = _default2;
-  return Displayable_1;
-}
-var Image$2;
-var hasRequiredImage;
-function requireImage() {
-  if (hasRequiredImage) return Image$2;
-  hasRequiredImage = 1;
-  var Displayable = requireDisplayable();
-  var BoundingRect2 = requireBoundingRect();
-  var zrUtil2 = util$6;
-  var imageHelper = requireImage$1();
-  function ZImage(opts) {
-    Displayable.call(this, opts);
-  }
-  ZImage.prototype = {
-    constructor: ZImage,
-    type: "image",
-    brush: function(ctx, prevEl) {
-      var style = this.style;
-      var src = style.image;
-      style.bind(ctx, this, prevEl);
-      var image2 = this._image = imageHelper.createOrUpdateImage(src, this._image, this, this.onload);
-      if (!image2 || !imageHelper.isImageReady(image2)) {
-        return;
-      }
-      var x = style.x || 0;
-      var y = style.y || 0;
-      var width = style.width;
-      var height = style.height;
-      var aspect = image2.width / image2.height;
-      if (width == null && height != null) {
-        width = height * aspect;
-      } else if (height == null && width != null) {
-        height = width / aspect;
-      } else if (width == null && height == null) {
-        width = image2.width;
-        height = image2.height;
-      }
+    } else {
       this.setTransform(ctx);
-      if (style.sWidth && style.sHeight) {
-        var sx = style.sx || 0;
-        var sy = style.sy || 0;
-        ctx.drawImage(image2, sx, sy, style.sWidth, style.sHeight, x, y, width, height);
-      } else if (style.sx && style.sy) {
-        var sx = style.sx;
-        var sy = style.sy;
-        var sWidth = width - sx;
-        var sHeight = height - sy;
-        ctx.drawImage(image2, sx, sy, sWidth, sHeight, x, y, width, height);
-      } else {
-        ctx.drawImage(image2, x, y, width, height);
-      }
-      if (style.text != null) {
-        this.restoreTransform(ctx);
-        this.drawRectText(ctx, this.getBoundingRect());
-      }
-    },
-    getBoundingRect: function() {
-      var style = this.style;
-      if (!this._rect) {
-        this._rect = new BoundingRect2(style.x || 0, style.y || 0, style.width || 0, style.height || 0);
-      }
-      return this._rect;
     }
-  };
-  zrUtil2.inherits(ZImage, Displayable);
-  var _default2 = ZImage;
-  Image$2 = _default2;
-  return Image$2;
+    textHelper.renderText(this, ctx, text2, style, rect, WILL_BE_RESTORED);
+    ctx.restore();
+  }
+};
+var _default$5 = RectText$1;
+var RectText_1 = _default$5;
+var zrUtil$3 = util$6;
+var Style = requireStyle();
+var Element = Element_1;
+var RectText = RectText_1;
+function Displayable$1(opts) {
+  opts = opts || {};
+  Element.call(this, opts);
+  for (var name in opts) {
+    if (opts.hasOwnProperty(name) && name !== "style") {
+      this[name] = opts[name];
+    }
+  }
+  this.style = new Style(opts.style, this);
+  this._rect = null;
+  this.__clipPaths = null;
 }
+Displayable$1.prototype = {
+  constructor: Displayable$1,
+  type: "displayable",
+  /**
+   * Dirty flag. From which painter will determine if this displayable object needs brush.
+   * @name module:zrender/graphic/Displayable#__dirty
+   * @type {boolean}
+   */
+  __dirty: true,
+  /**
+   * Whether the displayable object is visible. when it is true, the displayable object
+   * is not drawn, but the mouse event can still trigger the object.
+   * @name module:/zrender/graphic/Displayable#invisible
+   * @type {boolean}
+   * @default false
+   */
+  invisible: false,
+  /**
+   * @name module:/zrender/graphic/Displayable#z
+   * @type {number}
+   * @default 0
+   */
+  z: 0,
+  /**
+   * @name module:/zrender/graphic/Displayable#z
+   * @type {number}
+   * @default 0
+   */
+  z2: 0,
+  /**
+   * The z level determines the displayable object can be drawn in which layer canvas.
+   * @name module:/zrender/graphic/Displayable#zlevel
+   * @type {number}
+   * @default 0
+   */
+  zlevel: 0,
+  /**
+   * Whether it can be dragged.
+   * @name module:/zrender/graphic/Displayable#draggable
+   * @type {boolean}
+   * @default false
+   */
+  draggable: false,
+  /**
+   * Whether is it dragging.
+   * @name module:/zrender/graphic/Displayable#draggable
+   * @type {boolean}
+   * @default false
+   */
+  dragging: false,
+  /**
+   * Whether to respond to mouse events.
+   * @name module:/zrender/graphic/Displayable#silent
+   * @type {boolean}
+   * @default false
+   */
+  silent: false,
+  /**
+   * If enable culling
+   * @type {boolean}
+   * @default false
+   */
+  culling: false,
+  /**
+   * Mouse cursor when hovered
+   * @name module:/zrender/graphic/Displayable#cursor
+   * @type {string}
+   */
+  cursor: "pointer",
+  /**
+   * If hover area is bounding rect
+   * @name module:/zrender/graphic/Displayable#rectHover
+   * @type {string}
+   */
+  rectHover: false,
+  /**
+   * Render the element progressively when the value >= 0,
+   * usefull for large data.
+   * @type {boolean}
+   */
+  progressive: false,
+  /**
+   * @type {boolean}
+   */
+  incremental: false,
+  /**
+   * Scale ratio for global scale.
+   * @type {boolean}
+   */
+  globalScaleRatio: 1,
+  beforeBrush: function(ctx) {
+  },
+  afterBrush: function(ctx) {
+  },
+  /**
+   * Graphic drawing method.
+   * @param {CanvasRenderingContext2D} ctx
+   */
+  // Interface
+  brush: function(ctx, prevEl) {
+  },
+  /**
+   * Get the minimum bounding box.
+   * @return {module:zrender/core/BoundingRect}
+   */
+  // Interface
+  getBoundingRect: function() {
+  },
+  /**
+   * If displayable element contain coord x, y
+   * @param  {number} x
+   * @param  {number} y
+   * @return {boolean}
+   */
+  contain: function(x, y) {
+    return this.rectContain(x, y);
+  },
+  /**
+   * @param  {Function} cb
+   * @param  {}   context
+   */
+  traverse: function(cb, context) {
+    cb.call(context, this);
+  },
+  /**
+   * If bounding rect of element contain coord x, y
+   * @param  {number} x
+   * @param  {number} y
+   * @return {boolean}
+   */
+  rectContain: function(x, y) {
+    var coord = this.transformCoordToLocal(x, y);
+    var rect = this.getBoundingRect();
+    return rect.contain(coord[0], coord[1]);
+  },
+  /**
+   * Mark displayable element dirty and refresh next frame
+   */
+  dirty: function() {
+    this.__dirty = this.__dirtyText = true;
+    this._rect = null;
+    this.__zr && this.__zr.refresh();
+  },
+  /**
+   * If displayable object binded any event
+   * @return {boolean}
+   */
+  // TODO, events bound by bind
+  // isSilent: function () {
+  //     return !(
+  //         this.hoverable || this.draggable
+  //         || this.onmousemove || this.onmouseover || this.onmouseout
+  //         || this.onmousedown || this.onmouseup || this.onclick
+  //         || this.ondragenter || this.ondragover || this.ondragleave
+  //         || this.ondrop
+  //     );
+  // },
+  /**
+   * Alias for animate('style')
+   * @param {boolean} loop
+   */
+  animateStyle: function(loop) {
+    return this.animate("style", loop);
+  },
+  attrKV: function(key, value) {
+    if (key !== "style") {
+      Element.prototype.attrKV.call(this, key, value);
+    } else {
+      this.style.set(value);
+    }
+  },
+  /**
+   * @param {Object|string} key
+   * @param {*} value
+   */
+  setStyle: function(key, value) {
+    this.style.set(key, value);
+    this.dirty(false);
+    return this;
+  },
+  /**
+   * Use given style object
+   * @param  {Object} obj
+   */
+  useStyle: function(obj) {
+    this.style = new Style(obj, this);
+    this.dirty(false);
+    return this;
+  },
+  /**
+   * The string value of `textPosition` needs to be calculated to a real postion.
+   * For example, `'inside'` is calculated to `[rect.width/2, rect.height/2]`
+   * by default. See `contain/text.js#calculateTextPosition` for more details.
+   * But some coutom shapes like "pin", "flag" have center that is not exactly
+   * `[width/2, height/2]`. So we provide this hook to customize the calculation
+   * for those shapes. It will be called if the `style.textPosition` is a string.
+   * @param {Obejct} [out] Prepared out object. If not provided, this method should
+   *        be responsible for creating one.
+   * @param {module:zrender/graphic/Style} style
+   * @param {Object} rect {x, y, width, height}
+   * @return {Obejct} out The same as the input out.
+   *         {
+   *             x: number. mandatory.
+   *             y: number. mandatory.
+   *             textAlign: string. optional. use style.textAlign by default.
+   *             textVerticalAlign: string. optional. use style.textVerticalAlign by default.
+   *         }
+   */
+  calculateTextPosition: null
+};
+zrUtil$3.inherits(Displayable$1, Element);
+zrUtil$3.mixin(Displayable$1, RectText);
+var _default$4 = Displayable$1;
+var Displayable_1 = _default$4;
+var Displayable = Displayable_1;
+var BoundingRect$1 = BoundingRect_1;
+var zrUtil$2 = util$6;
+var imageHelper = image;
+function ZImage(opts) {
+  Displayable.call(this, opts);
+}
+ZImage.prototype = {
+  constructor: ZImage,
+  type: "image",
+  brush: function(ctx, prevEl) {
+    var style = this.style;
+    var src = style.image;
+    style.bind(ctx, this, prevEl);
+    var image2 = this._image = imageHelper.createOrUpdateImage(src, this._image, this, this.onload);
+    if (!image2 || !imageHelper.isImageReady(image2)) {
+      return;
+    }
+    var x = style.x || 0;
+    var y = style.y || 0;
+    var width = style.width;
+    var height = style.height;
+    var aspect = image2.width / image2.height;
+    if (width == null && height != null) {
+      width = height * aspect;
+    } else if (height == null && width != null) {
+      height = width / aspect;
+    } else if (width == null && height == null) {
+      width = image2.width;
+      height = image2.height;
+    }
+    this.setTransform(ctx);
+    if (style.sWidth && style.sHeight) {
+      var sx = style.sx || 0;
+      var sy = style.sy || 0;
+      ctx.drawImage(image2, sx, sy, style.sWidth, style.sHeight, x, y, width, height);
+    } else if (style.sx && style.sy) {
+      var sx = style.sx;
+      var sy = style.sy;
+      var sWidth = width - sx;
+      var sHeight = height - sy;
+      ctx.drawImage(image2, sx, sy, sWidth, sHeight, x, y, width, height);
+    } else {
+      ctx.drawImage(image2, x, y, width, height);
+    }
+    if (style.text != null) {
+      this.restoreTransform(ctx);
+      this.drawRectText(ctx, this.getBoundingRect());
+    }
+  },
+  getBoundingRect: function() {
+    var style = this.style;
+    if (!this._rect) {
+      this._rect = new BoundingRect$1(style.x || 0, style.y || 0, style.width || 0, style.height || 0);
+    }
+    return this._rect;
+  }
+};
+zrUtil$2.inherits(ZImage, Displayable);
+var _default$3 = ZImage;
+var Image$2 = _default$3;
 var _config = config;
 var devicePixelRatio = _config.devicePixelRatio;
 var util$2 = util$6;
 var logError = log;
-var BoundingRect = requireBoundingRect();
+var BoundingRect = BoundingRect_1;
 var timsort = timsort$2;
 var Layer = Layer_1;
 var requestAnimationFrame$1 = requestAnimationFrame$2;
-var Image$1 = requireImage();
+var Image$1 = Image$2;
 var env$2 = env_1;
 var HOVER_LAYER_ZLEVEL = 1e5;
 var CANVAS_ZLEVEL = 314159;
@@ -6883,10 +6808,10 @@ Painter$3.prototype = {
   },
   refreshHover: function() {
     var hoverElements = this._hoverElements;
-    var len = hoverElements.length;
+    var len2 = hoverElements.length;
     var hoverLayer = this._hoverlayer;
     hoverLayer && hoverLayer.clear();
-    if (!len) {
+    if (!len2) {
       return;
     }
     timsort(hoverElements, this.storage.displayableSortFunc);
@@ -6895,13 +6820,13 @@ Painter$3.prototype = {
     }
     var scope = {};
     hoverLayer.ctx.save();
-    for (var i = 0; i < len; ) {
+    for (var i = 0; i < len2; ) {
       var el = hoverElements[i];
       var originalEl = el.__from;
       if (!(originalEl && originalEl.__zr)) {
         hoverElements.splice(i, 1);
         originalEl.__hoverMir = null;
-        len--;
+        len2--;
         continue;
       }
       i++;
@@ -7061,7 +6986,7 @@ Painter$3.prototype = {
   insertLayer: function(zlevel, layer) {
     var layersMap = this._layers;
     var zlevelList = this._zlevelList;
-    var len = zlevelList.length;
+    var len2 = zlevelList.length;
     var prevLayer = null;
     var i = -1;
     var domRoot = this._domRoot;
@@ -7073,8 +6998,8 @@ Painter$3.prototype = {
       logError("Layer of zlevel " + zlevel + " is not valid");
       return;
     }
-    if (len > 0 && zlevel > zlevelList[0]) {
-      for (i = 0; i < len - 1; i++) {
+    if (len2 > 0 && zlevel > zlevelList[0]) {
+      for (i = 0; i < len2 - 1; i++) {
         if (zlevelList[i] < zlevel && zlevelList[i + 1] > zlevel) {
           break;
         }
@@ -7510,10 +7435,10 @@ Animation$1.prototype = {
     var time = (/* @__PURE__ */ new Date()).getTime() - this._pausedTime;
     var delta = time - this._time;
     var clips = this._clips;
-    var len = clips.length;
+    var len2 = clips.length;
     var deferredEvents = [];
     var deferredClips = [];
-    for (var i = 0; i < len; i++) {
+    for (var i = 0; i < len2; i++) {
       var clip = clips[i];
       var e = clip.step(time, delta);
       if (e) {
@@ -7521,17 +7446,17 @@ Animation$1.prototype = {
         deferredClips.push(clip);
       }
     }
-    for (var i = 0; i < len; ) {
+    for (var i = 0; i < len2; ) {
       if (clips[i]._needsRemove) {
-        clips[i] = clips[len - 1];
+        clips[i] = clips[len2 - 1];
         clips.pop();
-        len--;
+        len2--;
       } else {
         i++;
       }
     }
-    len = deferredEvents.length;
-    for (var i = 0; i < len; i++) {
+    len2 = deferredEvents.length;
+    for (var i = 0; i < len2; i++) {
       deferredClips[i].fire(deferredEvents[i]);
     }
     this._time = time;
@@ -7894,7 +7819,7 @@ handlerDomProxyProto.setCursor = function(cursorStyle) {
 zrUtil$1.mixin(HandlerDomProxy, Eventful);
 var _default = HandlerDomProxy;
 var HandlerProxy$1 = _default;
-var guid = guid$1;
+var guid = guid$2;
 var env = env_1;
 var zrUtil = util$6;
 var Handler = Handler_1;
@@ -8231,12 +8156,12 @@ var hasRequiredCurve;
 function requireCurve() {
   if (hasRequiredCurve) return curve;
   hasRequiredCurve = 1;
-  var _vector = requireVector();
+  var _vector = vector$1;
   var v2Create = _vector.create;
   var v2DistSquare = _vector.distSquare;
   var mathPow = Math.pow;
   var mathSqrt = Math.sqrt;
-  var EPSILON = 1e-8;
+  var EPSILON2 = 1e-8;
   var EPSILON_NUMERIC = 1e-4;
   var THREE_SQRT = mathSqrt(3);
   var ONE_THIRD = 1 / 3;
@@ -8244,10 +8169,10 @@ function requireCurve() {
   var _v1 = v2Create();
   var _v2 = v2Create();
   function isAroundZero(val) {
-    return val > -EPSILON && val < EPSILON;
+    return val > -EPSILON2 && val < EPSILON2;
   }
-  function isNotAroundZero(val) {
-    return val > EPSILON || val < -EPSILON;
+  function isNotAroundZero2(val) {
+    return val > EPSILON2 || val < -EPSILON2;
   }
   function cubicAt(p0, p1, p2, p3, t) {
     var onet = 1 - t;
@@ -8332,7 +8257,7 @@ function requireCurve() {
     var c = 3 * p1 - 3 * p0;
     var n = 0;
     if (isAroundZero(a)) {
-      if (isNotAroundZero(b)) {
+      if (isNotAroundZero2(b)) {
         var t1 = -c / b;
         if (t1 >= 0 && t1 <= 1) {
           extrema[n++] = t1;
@@ -8435,7 +8360,7 @@ function requireCurve() {
     var c = p0 - val;
     var n = 0;
     if (isAroundZero(a)) {
-      if (isNotAroundZero(b)) {
+      if (isNotAroundZero2(b)) {
         var t1 = -c / b;
         if (t1 >= 0 && t1 <= 1) {
           roots[n++] = t1;
@@ -8546,17 +8471,17 @@ var hasRequiredBbox;
 function requireBbox() {
   if (hasRequiredBbox) return bbox;
   hasRequiredBbox = 1;
-  var vec22 = requireVector();
+  var vec22 = vector$1;
   var curve2 = requireCurve();
-  var mathMin = Math.min;
-  var mathMax = Math.max;
+  var mathMin2 = Math.min;
+  var mathMax2 = Math.max;
   var mathSin = Math.sin;
   var mathCos = Math.cos;
   var PI2 = Math.PI * 2;
   var start = vec22.create();
   var end = vec22.create();
   var extremity = vec22.create();
-  function fromPoints(points, min, max) {
+  function fromPoints(points, min2, max2) {
     if (points.length === 0) {
       return;
     }
@@ -8568,82 +8493,82 @@ function requireBbox() {
     var i;
     for (i = 1; i < points.length; i++) {
       p = points[i];
-      left = mathMin(left, p[0]);
-      right = mathMax(right, p[0]);
-      top = mathMin(top, p[1]);
-      bottom = mathMax(bottom, p[1]);
+      left = mathMin2(left, p[0]);
+      right = mathMax2(right, p[0]);
+      top = mathMin2(top, p[1]);
+      bottom = mathMax2(bottom, p[1]);
     }
-    min[0] = left;
-    min[1] = top;
-    max[0] = right;
-    max[1] = bottom;
+    min2[0] = left;
+    min2[1] = top;
+    max2[0] = right;
+    max2[1] = bottom;
   }
-  function fromLine(x0, y0, x1, y1, min, max) {
-    min[0] = mathMin(x0, x1);
-    min[1] = mathMin(y0, y1);
-    max[0] = mathMax(x0, x1);
-    max[1] = mathMax(y0, y1);
+  function fromLine(x0, y0, x1, y1, min2, max2) {
+    min2[0] = mathMin2(x0, x1);
+    min2[1] = mathMin2(y0, y1);
+    max2[0] = mathMax2(x0, x1);
+    max2[1] = mathMax2(y0, y1);
   }
   var xDim = [];
   var yDim = [];
-  function fromCubic(x0, y0, x1, y1, x2, y2, x3, y3, min, max) {
+  function fromCubic(x0, y0, x1, y1, x2, y2, x3, y3, min2, max2) {
     var cubicExtrema = curve2.cubicExtrema;
     var cubicAt = curve2.cubicAt;
     var i;
     var n = cubicExtrema(x0, x1, x2, x3, xDim);
-    min[0] = Infinity;
-    min[1] = Infinity;
-    max[0] = -Infinity;
-    max[1] = -Infinity;
+    min2[0] = Infinity;
+    min2[1] = Infinity;
+    max2[0] = -Infinity;
+    max2[1] = -Infinity;
     for (i = 0; i < n; i++) {
       var x = cubicAt(x0, x1, x2, x3, xDim[i]);
-      min[0] = mathMin(x, min[0]);
-      max[0] = mathMax(x, max[0]);
+      min2[0] = mathMin2(x, min2[0]);
+      max2[0] = mathMax2(x, max2[0]);
     }
     n = cubicExtrema(y0, y1, y2, y3, yDim);
     for (i = 0; i < n; i++) {
       var y = cubicAt(y0, y1, y2, y3, yDim[i]);
-      min[1] = mathMin(y, min[1]);
-      max[1] = mathMax(y, max[1]);
+      min2[1] = mathMin2(y, min2[1]);
+      max2[1] = mathMax2(y, max2[1]);
     }
-    min[0] = mathMin(x0, min[0]);
-    max[0] = mathMax(x0, max[0]);
-    min[0] = mathMin(x3, min[0]);
-    max[0] = mathMax(x3, max[0]);
-    min[1] = mathMin(y0, min[1]);
-    max[1] = mathMax(y0, max[1]);
-    min[1] = mathMin(y3, min[1]);
-    max[1] = mathMax(y3, max[1]);
+    min2[0] = mathMin2(x0, min2[0]);
+    max2[0] = mathMax2(x0, max2[0]);
+    min2[0] = mathMin2(x3, min2[0]);
+    max2[0] = mathMax2(x3, max2[0]);
+    min2[1] = mathMin2(y0, min2[1]);
+    max2[1] = mathMax2(y0, max2[1]);
+    min2[1] = mathMin2(y3, min2[1]);
+    max2[1] = mathMax2(y3, max2[1]);
   }
-  function fromQuadratic(x0, y0, x1, y1, x2, y2, min, max) {
+  function fromQuadratic(x0, y0, x1, y1, x2, y2, min2, max2) {
     var quadraticExtremum = curve2.quadraticExtremum;
     var quadraticAt = curve2.quadraticAt;
-    var tx = mathMax(mathMin(quadraticExtremum(x0, x1, x2), 1), 0);
-    var ty = mathMax(mathMin(quadraticExtremum(y0, y1, y2), 1), 0);
+    var tx = mathMax2(mathMin2(quadraticExtremum(x0, x1, x2), 1), 0);
+    var ty = mathMax2(mathMin2(quadraticExtremum(y0, y1, y2), 1), 0);
     var x = quadraticAt(x0, x1, x2, tx);
     var y = quadraticAt(y0, y1, y2, ty);
-    min[0] = mathMin(x0, x2, x);
-    min[1] = mathMin(y0, y2, y);
-    max[0] = mathMax(x0, x2, x);
-    max[1] = mathMax(y0, y2, y);
+    min2[0] = mathMin2(x0, x2, x);
+    min2[1] = mathMin2(y0, y2, y);
+    max2[0] = mathMax2(x0, x2, x);
+    max2[1] = mathMax2(y0, y2, y);
   }
-  function fromArc(x, y, rx, ry, startAngle, endAngle, anticlockwise, min, max) {
+  function fromArc(x, y, rx, ry, startAngle, endAngle, anticlockwise, min2, max2) {
     var vec2Min = vec22.min;
     var vec2Max = vec22.max;
     var diff = Math.abs(startAngle - endAngle);
     if (diff % PI2 < 1e-4 && diff > 1e-4) {
-      min[0] = x - rx;
-      min[1] = y - ry;
-      max[0] = x + rx;
-      max[1] = y + ry;
+      min2[0] = x - rx;
+      min2[1] = y - ry;
+      max2[0] = x + rx;
+      max2[1] = y + ry;
       return;
     }
     start[0] = mathCos(startAngle) * rx + x;
     start[1] = mathSin(startAngle) * ry + y;
     end[0] = mathCos(endAngle) * rx + x;
     end[1] = mathSin(endAngle) * ry + y;
-    vec2Min(min, start, end);
-    vec2Max(max, start, end);
+    vec2Min(min2, start, end);
+    vec2Max(max2, start, end);
     startAngle = startAngle % PI2;
     if (startAngle < 0) {
       startAngle = startAngle + PI2;
@@ -8666,8 +8591,8 @@ function requireBbox() {
       if (angle > startAngle) {
         extremity[0] = mathCos(angle) * rx + x;
         extremity[1] = mathSin(angle) * ry + y;
-        vec2Min(min, extremity, min);
-        vec2Max(max, extremity, max);
+        vec2Min(min2, extremity, min2);
+        vec2Max(max2, extremity, max2);
       }
     }
   }
@@ -8684,9 +8609,9 @@ function requirePathProxy() {
   if (hasRequiredPathProxy) return PathProxy_1;
   hasRequiredPathProxy = 1;
   var curve2 = requireCurve();
-  var vec22 = requireVector();
+  var vec22 = vector$1;
   var bbox2 = requireBbox();
-  var BoundingRect2 = requireBoundingRect();
+  var BoundingRect2 = BoundingRect_1;
   var _config2 = config;
   var dpr2 = _config2.devicePixelRatio;
   var CMD = {
@@ -8699,12 +8624,12 @@ function requirePathProxy() {
     // Rect
     R: 7
   };
-  var min = [];
-  var max = [];
   var min2 = [];
   var max2 = [];
-  var mathMin = Math.min;
-  var mathMax = Math.max;
+  var min22 = [];
+  var max22 = [];
+  var mathMin2 = Math.min;
+  var mathMax2 = Math.max;
   var mathCos = Math.cos;
   var mathSin = Math.sin;
   var mathSqrt = Math.sqrt;
@@ -8924,14 +8849,14 @@ function requirePathProxy() {
      * 直接设置 Path 数据
      */
     setData: function(data) {
-      var len = data.length;
-      if (!(this.data && this.data.length === len) && hasTypedArray) {
-        this.data = new Float32Array(len);
+      var len2 = data.length;
+      if (!(this.data && this.data.length === len2) && hasTypedArray) {
+        this.data = new Float32Array(len2);
       }
-      for (var i = 0; i < len; i++) {
+      for (var i = 0; i < len2; i++) {
         this.data[i] = data[i];
       }
-      this._len = len;
+      this._len = len2;
     },
     /**
      * 添加子路径
@@ -8941,16 +8866,16 @@ function requirePathProxy() {
       if (!(path2 instanceof Array)) {
         path2 = [path2];
       }
-      var len = path2.length;
+      var len2 = path2.length;
       var appendSize = 0;
       var offset = this._len;
-      for (var i = 0; i < len; i++) {
+      for (var i = 0; i < len2; i++) {
         appendSize += path2[i].len();
       }
       if (hasTypedArray && this.data instanceof Float32Array) {
         this.data = new Float32Array(offset + appendSize);
       }
-      for (var i = 0; i < len; i++) {
+      for (var i = 0; i < len2; i++) {
         var appendPathData = path2[i].data;
         for (var k = 0; k < appendPathData.length; k++) {
           this.data[offset++] = appendPathData[k];
@@ -9025,7 +8950,7 @@ function requirePathProxy() {
         if (dx > 0 && x < x0 || dx < 0 && x > x0 || dy > 0 && y < y0 || dy < 0 && y > y0) {
           continue;
         }
-        ctx[idx % 2 ? "moveTo" : "lineTo"](dx >= 0 ? mathMin(x, x1) : mathMax(x, x1), dy >= 0 ? mathMin(y, y1) : mathMax(y, y1));
+        ctx[idx % 2 ? "moveTo" : "lineTo"](dx >= 0 ? mathMin2(x, x1) : mathMax2(x, x1), dy >= 0 ? mathMin2(y, y1) : mathMax2(y, y1));
       }
       dx = x - x1;
       dy = y - y1;
@@ -9103,8 +9028,8 @@ function requirePathProxy() {
      * @return {module:zrender/core/BoundingRect}
      */
     getBoundingRect: function() {
-      min[0] = min[1] = min2[0] = min2[1] = Number.MAX_VALUE;
-      max[0] = max[1] = max2[0] = max2[1] = -Number.MAX_VALUE;
+      min2[0] = min2[1] = min22[0] = min22[1] = Number.MAX_VALUE;
+      max2[0] = max2[1] = max22[0] = max22[1] = -Number.MAX_VALUE;
       var data = this.data;
       var xi = 0;
       var yi = 0;
@@ -9124,23 +9049,23 @@ function requirePathProxy() {
             y0 = data[i++];
             xi = x0;
             yi = y0;
-            min2[0] = x0;
-            min2[1] = y0;
-            max2[0] = x0;
-            max2[1] = y0;
+            min22[0] = x0;
+            min22[1] = y0;
+            max22[0] = x0;
+            max22[1] = y0;
             break;
           case CMD.L:
-            bbox2.fromLine(xi, yi, data[i], data[i + 1], min2, max2);
+            bbox2.fromLine(xi, yi, data[i], data[i + 1], min22, max22);
             xi = data[i++];
             yi = data[i++];
             break;
           case CMD.C:
-            bbox2.fromCubic(xi, yi, data[i++], data[i++], data[i++], data[i++], data[i], data[i + 1], min2, max2);
+            bbox2.fromCubic(xi, yi, data[i++], data[i++], data[i++], data[i++], data[i], data[i + 1], min22, max22);
             xi = data[i++];
             yi = data[i++];
             break;
           case CMD.Q:
-            bbox2.fromQuadratic(xi, yi, data[i++], data[i++], data[i], data[i + 1], min2, max2);
+            bbox2.fromQuadratic(xi, yi, data[i++], data[i++], data[i], data[i + 1], min22, max22);
             xi = data[i++];
             yi = data[i++];
             break;
@@ -9157,7 +9082,7 @@ function requirePathProxy() {
               x0 = mathCos(startAngle) * rx + cx;
               y0 = mathSin(startAngle) * ry + cy;
             }
-            bbox2.fromArc(cx, cy, rx, ry, startAngle, endAngle, anticlockwise, min2, max2);
+            bbox2.fromArc(cx, cy, rx, ry, startAngle, endAngle, anticlockwise, min22, max22);
             xi = mathCos(endAngle) * rx + cx;
             yi = mathSin(endAngle) * ry + cy;
             break;
@@ -9166,20 +9091,20 @@ function requirePathProxy() {
             y0 = yi = data[i++];
             var width = data[i++];
             var height = data[i++];
-            bbox2.fromLine(x0, y0, x0 + width, y0 + height, min2, max2);
+            bbox2.fromLine(x0, y0, x0 + width, y0 + height, min22, max22);
             break;
           case CMD.Z:
             xi = x0;
             yi = y0;
             break;
         }
-        vec22.min(min, min, min2);
-        vec22.max(max, max, max2);
+        vec22.min(min2, min2, min22);
+        vec22.max(max2, max2, max22);
       }
       if (i === 0) {
-        min[0] = min[1] = max[0] = max[1] = 0;
+        min2[0] = min2[1] = max2[0] = max2[1] = 0;
       }
-      return new BoundingRect2(min[0], min[1], max[0] - min[0], max[1] - min[1]);
+      return new BoundingRect2(min2[0], min2[1], max2[0] - min2[0], max2[1] - min2[1]);
     },
     /**
      * Rebuild path from current data
@@ -9196,8 +9121,8 @@ function requirePathProxy() {
       var y;
       var ux = this._ux;
       var uy = this._uy;
-      var len = this._len;
-      for (var i = 0; i < len; ) {
+      var len2 = this._len;
+      for (var i = 0; i < len2; ) {
         var cmd = d[i++];
         if (i === 1) {
           xi = d[i];
@@ -9214,7 +9139,7 @@ function requirePathProxy() {
           case CMD.L:
             x = d[i++];
             y = d[i++];
-            if (mathAbs(x - xi) > ux || mathAbs(y - yi) > uy || i === len - 1) {
+            if (mathAbs(x - xi) > ux || mathAbs(y - yi) > uy || i === len2 - 1) {
               ctx.lineTo(x, y);
               xi = x;
               yi = y;
@@ -9446,9 +9371,9 @@ function requirePath$2() {
   var windingLine = requireWindingLine();
   var CMD = PathProxy.CMD;
   var PI2 = Math.PI * 2;
-  var EPSILON = 1e-4;
+  var EPSILON2 = 1e-4;
   function isAroundEqual(a, b) {
-    return Math.abs(a - b) < EPSILON;
+    return Math.abs(a - b) < EPSILON2;
   }
   var roots = [-1, -1, -1];
   var extrema = [-1, -1];
@@ -9728,7 +9653,7 @@ var hasRequiredPath$1;
 function requirePath$1() {
   if (hasRequiredPath$1) return Path_1;
   hasRequiredPath$1 = 1;
-  var Displayable = requireDisplayable();
+  var Displayable2 = Displayable_1;
   var zrUtil2 = util$6;
   var PathProxy = requirePathProxy();
   var pathContain = requirePath$2();
@@ -9737,7 +9662,7 @@ function requirePath$1() {
   var abs = Math.abs;
   var pathProxyForDraw = new PathProxy(true);
   function Path(opts) {
-    Displayable.call(this, opts);
+    Displayable2.call(this, opts);
     this.path = null;
   }
   Path.prototype = {
@@ -9791,8 +9716,8 @@ function requirePath$1() {
       var lineDash = style.lineDash;
       var lineDashOffset = style.lineDashOffset;
       var ctxLineDash = !!ctx.setLineDash;
-      var scale = this.getGlobalScale();
-      path2.setScale(scale[0], scale[1], this.segmentIgnoreThreshold);
+      var scale2 = this.getGlobalScale();
+      path2.setScale(scale2[0], scale2[1], this.segmentIgnoreThreshold);
       if (this.__dirtyPath || lineDash && !ctxLineDash && hasStroke) {
         path2.beginPath(ctx);
         if (lineDash && !ctxLineDash) {
@@ -9939,7 +9864,7 @@ function requirePath$1() {
         this.__dirtyPath = true;
         this._rect = null;
       } else {
-        Displayable.prototype.attrKV.call(this, key, value);
+        Displayable2.prototype.attrKV.call(this, key, value);
       }
     },
     /**
@@ -9993,7 +9918,7 @@ function requirePath$1() {
     }
     return Sub;
   };
-  zrUtil2.inherits(Path, Displayable);
+  zrUtil2.inherits(Path, Displayable2);
   var _default2 = Path;
   Path_1 = _default2;
   return Path_1;
@@ -10004,8 +9929,8 @@ function requireTransformPath() {
   if (hasRequiredTransformPath) return transformPath;
   hasRequiredTransformPath = 1;
   var PathProxy = requirePathProxy();
-  var _vector = requireVector();
-  var v2ApplyTransform = _vector.applyTransform;
+  var _vector = vector$1;
+  var v2ApplyTransform2 = _vector.applyTransform;
   var CMD = PathProxy.CMD;
   var points = [[], [], []];
   var mathSqrt = Math.sqrt;
@@ -10061,12 +9986,12 @@ function requireTransformPath() {
         case R:
           p[0] = data[i++];
           p[1] = data[i++];
-          v2ApplyTransform(p, p, m);
+          v2ApplyTransform2(p, p, m);
           data[j++] = p[0];
           data[j++] = p[1];
           p[0] += data[i++];
           p[1] += data[i++];
-          v2ApplyTransform(p, p, m);
+          v2ApplyTransform2(p, p, m);
           data[j++] = p[0];
           data[j++] = p[1];
       }
@@ -10074,7 +9999,7 @@ function requireTransformPath() {
         var p = points[k];
         p[0] = data[i++];
         p[1] = data[i++];
-        v2ApplyTransform(p, p, m);
+        v2ApplyTransform2(p, p, m);
         data[j++] = p[0];
         data[j++] = p[1];
       }
@@ -10235,11 +10160,11 @@ function requirePath() {
           case "S":
             ctlPtx = cpx;
             ctlPty = cpy;
-            var len = path2.len();
+            var len2 = path2.len();
             var pathData = path2.data;
             if (prevCmd === CMD.C) {
-              ctlPtx += cpx - pathData[len - 4];
-              ctlPty += cpy - pathData[len - 3];
+              ctlPtx += cpx - pathData[len2 - 4];
+              ctlPty += cpy - pathData[len2 - 3];
             }
             cmd = CMD.C;
             x1 = p[off++];
@@ -10251,11 +10176,11 @@ function requirePath() {
           case "s":
             ctlPtx = cpx;
             ctlPty = cpy;
-            var len = path2.len();
+            var len2 = path2.len();
             var pathData = path2.data;
             if (prevCmd === CMD.C) {
-              ctlPtx += cpx - pathData[len - 4];
-              ctlPty += cpy - pathData[len - 3];
+              ctlPtx += cpx - pathData[len2 - 4];
+              ctlPty += cpy - pathData[len2 - 3];
             }
             cmd = CMD.C;
             x1 = cpx + p[off++];
@@ -10283,11 +10208,11 @@ function requirePath() {
           case "T":
             ctlPtx = cpx;
             ctlPty = cpy;
-            var len = path2.len();
+            var len2 = path2.len();
             var pathData = path2.data;
             if (prevCmd === CMD.Q) {
-              ctlPtx += cpx - pathData[len - 4];
-              ctlPty += cpy - pathData[len - 3];
+              ctlPtx += cpx - pathData[len2 - 4];
+              ctlPty += cpy - pathData[len2 - 3];
             }
             cpx = p[off++];
             cpy = p[off++];
@@ -10297,11 +10222,11 @@ function requirePath() {
           case "t":
             ctlPtx = cpx;
             ctlPty = cpy;
-            var len = path2.len();
+            var len2 = path2.len();
             var pathData = path2.data;
             if (prevCmd === CMD.Q) {
-              ctlPtx += cpx - pathData[len - 4];
-              ctlPty += cpy - pathData[len - 3];
+              ctlPtx += cpx - pathData[len2 - 4];
+              ctlPty += cpy - pathData[len2 - 3];
             }
             cpx += p[off++];
             cpy += p[off++];
@@ -10374,8 +10299,8 @@ function requirePath() {
   }
   function mergePath(pathEls, opts) {
     var pathList = [];
-    var len = pathEls.length;
-    for (var i = 0; i < len; i++) {
+    var len2 = pathEls.length;
+    for (var i = 0; i < len2; i++) {
       var pathEl = pathEls[i];
       if (!pathEl.path) {
         pathEl.createPathProxy();
@@ -10407,41 +10332,41 @@ var hasRequiredText;
 function requireText() {
   if (hasRequiredText) return Text_1;
   hasRequiredText = 1;
-  var Displayable = requireDisplayable();
+  var Displayable2 = Displayable_1;
   var zrUtil2 = util$6;
   var textContain = requireText$2();
-  var textHelper = requireText$1();
-  var _constant = requireConstant();
-  var ContextCachedBy = _constant.ContextCachedBy;
+  var textHelper2 = requireText$1();
+  var _constant2 = requireConstant();
+  var ContextCachedBy = _constant2.ContextCachedBy;
   var Text = function(opts) {
-    Displayable.call(this, opts);
+    Displayable2.call(this, opts);
   };
   Text.prototype = {
     constructor: Text,
     type: "text",
     brush: function(ctx, prevEl) {
       var style = this.style;
-      this.__dirty && textHelper.normalizeTextStyle(style, true);
+      this.__dirty && textHelper2.normalizeTextStyle(style, true);
       style.fill = style.stroke = style.shadowBlur = style.shadowColor = style.shadowOffsetX = style.shadowOffsetY = null;
       var text2 = style.text;
       text2 != null && (text2 += "");
-      if (!textHelper.needDrawText(text2, style)) {
+      if (!textHelper2.needDrawText(text2, style)) {
         ctx.__attrCachedBy = ContextCachedBy.NONE;
         return;
       }
       this.setTransform(ctx);
-      textHelper.renderText(this, ctx, text2, style, null, prevEl);
+      textHelper2.renderText(this, ctx, text2, style, null, prevEl);
       this.restoreTransform(ctx);
     },
     getBoundingRect: function() {
       var style = this.style;
-      this.__dirty && textHelper.normalizeTextStyle(style, true);
+      this.__dirty && textHelper2.normalizeTextStyle(style, true);
       if (!this._rect) {
         style.text;
         var rect = textContain.getBoundingRect(style.text + "", style.font, style.textAlign, style.textVerticalAlign, style.textPadding, style.textLineHeight, style.rich);
         rect.x += style.x || 0;
         rect.y += style.y || 0;
-        if (textHelper.getStroke(style.textStroke, style.textStrokeWidth)) {
+        if (textHelper2.getStroke(style.textStroke, style.textStrokeWidth)) {
           var w = style.textStrokeWidth;
           rect.x -= w / 2;
           rect.y -= w / 2;
@@ -10453,7 +10378,7 @@ function requireText() {
       return this._rect;
     }
   };
-  zrUtil2.inherits(Text, Displayable);
+  zrUtil2.inherits(Text, Displayable2);
   var _default2 = Text;
   Text_1 = _default2;
   return Text_1;
@@ -10702,7 +10627,7 @@ var hasRequiredSmoothSpline;
 function requireSmoothSpline() {
   if (hasRequiredSmoothSpline) return smoothSpline;
   hasRequiredSmoothSpline = 1;
-  var _vector = requireVector();
+  var _vector = vector$1;
   var v2Distance = _vector.distance;
   function interpolate(p0, p1, p2, p3, t, t2, t3) {
     var v0 = (p2 - p0) * 0.5;
@@ -10710,30 +10635,30 @@ function requireSmoothSpline() {
     return (2 * (p1 - p2) + v0 + v1) * t3 + (-3 * (p1 - p2) - 2 * v0 - v1) * t2 + v0 * t + p1;
   }
   function _default2(points, isLoop) {
-    var len = points.length;
+    var len2 = points.length;
     var ret = [];
-    var distance = 0;
-    for (var i = 1; i < len; i++) {
-      distance += v2Distance(points[i - 1], points[i]);
+    var distance2 = 0;
+    for (var i = 1; i < len2; i++) {
+      distance2 += v2Distance(points[i - 1], points[i]);
     }
-    var segs = distance / 2;
-    segs = segs < len ? len : segs;
+    var segs = distance2 / 2;
+    segs = segs < len2 ? len2 : segs;
     for (var i = 0; i < segs; i++) {
-      var pos = i / (segs - 1) * (isLoop ? len : len - 1);
+      var pos = i / (segs - 1) * (isLoop ? len2 : len2 - 1);
       var idx = Math.floor(pos);
       var w = pos - idx;
       var p0;
-      var p1 = points[idx % len];
+      var p1 = points[idx % len2];
       var p2;
       var p3;
       if (!isLoop) {
         p0 = points[idx === 0 ? idx : idx - 1];
-        p2 = points[idx > len - 2 ? len - 1 : idx + 1];
-        p3 = points[idx > len - 3 ? len - 1 : idx + 2];
+        p2 = points[idx > len2 - 2 ? len2 - 1 : idx + 1];
+        p3 = points[idx > len2 - 3 ? len2 - 1 : idx + 2];
       } else {
-        p0 = points[(idx - 1 + len) % len];
-        p2 = points[(idx + 1) % len];
-        p3 = points[(idx + 2) % len];
+        p0 = points[(idx - 1 + len2) % len2];
+        p2 = points[(idx + 1) % len2];
+        p3 = points[(idx + 2) % len2];
       }
       var w2 = w * w;
       var w3 = w * w2;
@@ -10749,7 +10674,7 @@ var hasRequiredSmoothBezier;
 function requireSmoothBezier() {
   if (hasRequiredSmoothBezier) return smoothBezier;
   hasRequiredSmoothBezier = 1;
-  var _vector = requireVector();
+  var _vector = vector$1;
   var v2Min = _vector.min;
   var v2Max = _vector.max;
   var v2Scale = _vector.scale;
@@ -10764,25 +10689,25 @@ function requireSmoothBezier() {
     var v2 = [];
     var prevPoint;
     var nextPoint;
-    var min;
-    var max;
+    var min2;
+    var max2;
     if (constraint) {
-      min = [Infinity, Infinity];
-      max = [-Infinity, -Infinity];
-      for (var i = 0, len = points.length; i < len; i++) {
-        v2Min(min, min, points[i]);
-        v2Max(max, max, points[i]);
+      min2 = [Infinity, Infinity];
+      max2 = [-Infinity, -Infinity];
+      for (var i = 0, len2 = points.length; i < len2; i++) {
+        v2Min(min2, min2, points[i]);
+        v2Max(max2, max2, points[i]);
       }
-      v2Min(min, min, constraint[0]);
-      v2Max(max, max, constraint[1]);
+      v2Min(min2, min2, constraint[0]);
+      v2Max(max2, max2, constraint[1]);
     }
-    for (var i = 0, len = points.length; i < len; i++) {
+    for (var i = 0, len2 = points.length; i < len2; i++) {
       var point = points[i];
       if (isLoop) {
-        prevPoint = points[i ? i - 1 : len - 1];
-        nextPoint = points[(i + 1) % len];
+        prevPoint = points[i ? i - 1 : len2 - 1];
+        nextPoint = points[(i + 1) % len2];
       } else {
-        if (i === 0 || i === len - 1) {
+        if (i === 0 || i === len2 - 1) {
           cps.push(v2Clone(points[i]));
           continue;
         } else {
@@ -10804,10 +10729,10 @@ function requireSmoothBezier() {
       var cp0 = v2Add([], point, v1);
       var cp1 = v2Add([], point, v2);
       if (constraint) {
-        v2Max(cp0, cp0, min);
-        v2Min(cp0, cp0, max);
-        v2Max(cp1, cp1, min);
-        v2Min(cp1, cp1, max);
+        v2Max(cp0, cp0, min2);
+        v2Min(cp0, cp0, max2);
+        v2Max(cp1, cp1, min2);
+        v2Min(cp1, cp1, max2);
       }
       cps.push(cp0);
       cps.push(cp1);
@@ -10833,11 +10758,11 @@ function requirePoly() {
       if (smooth && smooth !== "spline") {
         var controlPoints = smoothBezier2(points, smooth, closePath, shape.smoothConstraint);
         ctx.moveTo(points[0][0], points[0][1]);
-        var len = points.length;
-        for (var i = 0; i < (closePath ? len : len - 1); i++) {
+        var len2 = points.length;
+        for (var i = 0; i < (closePath ? len2 : len2 - 1); i++) {
           var cp1 = controlPoints[i * 2];
           var cp2 = controlPoints[i * 2 + 1];
-          var p = points[(i + 1) % len];
+          var p = points[(i + 1) % len2];
           ctx.bezierCurveTo(cp1[0], cp1[1], cp2[0], cp2[1], p[0], p[1]);
         }
       } else {
@@ -10950,8 +10875,8 @@ var hasRequiredParseSVG;
 function requireParseSVG() {
   if (hasRequiredParseSVG) return parseSVG;
   hasRequiredParseSVG = 1;
-  var Group2 = requireGroup();
-  var ZImage = requireImage();
+  var Group2 = Group_1;
+  var ZImage2 = Image$2;
   var Text = requireText();
   var Circle2 = requireCircle();
   var Rect2 = requireRect();
@@ -11203,7 +11128,7 @@ function requireParseSVG() {
       return polyline;
     },
     "image": function(xmlNode, parentGroup) {
-      var img = new ZImage();
+      var img = new ZImage2();
       inheritStyle(parentGroup, img);
       parseAttributes(xmlNode, img, this._defs);
       img.setStyle({
@@ -11449,9 +11374,9 @@ function requireParseSVG() {
   function makeViewBoxTransform(viewBoxRect, width, height) {
     var scaleX = width / viewBoxRect.width;
     var scaleY = height / viewBoxRect.height;
-    var scale = Math.min(scaleX, scaleY);
-    var viewBoxScale = [scale, scale];
-    var viewBoxPosition = [-(viewBoxRect.x + viewBoxRect.width / 2) * scale + width / 2, -(viewBoxRect.y + viewBoxRect.height / 2) * scale + height / 2];
+    var scale2 = Math.min(scaleX, scaleY);
+    var viewBoxScale = [scale2, scale2];
+    var viewBoxPosition = [-(viewBoxRect.x + viewBoxRect.width / 2) * scale2 + width / 2, -(viewBoxRect.y + viewBoxRect.height / 2) * scale2 + height / 2];
     return {
       scale: viewBoxScale,
       position: viewBoxPosition
@@ -11489,12 +11414,12 @@ function requireCompoundPath() {
     beforeBrush: function() {
       this._updatePathDirty();
       var paths = this.shape.paths || [];
-      var scale = this.getGlobalScale();
+      var scale2 = this.getGlobalScale();
       for (var i = 0; i < paths.length; i++) {
         if (!paths[i].path) {
           paths[i].createPathProxy();
         }
-        paths[i].path.setScale(scale[0], scale[1], paths[i].segmentIgnoreThreshold);
+        paths[i].path.setScale(scale2[0], scale2[1], paths[i].segmentIgnoreThreshold);
       }
     },
     buildPath: function(ctx, shape) {
@@ -11524,8 +11449,8 @@ function requireIncrementalDisplayable() {
   hasRequiredIncrementalDisplayable = 1;
   var _util2 = util$6;
   var inherits2 = _util2.inherits;
-  var Displayble = requireDisplayable();
-  var BoundingRect2 = requireBoundingRect();
+  var Displayble = Displayable_1;
+  var BoundingRect2 = BoundingRect_1;
   function IncrementalDisplayble(opts) {
     Displayble.call(this, opts);
     this._displayables = [];
@@ -11671,7 +11596,7 @@ function requireBezierCurve() {
   if (hasRequiredBezierCurve) return BezierCurve;
   hasRequiredBezierCurve = 1;
   var Path = requirePath$1();
-  var vec22 = requireVector();
+  var vec22 = vector$1;
   var _curve = requireCurve();
   var quadraticSubdivide = _curve.quadraticSubdivide;
   var cubicSubdivide = _curve.cubicSubdivide;
@@ -11919,7 +11844,7 @@ function requireRose() {
       var x0 = shape.cx;
       var y0 = shape.cy;
       ctx.moveTo(x0, y0);
-      for (var i = 0, len = R.length; i < len; i++) {
+      for (var i = 0, len2 = R.length; i < len2; i++) {
         r = R[i];
         for (var j = 0; j <= 360 * n; j++) {
           x = r * sin(k / n * j % 360 * radian) * cos(j * radian) + x0;
@@ -12147,7 +12072,7 @@ function require_export() {
   _export.util = zrUtil2;
   var matrix2 = requireMatrix();
   _export.matrix = matrix2;
-  var vector2 = requireVector();
+  var vector2 = vector$1;
   _export.vector = vector2;
   var colorTool = requireColor();
   _export.color = colorTool;
@@ -12156,11 +12081,11 @@ function require_export() {
   var _parseSVG = requireParseSVG();
   _parseSVG.parseSVG;
   _export.parseSVG = _parseSVG.parseSVG;
-  var _Group = requireGroup();
+  var _Group = Group_1;
   _export.Group = _Group;
   var _Path = requirePath$1();
   _export.Path = _Path;
-  var _Image = requireImage();
+  var _Image = Image$2;
   _export.Image = _Image;
   var _CompoundPath = requireCompoundPath();
   _export.CompoundPath = _CompoundPath;
@@ -12206,7 +12131,7 @@ function require_export() {
   _export.RadialGradient = _RadialGradient;
   var _Pattern = requirePattern();
   _export.Pattern = _Pattern;
-  var _BoundingRect = requireBoundingRect();
+  var _BoundingRect = BoundingRect_1;
   _export.BoundingRect = _BoundingRect;
   return _export;
 }
@@ -12231,10 +12156,10 @@ function requireGraphic$1() {
   var _core = requireCore$1();
   var createElement = _core.createElement;
   var PathProxy = requirePathProxy();
-  var BoundingRect2 = requireBoundingRect();
+  var BoundingRect2 = BoundingRect_1;
   var matrix2 = requireMatrix();
   var textContain = requireText$2();
-  var textHelper = requireText$1();
+  var textHelper2 = requireText$1();
   var Text = requireText();
   var CMD = PathProxy.CMD;
   var arrayJoin = Array.prototype.join;
@@ -12245,12 +12170,12 @@ function requireGraphic$1() {
   var PI = Math.PI;
   var PI2 = Math.PI * 2;
   var degree = 180 / PI;
-  var EPSILON = 1e-4;
+  var EPSILON2 = 1e-4;
   function round4(val) {
     return mathRound(val * 1e4) / 1e4;
   }
   function isAroundZero(val) {
-    return val < EPSILON && val > -EPSILON;
+    return val < EPSILON2 && val > -EPSILON2;
   }
   function pathHasFill(style, isText) {
     var fill = isText ? style.textFill : style.fill;
@@ -12464,10 +12389,10 @@ function requireGraphic$1() {
     var style = el.style;
     var elTransform = el.transform;
     var needTransformTextByHostEl = el instanceof Text || style.transformText;
-    el.__dirty && textHelper.normalizeTextStyle(style, true);
+    el.__dirty && textHelper2.normalizeTextStyle(style, true);
     var text2 = style.text;
     text2 != null && (text2 += "");
-    if (!textHelper.needDrawText(text2, style)) {
+    if (!textHelper2.needDrawText(text2, style)) {
       return;
     }
     text2 == null && (text2 = "");
@@ -12496,7 +12421,7 @@ function requireGraphic$1() {
     }
     var outerHeight = contentBlock.outerHeight;
     var lineHeight = contentBlock.lineHeight;
-    textHelper.getBoxPosition(_tmpTextBoxPos, el, style, hostRect);
+    textHelper2.getBoxPosition(_tmpTextBoxPos, el, style, hostRect);
     var baseX = _tmpTextBoxPos.baseX;
     var baseY = _tmpTextBoxPos.baseY;
     var textAlign = _tmpTextBoxPos.textAlign || "left";
@@ -12771,7 +12696,7 @@ function requireDefinable() {
   var createElement = _core.createElement;
   var zrUtil2 = util$6;
   var Path = requirePath$1();
-  var ZImage = requireImage();
+  var ZImage2 = Image$2;
   var ZText = requireText();
   var _graphic = requireGraphic$1();
   var svgPath = _graphic.path;
@@ -12888,7 +12813,7 @@ function requireDefinable() {
   Definable.prototype.getSvgProxy = function(displayable) {
     if (displayable instanceof Path) {
       return svgPath;
-    } else if (displayable instanceof ZImage) {
+    } else if (displayable instanceof ZImage2) {
       return svgImage;
     } else if (displayable instanceof ZText) {
       return svgText;
@@ -12992,7 +12917,7 @@ function requireGradientManager() {
     }
     dom2.innerHTML = "";
     var colors = gradient.colorStops;
-    for (var i = 0, len = colors.length; i < len; ++i) {
+    for (var i = 0, len2 = colors.length; i < len2; ++i) {
       var stop2 = this.createElement("stop");
       stop2.setAttribute("offset", colors[i].offset * 100 + "%");
       var color2 = colors[i].color;
@@ -13224,7 +13149,7 @@ function requirePainter$1() {
   var util2 = util$6;
   var logError2 = log;
   var Path = requirePath$1();
-  var ZImage = requireImage();
+  var ZImage2 = Image$2;
   var ZText = requireText();
   var arrayDiff = requireArrayDiff2();
   var GradientManager = requireGradientManager();
@@ -13240,7 +13165,7 @@ function requirePainter$1() {
   function getSvgProxy(el) {
     if (el instanceof Path) {
       return svgPath;
-    } else if (el instanceof ZImage) {
+    } else if (el instanceof ZImage2) {
       return svgImage;
     } else if (el instanceof ZText) {
       return svgText;
@@ -13598,15 +13523,15 @@ function requireGraphic() {
   if (hasRequiredGraphic) return graphic;
   hasRequiredGraphic = 1;
   var env2 = env_1;
-  var _vector = requireVector();
-  var applyTransform = _vector.applyTransform;
-  var BoundingRect2 = requireBoundingRect();
+  var _vector = vector$1;
+  var applyTransform2 = _vector.applyTransform;
+  var BoundingRect2 = BoundingRect_1;
   var colorTool = requireColor();
   var textContain = requireText$2();
-  var textHelper = requireText$1();
-  var RectText = requireRectText();
-  var Displayable = requireDisplayable();
-  var ZImage = requireImage();
+  var textHelper2 = requireText$1();
+  var RectText2 = RectText_1;
+  var Displayable2 = Displayable_1;
+  var ZImage2 = Image$2;
   var Text = requireText();
   var Path = requirePath$1();
   var PathProxy = requirePathProxy();
@@ -13618,7 +13543,7 @@ function requireGraphic() {
   var abs = Math.abs;
   var cos = Math.cos;
   var sin = Math.sin;
-  var mathMax = Math.max;
+  var mathMax2 = Math.max;
   if (!env2.canvasSupported) {
     var comma = ",";
     var imageTransformPrefix = "progid:DXImageTransform.Microsoft";
@@ -13650,7 +13575,7 @@ function requireGraphic() {
     var getZIndex = function(zlevel, z, z2) {
       return (parseFloat(zlevel) || 0) * ZLEVEL_BASE + (parseFloat(z) || 0) * Z_BASE + z2;
     };
-    var parsePercent = textHelper.parsePercent;
+    var parsePercent = textHelper2.parsePercent;
     var setColorAndOpacity = function(el, color2, opacity) {
       var colorArr = colorTool.parse(color2);
       opacity = +opacity;
@@ -13684,8 +13609,8 @@ function requireGraphic() {
             var p0 = [fill.x * rectWidth, fill.y * rectHeight];
             var p1 = [fill.x2 * rectWidth, fill.y2 * rectHeight];
             if (transform) {
-              applyTransform(p0, p0, transform);
-              applyTransform(p1, p1, transform);
+              applyTransform2(p0, p0, transform);
+              applyTransform2(p1, p1, transform);
             }
             var dx = p1[0] - p0[0];
             var dy = p1[1] - p0[1];
@@ -13700,7 +13625,7 @@ function requireGraphic() {
             gradientType = "gradientradial";
             var p0 = [fill.x * rectWidth, fill.y * rectHeight];
             var transform = zrEl.transform;
-            var scale = zrEl.scale;
+            var scale2 = zrEl.scale;
             var width = rectWidth;
             var height = rectHeight;
             focus = [
@@ -13709,11 +13634,11 @@ function requireGraphic() {
               (p0[1] - rect.y) / height
             ];
             if (transform) {
-              applyTransform(p0, p0, transform);
+              applyTransform2(p0, p0, transform);
             }
-            width /= scale[0] * Z;
-            height /= scale[1] * Z;
-            var dimension = mathMax(width, height);
+            width /= scale2[0] * Z;
+            height /= scale2[1] * Z;
+            var dimension = mathMax2(width, height);
             shift = 2 * 0 / dimension;
             expansion = 2 * fill.r / dimension - shift;
           }
@@ -13721,18 +13646,18 @@ function requireGraphic() {
           stops.sort(function(cs1, cs2) {
             return cs1.offset - cs2.offset;
           });
-          var length = stops.length;
+          var length2 = stops.length;
           var colorAndAlphaList = [];
           var colors = [];
-          for (var i2 = 0; i2 < length; i2++) {
+          for (var i2 = 0; i2 < length2; i2++) {
             var stop2 = stops[i2];
             var colorAndAlpha = getColorAndAlpha(stop2.color);
             colors.push(stop2.offset * expansion + shift + " " + colorAndAlpha[0]);
-            if (i2 === 0 || i2 === length - 1) {
+            if (i2 === 0 || i2 === length2 - 1) {
               colorAndAlphaList.push(colorAndAlpha);
             }
           }
-          if (length >= 2) {
+          if (length2 >= 2) {
             var color1 = colorAndAlphaList[0][0];
             var color2 = colorAndAlphaList[1][0];
             var opacity1 = colorAndAlphaList[0][1] * style.opacity;
@@ -13905,8 +13830,8 @@ function requireGraphic() {
             p1[0] = p0[0] + data[i2++];
             p1[1] = p0[1] + data[i2++];
             if (m) {
-              applyTransform(p0, p0, m);
-              applyTransform(p1, p1, m);
+              applyTransform2(p0, p0, m);
+              applyTransform2(p1, p1, m);
             }
             p0[0] = round(p0[0] * Z - Z2);
             p1[0] = round(p1[0] * Z - Z2);
@@ -13942,7 +13867,7 @@ function requireGraphic() {
           str.push(cmdStr);
           for (var k = 0; k < nPoint; k++) {
             var p = points[k];
-            m && applyTransform(p, p, m);
+            m && applyTransform2(p, p, m);
             str.push(round(p[0] * Z - Z2), comma, round(p[1] * Z - Z2), k < nPoint - 1 ? comma : "");
           }
         }
@@ -13998,7 +13923,7 @@ function requireGraphic() {
     var isImage = function(img) {
       return typeof img === "object" && img.tagName && img.tagName.toUpperCase() === "IMG";
     };
-    ZImage.prototype.brushVML = function(vmlRoot) {
+    ZImage2.prototype.brushVML = function(vmlRoot) {
       var style = this.style;
       var image2 = style.image;
       var ow;
@@ -14063,12 +13988,12 @@ function requireGraphic() {
         var p1 = [x + dw, y];
         var p2 = [x, y + dh];
         var p3 = [x + dw, y + dh];
-        applyTransform(p0, p0, m);
-        applyTransform(p1, p1, m);
-        applyTransform(p2, p2, m);
-        applyTransform(p3, p3, m);
-        var maxX = mathMax(p0[0], p1[0], p2[0], p3[0]);
-        var maxY = mathMax(p0[1], p1[1], p2[1], p3[1]);
+        applyTransform2(p0, p0, m);
+        applyTransform2(p1, p1, m);
+        applyTransform2(p2, p2, m);
+        applyTransform2(p3, p3, m);
+        var maxX = mathMax2(p0[0], p1[0], p2[0], p3[0]);
+        var maxY = mathMax2(p0[1], p1[1], p2[1], p3[1]);
         var transformFilter = [];
         transformFilter.push("M11=", m[0] / scaleX, comma, "M12=", m[2] / scaleY, comma, "M21=", m[1] / scaleX, comma, "M22=", m[3] / scaleY, comma, "Dx=", round(x * scaleX + m[4]), comma, "Dy=", round(y * scaleY + m[5]));
         vmlElStyle.padding = "0 " + round(maxX) + "px " + round(maxY) + "px 0";
@@ -14145,14 +14070,14 @@ function requireGraphic() {
         this.drawRectText(vmlRoot, this.getBoundingRect());
       }
     };
-    ZImage.prototype.onRemove = function(vmlRoot) {
+    ZImage2.prototype.onRemove = function(vmlRoot) {
       remove(vmlRoot, this._vmlEl);
       this._vmlEl = null;
       this._cropEl = null;
       this._imageEl = null;
       this.removeRectText(vmlRoot);
     };
-    ZImage.prototype.onAdd = function(vmlRoot) {
+    ZImage2.prototype.onAdd = function(vmlRoot) {
       append(vmlRoot, this._vmlEl);
       this.appendRectText(vmlRoot);
     };
@@ -14208,7 +14133,7 @@ function requireGraphic() {
     var tmpRect2 = new BoundingRect2();
     var drawRectText = function(vmlRoot, rect, textRect, fromTextEl) {
       var style = this.style;
-      this.__dirty && textHelper.normalizeTextStyle(style, true);
+      this.__dirty && textHelper2.normalizeTextStyle(style, true);
       var text2 = style.text;
       text2 != null && (text2 += "");
       if (!text2) {
@@ -14288,7 +14213,7 @@ function requireGraphic() {
       var coords = [x, y];
       var textVmlElStyle = textVmlEl.style;
       if (m && fromTextEl) {
-        applyTransform(coords, coords, m);
+        applyTransform2(coords, coords, m);
         skewEl.on = true;
         skewEl.matrix = m[0].toFixed(3) + comma + m[2].toFixed(3) + comma + m[1].toFixed(3) + comma + m[3].toFixed(3) + ",0,0";
         skewEl.offset = (round(coords[0]) || 0) + "," + (round(coords[1]) || 0);
@@ -14325,7 +14250,7 @@ function requireGraphic() {
     var appendRectText = function(vmlRoot) {
       append(vmlRoot, this._textVmlEl);
     };
-    var list = [RectText, Displayable, ZImage, Path, Text];
+    var list = [RectText2, Displayable2, ZImage2, Path, Text];
     for (var i = 0; i < list.length; i++) {
       var proto = list[i].prototype;
       proto.drawRectText = drawRectText;
@@ -14566,33 +14491,32 @@ class Node {
     this.onNodeMouseUp = onNodeMouseUp;
     this.onNodeMouseEnter = onNodeMouseEnter;
     this.onNodeMouseLeave = onNodeMouseLeave;
-    this._init();
     this.isSelected = false;
+    this.init();
   }
-  _init() {
-    const { radius, rootRect, normalRect, fontFamily, fontWeight } = this.config;
+  init() {
+    const { rootNode, normalNode } = this.config;
     this.group = new zrender$1.Group({
       draggable: false
     });
-    let textOffset = [0, 0];
+    const r = this.data.level === 0 ? rootNode : normalNode;
     this.rect = new zrender$1.Rect({
       shape: {
-        r: radius,
+        r: r.radius,
         x: this.x,
         y: this.y,
         width: this.w,
         height: this.h
       },
       style: {
-        stroke: this.level === 0 ? rootRect.bg : normalRect.bg,
-        lineWidth: this.level === 0 ? rootRect.borderWidth : normalRect.borderWidth,
-        fill: this.level === 0 ? rootRect.bg : normalRect.bg,
+        stroke: r.bg,
+        lineWidth: r.borderWidth,
+        fill: r.bg,
         text: this.data.name,
-        textOffset,
-        textFill: this.level === 0 ? rootRect.textColor : normalRect.textColor,
-        fontSize: this.level === 0 ? rootRect.fontSize : normalRect.fontSize,
-        fontFamily,
-        fontWeight,
+        textFill: r.textColor,
+        fontSize: r.fontSize,
+        fontFamily: r.fontFamily,
+        fontWeight: r.fontWeight,
         transformText: true
         // 跟随group缩放
       },
@@ -14601,7 +14525,7 @@ class Node {
     this.rect.id = this.data.id;
     this.group.add(this.rect);
     if (this.data.level !== 0) {
-      this.placeholderRect = this._getPlaceholderRect();
+      this.placeholderRect = this.getPlaceholderRect();
       this.data.fatherNode.group.add(this.placeholderRect);
       this.placeholderRect.on("mouseup", (e) => {
         this.onMouseUp();
@@ -14625,7 +14549,7 @@ class Node {
     this.group.on("mouseover", (e) => {
       if (!this.isSelected) {
         this.rect.attr("style", {
-          stroke: this.level === 0 ? rootRect.hoverBorderColor : normalRect.hoverBorderColor
+          stroke: r.hoverBorderColor
         });
       }
       this.onNodeMouseEnter(e, this.data);
@@ -14633,7 +14557,7 @@ class Node {
     this.group.on("mouseout", (e) => {
       if (!this.isSelected) {
         this.rect.attr("style", {
-          stroke: this.level === 0 ? rootRect.bg : normalRect.bg
+          stroke: r.bg
         });
       }
       this.onNodeMouseLeave(e, this.data);
@@ -14650,6 +14574,7 @@ class Node {
       this.onNodeMouseDown(e, this.data);
     });
     this.group.on("mousemove", (e) => {
+      var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n;
       if (this.readonly) {
         return;
       }
@@ -14662,27 +14587,24 @@ class Node {
       if (this.rect.z === 10) {
         this.rect.attr("z", 8);
       }
-      if (this.data.btn && this.data.btn.type === 1) {
+      if (((_a = this.data.btn) == null ? void 0 : _a.type) === 1) {
         this.data.btn.setType(0);
       }
-      if (this.data.lineBeforeBtn && this.data.lineBeforeBtn.line.style !== rootRect.bg) {
-        this.data.lineBeforeBtn.setColor(rootRect.bg);
+      if (((_c = (_b = this.data.lineBeforeBtn) == null ? void 0 : _b.line) == null ? void 0 : _c.style) !== rootNode.bg) {
+        (_e = (_d = this.data.lineBeforeBtn) == null ? void 0 : _d.setColor) == null ? void 0 : _e.call(_d, rootNode.bg);
       }
-      if (this.data.lineBeforeNode && this.data.lineBeforeNode.line.z === 1) {
-        this.data.lineBeforeNode.line.attr("z", 2);
+      if (((_g = (_f = this.data.lineBeforeNode) == null ? void 0 : _f.line) == null ? void 0 : _g.z) === 1) {
+        (_i = (_h = this.data.lineBeforeNode) == null ? void 0 : _h.line) == null ? void 0 : _i.attr("z", 2);
       }
-      if (this.data.lineBeforeNode && this.data.lineBeforeNode.line.style !== rootRect.bg) {
-        this.data.lineBeforeNode.setColor(rootRect.bg);
+      if (((_k = (_j = this.data.lineBeforeNode) == null ? void 0 : _j.line) == null ? void 0 : _k.style) !== rootNode.bg) {
+        (_m = (_l = this.data.lineBeforeNode) == null ? void 0 : _l.setColor) == null ? void 0 : _m.call(_l, rootNode.bg);
       }
-      if (this.placeholderRect && this.placeholderRect.invisible) {
+      if ((_n = this.placeholderRect) == null ? void 0 : _n.invisible) {
         this.placeholderRect.attr("invisible", false);
       }
     });
     this.group.on("mouseup", (e) => {
       if (this.readonly) {
-        return;
-      }
-      if (this.data.level === 0) {
         return;
       }
       this.group.attr("draggable", false);
@@ -14691,39 +14613,41 @@ class Node {
     });
   }
   onMouseUp() {
-    const { lineColor } = this.config;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o;
+    const { line: line2 } = this.config;
+    const lineColor = line2.color;
     this.group.attr("position", [0, 0]);
     this.group.attr("scale", [1, 1]);
     this.rect.attr("z", 10);
-    if (this.data.btn && this.data.btn.type === 0) {
-      this.data.btn.setType(1);
+    if (((_a = this.data.btn) == null ? void 0 : _a.type) === 0) {
+      (_b = this.data.btn) == null ? void 0 : _b.setType(1);
     }
-    if (this.data.lineBeforeBtn && this.data.lineBeforeBtn.line.style !== lineColor) {
-      this.data.lineBeforeBtn.setColor(lineColor);
+    if (((_d = (_c = this.data.lineBeforeBtn) == null ? void 0 : _c.line) == null ? void 0 : _d.style) !== lineColor) {
+      (_f = (_e = this.data.lineBeforeBtn) == null ? void 0 : _e.setColor) == null ? void 0 : _f.call(_e, lineColor);
     }
-    if (this.data.lineBeforeNode && this.data.lineBeforeNode.line.z === 2) {
-      this.data.lineBeforeNode.line.attr("z", 1);
+    if (((_h = (_g = this.data.lineBeforeNode) == null ? void 0 : _g.line) == null ? void 0 : _h.z) === 2) {
+      (_j = (_i = this.data.lineBeforeNode) == null ? void 0 : _i.line) == null ? void 0 : _j.attr("z", 1);
     }
-    if (this.data.lineBeforeNode && this.data.lineBeforeNode.line.style !== lineColor) {
-      this.data.lineBeforeNode.setColor(lineColor);
+    if (((_l = (_k = this.data.lineBeforeNode) == null ? void 0 : _k.line) == null ? void 0 : _l.style) !== lineColor) {
+      (_n = (_m = this.data.lineBeforeNode) == null ? void 0 : _m.setColor) == null ? void 0 : _n.call(_m, lineColor);
     }
-    if (this.placeholderRect && this.placeholderRect.invisible) {
+    if ((_o = this.placeholderRect) == null ? void 0 : _o.invisible) {
       this.placeholderRect.attr("invisible", true);
     }
     this.moveable = false;
   }
-  _getPlaceholderRect() {
-    const { rootRect, radius } = this.config;
+  getPlaceholderRect() {
+    const { rootNode, normalNode } = this.config;
     return new zrender$1.Rect({
       shape: {
-        r: radius,
+        r: normalNode.radius,
         x: this.x,
         y: this.y,
         width: this.w,
         height: this.h
       },
       style: {
-        fill: rootRect.bg
+        fill: rootNode.bg
       },
       z: 9,
       silent: false,
@@ -14731,28 +14655,34 @@ class Node {
     });
   }
   // 双击生成文本输入框
-  _generateInputDom({ x, y, w, h }) {
+  generateInputDom({ x, y, w, h }) {
     if (!x || !y || !w || !h) {
       return;
     }
-    const { fontSize, fontFamily, radius, normalRect } = this.config;
+    const { rootNode, normalNode, animation } = this.config;
+    const r = this.data.level === 0 ? rootNode : normalNode;
     let input = document.createElement("input");
     input.style = `
             position: fixed;
             left: ${x}px;
             top: ${y}px;
-            padding: 0 12px;
-            width: ${w - 28}px;
-            height: ${h - 3}px;
-            border-radius: ${radius}px;
+            padding: 0 ${r.textPadding};
+            width: ${w}px;
+            height: ${h}px;
+            line-height: ${h}px;
+            border-radius: ${r.radius}px;
             outline: none;
             border: none;
-            font-size: ${fontSize};
-            font-family: ${fontFamily};
-            border-radius: ${normalRect.radius}px;
-            border: 2px solid #5CDBD3;
+            font-size: ${r.fontSize};
+            font-family: ${r.fontFamily};
+            font-weight: ${r.fontWeight};
+            border-radius: ${r.radius}px;
+            border: 2px solid ${r.bg};
             z-index: 10;
-            background: ${normalRect.bg};
+            background: ${r.bg};
+            color: ${r.textColor};
+            box-sizing: border-box;
+            text-align: center;
         `;
     input.value = this.data.name;
     input.onkeyup = (e) => {
@@ -14772,22 +14702,22 @@ class Node {
     document.body.appendChild(input);
     setTimeout(() => {
       input.focus();
-    }, 100);
+    }, animation.time);
   }
   // 选中节点
   selectNode() {
-    const { rootRect, normalRect } = this.config;
+    const { rootNode, normalNode } = this.config;
     this.isSelected = true;
     this.rect.attr("style", {
-      stroke: this.level === 0 ? rootRect.clickBorderColor : normalRect.clickBorderColor
+      stroke: this.data.level === 0 ? rootNode.clickBorderColor : normalNode.clickBorderColor
     });
   }
   // 取消选中节点
   cancelNode() {
-    const { rootRect, normalRect } = this.config;
+    const { rootNode, normalNode } = this.config;
     this.isSelected = false;
     this.rect.attr("style", {
-      stroke: this.level === 0 ? rootRect.bg : normalRect.bg
+      stroke: this.data.level === 0 ? rootNode.bg : normalNode.bg
     });
   }
   // 移动节点位置
@@ -14832,16 +14762,16 @@ class Node {
       return;
     }
     const clientRect = this.container.getBoundingClientRect();
-    const { position, scale } = this.rootGroup;
+    const { position, scale: scale2 } = this.rootGroup;
     const [offsetX, offsetY] = position;
-    const [scaleX, scaleY] = scale;
+    const [scaleX, scaleY] = scale2;
     const rect = {
       x: this.x + (clientRect.left + offsetX) * scaleX,
       y: this.y + (clientRect.top + offsetY) * scaleY,
       w: this.w * scaleX,
       h: this.h * scaleY
     };
-    this._generateInputDom(rect);
+    this.generateInputDom(rect);
   }
   setName(text2) {
     this.rect.attr("style", {
@@ -14849,6 +14779,7 @@ class Node {
     });
   }
   setWidth(w) {
+    var _a, _b;
     if (this.readonly) {
       return;
     }
@@ -14864,7 +14795,7 @@ class Node {
         animation.time,
         animation.easing
       );
-      this.placeholderRect && this.placeholderRect.animateTo(
+      (_a = this.placeholderRect) == null ? void 0 : _a.animateTo(
         {
           shape: {
             width: this.w
@@ -14875,7 +14806,7 @@ class Node {
       );
     } else {
       this.rect.attr("shape", { width: this.w });
-      this.placeholderRect && this.placeholderRect.attr("shape", { width: this.w });
+      (_b = this.placeholderRect) == null ? void 0 : _b.attr("shape", { width: this.w });
     }
   }
   getNode() {
@@ -14889,10 +14820,10 @@ class Line {
     this.x2 = x2;
     this.y2 = y2;
     this.config = config2;
-    this._init();
+    this.init();
   }
-  _init() {
-    const { lineWidth, lineColor, radius } = this.config;
+  init() {
+    const { line: line2 } = this.config;
     const Line2 = zrender$1.Path.extend({
       shape: {
         x1: 0,
@@ -14932,12 +14863,12 @@ class Line {
         y1: this.y1,
         x2: this.x2,
         y2: this.y2,
-        radius
+        radius: line2.radius
       },
       style: {
-        lineWidth,
+        lineWidth: line2.w,
         fill: "transparent",
-        stroke: lineColor
+        stroke: line2.color
       },
       z: 1
     });
@@ -14989,10 +14920,10 @@ class Btn {
     this.data = data;
     this.type = type;
     this.config = config2;
-    this._init();
+    this.init();
   }
-  _init() {
-    const { symbolLineWidth, symbolRadius, lineColor, normalRect } = this.config;
+  init() {
+    const { btn, line: line2, normalNode } = this.config;
     const Button = zrender$1.Path.extend({
       shape: {
         x: 0,
@@ -15022,13 +14953,13 @@ class Btn {
       shape: {
         x: this.x,
         y: this.y,
-        r: symbolRadius,
+        r: btn.radius,
         type: this.type
       },
       style: {
         fill: "#fff",
-        stroke: lineColor,
-        lineWidth: symbolLineWidth
+        stroke: line2.color,
+        lineWidth: btn.lineWidth
       },
       z: 5
     });
@@ -15043,12 +14974,12 @@ class Btn {
     });
     this.btn.on("mouseover", () => {
       this.btn.attr("style", {
-        stroke: normalRect.clickBorderColor
+        stroke: normalNode.clickBorderColor
       });
     });
     this.btn.on("mouseout", () => {
       this.btn.attr("style", {
-        stroke: lineColor
+        stroke: line2.color
       });
     });
   }
@@ -15069,7 +15000,7 @@ class Btn {
       } else {
         this.data.group.attr("scale", [1, 1]);
       }
-    } else if (type === 0 && this.data.group.scale && this.data.group.scale && this.data.group.scale.some((s) => s === 1)) {
+    } else if (type === 0 && this.data.group.scale && this.data.group.scale.some((s) => s === 1)) {
       if (animation.switch) {
         this.data.group.animateTo(
           {
@@ -15186,14 +15117,12 @@ const viewport = ({
     if (isHoveringNode) {
       return;
     }
-    if (e.ctrlKey || e.altKey) {
-      if (e.wheelDelta < 0) {
-        viewBox.scale -= SCALE_STEP;
-      } else {
-        viewBox.scale += SCALE_STEP;
-      }
-      setViewportScale(viewBox.scale);
+    if (e.deltaY < 0) {
+      viewBox.scale -= SCALE_STEP;
+    } else {
+      viewBox.scale += SCALE_STEP;
     }
+    setViewportScale(viewBox.scale);
   };
   const resize = () => {
     zr.resize();
@@ -15214,8 +15143,8 @@ const viewport = ({
     setIsHoverNode: (isHover2) => {
       isHoveringNode = isHover2;
     },
-    zoom: (scale) => {
-      setViewportScale(scale * (SCALE_MAX - SCALE_MIN));
+    zoom: (scale2) => {
+      setViewportScale(scale2 * (SCALE_MAX - SCALE_MIN));
     },
     dispose: dispose2
   };
@@ -15239,16 +15168,35 @@ const getEndNodeNum = (tree) => {
   fn(tree);
   return num;
 };
-const uuid = () => (/* @__PURE__ */ new Date()).getTime();
+const uuid = () => Date.now().toString(36) + Math.random().toString(36).substring(2);
+const mergeObjects = (obj1, obj2) => {
+  const result = {};
+  for (const key in obj1) {
+    if (obj1.hasOwnProperty(key)) {
+      result[key] = obj1[key];
+    }
+  }
+  for (const key in obj2) {
+    if (obj2.hasOwnProperty(key)) {
+      if (typeof obj2[key] === "object" && obj2[key] !== null && !Array.isArray(obj2[key])) {
+        result[key] = mergeObjects(result[key] || {}, obj2[key]);
+      } else if (Array.isArray(obj2[key])) {
+        result[key] = (result[key] || []).concat(obj2[key]);
+      } else {
+        result[key] = obj2[key];
+      }
+    }
+  }
+  return result;
+};
 class Mindmap {
-  // 视口
+  // 节点区域高度
   constructor({
     container,
     data,
+    config: config2 = {},
     readonly = true,
     onNodeClick = () => {
-    },
-    onZoom = () => {
     },
     onError = () => {
     }
@@ -15256,20 +15204,20 @@ class Mindmap {
     this._onKeyDown = (e) => {
       switch (e.keyCode) {
         case 9:
+          e.preventDefault();
           if (this.readonly) {
             return;
           }
           this.addChildNode();
-          e.preventDefault();
           break;
         case 13:
+          e.preventDefault();
           if (this.readonly) {
             return;
           }
           if (!this.isEditingText) {
             this.addSilbingNode();
           }
-          e.preventDefault();
           break;
         case 8:
         case 46:
@@ -15305,86 +15253,102 @@ class Mindmap {
     this.data = data;
     this.readonly = readonly;
     this.onNodeClick = onNodeClick;
-    this.onZoom = onZoom;
     this.onError = onError;
-    this._setConfig();
-    this._init();
     this.selectedNodes = [];
     this.dragSourceNode = null;
     this.dragTargetNode = null;
     this.isEditingText = false;
+    this.setConfig(config2);
+    this.init();
     this.render();
   }
-  _setConfig() {
+  setConfig(config2) {
     const w = this.container.clientWidth;
     const h = this.container.clientHeight;
-    const normalRect = {
-      w: 50,
-      h: 30,
-      bg: "#F3F7F7",
-      textColor: "#00474F",
-      fontSize: 14,
-      borderWidth: 3,
-      hoverBorderColor: "#C1F3F0",
-      // hover时边框颜色
-      clickBorderColor: "#5CDBD3"
-      // 点击选中时边框颜色
-    };
-    const space = {
-      x: 80,
-      y: 10
-    };
-    this.config = {
-      w,
-      h,
-      cx: w / 4,
-      // 画布中心x坐标
-      cy: h / 2,
-      // 画布中心y坐标
-      textFill: "#fff",
-      textPadding: 8,
-      fontFamily: "PingFangSC-Semibold PingFang SC",
-      fontWeight: 600,
-      fontSize: 14,
-      rootRect: {
-        // 跟节点矩形
-        w: 80,
-        h: 40,
-        bg: "#5CDBD3",
-        textColor: "#fff",
-        fontSize: 20,
-        borderWidth: 4,
-        hoverBorderColor: "#C1F3F0",
-        // hover时边框颜色
-        clickBorderColor: "#13C2C2"
-        // 点击选中时边框颜色
+    this.config = mergeObjects(
+      {
+        w,
+        // 画布宽度
+        h,
+        // 画布高度
+        cx: w / 4,
+        // 画布中心x坐标
+        cy: h / 2,
+        // 画布中心y坐标
+        // 根节点配置
+        rootNode: {
+          w: 80,
+          h: 40,
+          bg: "#5CDBD3",
+          textColor: "#fff",
+          fontSize: 20,
+          borderWidth: 4,
+          hoverBorderColor: "#C1F3F0",
+          // hover时边框颜色
+          clickBorderColor: "#13C2C2",
+          // 点击选中时边框颜色
+          textPadding: 8,
+          fontFamily: "PingFangSC-Semibold PingFang SC",
+          fontWeight: 600,
+          radius: 20
+          // 节点矩形圆角
+        },
+        // 普通节点配置
+        normalNode: {
+          w: 50,
+          h: 30,
+          bg: "#F3F7F7",
+          textColor: "#00474F",
+          fontSize: 14,
+          borderWidth: 3,
+          hoverBorderColor: "#C1F3F0",
+          // hover时边框颜色
+          clickBorderColor: "#5CDBD3",
+          // 点击选中时边框颜色
+          textPadding: 8,
+          fontFamily: "PingFangSC-Semibold PingFang SC",
+          fontWeight: 600,
+          radius: 20
+          // 节点矩形圆角
+        },
+        space: {
+          x: 60,
+          // 节点之间间距 x轴方向
+          y: 10
+          // 节点之间间距 y轴方向
+        },
+        line: {
+          w: 2,
+          // 节点间线宽
+          color: "#006D75",
+          // 节点间线颜色
+          radius: 30
+          // 节点间线圆角
+        },
+        btn: {
+          lineWidth: 2,
+          // 展开收起按钮线宽
+          radius: 8
+          // 展开收起按钮半径
+        },
+        // 动画配置
+        animation: {
+          switch: true,
+          // 是否开启动画
+          time: 100,
+          // 动画时间
+          easing: "linear"
+          // 动画曲线
+        }
       },
-      normalRect,
-      radius: 20,
-      // 节点矩形圆角
-      space,
-      lineWidth: 4,
-      // 节点间线宽
-      lineColor: "#006D75",
-      // 节点间线颜色
-      symbolLineWidth: 2,
-      // 展开收起按钮线宽
-      symbolRadius: 8,
-      // 展开时候按钮半径
-      nodeAreaHeight: normalRect.h + space.y * 2,
-      // 节点区域高度
-      animation: {
-        // 动画
-        switch: true,
-        time: 100,
-        easing: "linear"
-      }
-    };
+      config2
+    );
+    this.nodeAreaHeight = this.config.normalNode.h + this.config.space.y * 2;
   }
-  _init() {
+  init() {
     const { cx, cy } = this.config;
     this.zr = new zrender$1.init(this.container, {
-      // renderer: 'svg',
+      // renderer: "svg",
     });
     this.rootGroup = new zrender$1.Group({
       position: [0, 0],
@@ -15394,8 +15358,7 @@ class Mindmap {
       container: this.container,
       rootGroup: this.rootGroup,
       zr: this.zr,
-      onMouseDown: this._onMouseDown,
-      onZoom: this.onZoom
+      onMouseDown: this._onMouseDown
     });
     document.addEventListener("keydown", this._onKeyDown);
   }
@@ -15441,7 +15404,7 @@ class Mindmap {
    * @returns 新节点数据
    */
   _addNode(targetData, isSilbing, newD) {
-    const { space, normalRect, nodeAreaHeight } = this.config;
+    const { space, normalNode } = this.config;
     const newLevel = isSilbing ? targetData.level : targetData.level + 1;
     let newData;
     if (newD) {
@@ -15474,7 +15437,7 @@ class Mindmap {
       newData.pid = targetData.id;
     }
     const w = this._getTextWidth(newData, newLevel);
-    const h = normalRect.h;
+    const h = normalNode.h;
     const x = (isSilbing ? targetData.fatherNode.childOrigin[0] : targetData.childOrigin[0]) + space.x / 2;
     let y = isSilbing ? targetData.fatherNode.childStartY - h / 2 : targetData.childStartY;
     if (isSilbing) {
@@ -15487,15 +15450,15 @@ class Mindmap {
         silbingNodeNum += getEndNodeNum(n);
       });
       if (silbingNodeNum > 0) {
-        y += silbingNodeNum * nodeAreaHeight;
+        y += silbingNodeNum * this.nodeAreaHeight;
       } else {
-        y += nodeAreaHeight * i;
+        y += this.nodeAreaHeight * i;
       }
     } else {
       const nodeEndNum = getEndNodeNum(targetData);
       y = targetData.childStartY;
       if (nodeEndNum > 1 || targetData.children.length === 1) {
-        y += nodeEndNum * nodeAreaHeight - h / 2;
+        y += nodeEndNum * this.nodeAreaHeight - h / 2;
       } else {
         y += space.y;
       }
@@ -15542,7 +15505,7 @@ class Mindmap {
     if (isSilbing) {
       targetData.fatherNode.group.add(node.getNode());
       targetData.fatherNode.group.add(lineBeforeNode.getLine());
-      newData.childStartY = y - space.y + nodeAreaHeight / 2;
+      newData.childStartY = y - space.y + this.nodeAreaHeight / 2;
     } else {
       if (targetData.btn && targetData.btn.btn.shape.type === 0) {
         targetData.btn.setType(1);
@@ -15556,7 +15519,7 @@ class Mindmap {
       }
       newData.childStartY = y - space.y;
       if (targetData.children.length > 0) {
-        newData.childStartY += nodeAreaHeight / 2;
+        newData.childStartY += this.nodeAreaHeight / 2;
       }
     }
     return newData;
@@ -15566,8 +15529,7 @@ class Mindmap {
     if (this.readonly) {
       return;
     }
-    const { nodeAreaHeight } = this.config;
-    const dy = nodeAreaHeight / 2;
+    const dy = this.nodeAreaHeight / 2;
     if (this.selectedNodes.length === 0) {
       this.onError("请先选中节点");
     } else if (this.selectedNodes.length === 1) {
@@ -15597,7 +15559,6 @@ class Mindmap {
     if (this.readonly) {
       return;
     }
-    const { nodeAreaHeight } = this.config;
     const data = this.selectedNodes[0];
     if (this.selectedNodes.length === 0) {
       this.onError("请先选中节点");
@@ -15636,7 +15597,7 @@ class Mindmap {
       const newData = this._addNode(data, false, null);
       data.children.push(newData);
       if (data.children.length > 1) {
-        const dy = nodeAreaHeight / 2;
+        const dy = this.nodeAreaHeight / 2;
         this._resetSlibingPosition(newData, dy);
       }
       data.node.cancelNode();
@@ -15667,7 +15628,6 @@ class Mindmap {
     if (needDeleteNodes.length === 0) {
       this.onError("请先选中节点");
     } else if (needDeleteNodes.length === 1) {
-      const { nodeAreaHeight } = this.config;
       const data = needDeleteNodes[0];
       if (data.level === 0) {
         this.onError("根节点不允许删除!");
@@ -15678,7 +15638,7 @@ class Mindmap {
         if (data.fatherNode.children.length === 1) {
           nodeEndNum--;
         }
-        const dy = nodeEndNum * nodeAreaHeight / 2;
+        const dy = nodeEndNum * this.nodeAreaHeight / 2;
         this._resetSlibingPosition(data, -dy);
       }
       data.btn && data.fatherNode.group.remove(data.btn.getBtn());
@@ -15731,7 +15691,7 @@ class Mindmap {
       data.node.cancelNode();
       this.selectedNodes.splice(i, 1);
     }
-    this.onNodeClick(e);
+    this.onNodeClick(data);
   }
   // 节点文本改变事件
   onTextChange(data) {
@@ -15807,7 +15767,6 @@ class Mindmap {
     if (this.readonly) {
       return;
     }
-    const { nodeAreaHeight } = this.config;
     const { space } = this.config;
     if (!target.btn) {
       const foldBtn = this._getBtn(
@@ -15833,7 +15792,7 @@ class Mindmap {
       const newData = this._addNode(tar, false, sou);
       tar.children.push(newData);
       if (tar.children.length > 1) {
-        const dy = nodeAreaHeight / 2;
+        const dy = this.nodeAreaHeight / 2;
         this._resetSlibingPosition(newData, dy);
       }
       sou.children.forEach((s) => fn(s, newData));
@@ -15882,33 +15841,24 @@ class Mindmap {
   }
   // 计算文字宽度
   _getTextWidth(data, level) {
-    const { fontFamily, rootRect, normalRect, textPadding } = this.config;
-    const w = (getTextWidth(
-      data.name,
-      `${level === 0 ? rootRect.fontSize : normalRect.fontSize}px ${fontFamily}`
-    ) || normalRect.w) + textPadding * 2;
+    const { rootNode, normalNode } = this.config;
+    const r = level === 0 ? rootNode : normalNode;
+    const w = (getTextWidth(data.name, `${r.fontSize}px ${r.fontFamily}`) || normalNode.w) + r.textPadding * 2;
     return w;
   }
-  // 生成脑图
-  _generateMap() {
-    const {
-      cx,
-      cy,
-      rootRect,
-      normalRect,
-      space,
-      nodeAreaHeight,
-      animation
-    } = this.config;
+  // 渲染脑图
+  render() {
+    const { cx, cy, rootNode, normalNode, space, animation } = this.config;
     const rootW = this._getTextWidth(this.data, 0);
     this.data.level = 0;
     const rootR = this._getNode({
       x: cx - rootW / 2,
-      y: cy - rootRect.h / 2,
+      y: cy - rootNode.h / 2,
       w: rootW,
-      h: rootRect.h,
+      h: rootNode.h,
       data: this.data
     });
+    this.data.id = this.data.id || uuid();
     this.data.node = rootR;
     this.rootGroup.add(rootR.getNode());
     this.data.childOrigin = [cx + rootW / 2 + space.x / 2, cy];
@@ -15933,15 +15883,16 @@ class Mindmap {
     this.rootGroup.add(btn.getBtn());
     this.data.btn = btn;
     this.data.lineStartPos = { x: cx + rootW / 2, y: cy };
-    this.data.childStartY = cy - getEndNodeNum(this.data) * nodeAreaHeight / 2;
+    this.data.childStartY = cy - getEndNodeNum(this.data) * this.nodeAreaHeight / 2;
     const traverseNode = (fatherNode) => {
       const level = fatherNode.level + 1;
       fatherNode.children.forEach((n, i) => {
         n.level = level;
+        n.id = n.id || uuid();
         n.fatherNode = fatherNode;
         const text2 = n.name;
-        const w = text2 && text2 !== "" ? this._getTextWidth(n, level) : normalRect.w;
-        const h = normalRect.h;
+        const w = text2 && text2 !== "" ? this._getTextWidth(n, level) : normalNode.w;
+        const h = normalNode.h;
         let x = fatherNode.node.x + fatherNode.node.w + space.x;
         let y = fatherNode.childStartY;
         let silbingNodeNum = 0;
@@ -15950,12 +15901,12 @@ class Mindmap {
           silbingNodeNum += getEndNodeNum(n2);
         });
         if (silbingNodeNum > 0) {
-          y += silbingNodeNum * nodeAreaHeight;
+          y += silbingNodeNum * this.nodeAreaHeight;
         } else {
-          y += nodeAreaHeight * i;
+          y += this.nodeAreaHeight * i;
         }
         const nodeEndNum = getEndNodeNum(n);
-        y += nodeEndNum * nodeAreaHeight / 2 - h / 2;
+        y += nodeEndNum * this.nodeAreaHeight / 2 - h / 2;
         const rect = this._getNode({
           x,
           y,
@@ -15989,10 +15940,9 @@ class Mindmap {
           n.lineBeforeBtn = lineBeforeBtn2;
         }
         n.childOrigin = [lineStartPos.x + space.x / 2, lineStartPos.y];
-        n.childStartY = y + h / 2 - nodeEndNum * nodeAreaHeight / 2;
+        n.childStartY = y + h / 2 - nodeEndNum * this.nodeAreaHeight / 2;
         if (n.children.length > 0) {
           const branchGroup = new zrender$1.Group({
-            // scale: animation.switch ? [0, 0] : [1, 1],
             origin: n.childOrigin
           });
           n.group = branchGroup;
@@ -16031,9 +15981,11 @@ class Mindmap {
     this.rootGroup.add(this.data.group);
     this.zr.add(this.rootGroup);
   }
-  // 渲染脑图
-  render() {
-    this._generateMap();
+  rerender(config2) {
+    this.rootGroup && this.rootGroup.removeAll();
+    this.config = mergeObjects(this.config, config2);
+    this.nodeAreaHeight = this.config.normalNode.h + this.config.space.y * 2;
+    this.render();
   }
   // 取消选中状态
   cancelSelected() {
@@ -16060,12 +16012,13 @@ class Mindmap {
     }
   }
   // 设置脑图缩放
-  zoomMap(scale) {
-    this.viewport.zoom(scale);
+  zoomMap(scale2) {
+    this.viewport.zoom(scale2);
   }
   // 移除监听事件, 释放内存
   dispose() {
     this.data = [];
+    this.rootGroup && this.rootGroup.removeAll();
     this.zr && this.zr.clear();
     this.zr && this.zr.dispose();
     this.viewport && this.viewport.dispose();

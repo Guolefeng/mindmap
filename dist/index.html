@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>脑图</title>
+        <style>
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
+            }
+            ul {
+                padding: 8px;
+                margin: 0;
+            }
+            a {
+                color:rgb(46, 133, 233);
+            }
+            a:hover {
+                color:rgb(111, 176, 249);
+            }
+            #app {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                background-color: #2f2f2f;
+            }
+            .explain {
+                position: absolute;
+                top: 0;
+                left: 0;
+                padding: 8px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                font-size: 12px;
+                color: #fff;
+                background-color: rgba(0, 0, 0, 0.3);
+            }
+        </style>
+      <script type="module" crossorigin src="./index-CboI-0qA.js"></script>
+    </head>
+    <body>
+        <div id="app"></div>
+        <div class="explain">
+            <div>操作说明</div>
+            <ul>
+                <li>双击节点可编辑名称</li>
+                <li>点击节点选中后，tab键新增子节点</li>
+                <li>点击节点选中后，enter键新增兄弟节点</li>
+                <li>选中节点可拖拽到其他节点上修改父节点</li>
+                <li>节点后的按钮点击可展开收起子节点</li>
+                <li>backspace键、delete键都可删除选中的节点</li>
+                <li>点击背景(非脑图区域)可取消选中状态</li>
+                <li>点击背景(非脑图区域)拖拽可移动整体画布</li>
+            </ul>
+            <a href="https://github.com/Guolefeng/mindmap" target="_blank" >Github地址，查看代码使用方式</a>
+            <a href="https://guolefeng.com" target="_blank">作者相关</a>
+        </div>
+    </body>
+</html>

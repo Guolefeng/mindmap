@@ -1,10 +1,11 @@
-import { default as Node } from "./node";
-import { default as Line } from "./line";
-import { default as Btn } from "./btn";
-import { INode, IRect, IConfig, IBtnType, IPoint2 } from "./types";
+import { default as Node } from './node';
+import { default as Line } from './line';
+import { default as Btn } from './btn';
+import { INode, IRect, IConfig, IBtnType, IPoint2 } from './types';
 interface IParams {
     container: HTMLElement;
     data: INode;
+    config?: IConfig;
     readonly?: boolean;
     onNodeClick?: (data: INode) => void;
     onZoom?: (scale: number) => void;
@@ -25,24 +26,13 @@ export default class Mindmap {
     rootGroup: any;
     zr: any;
     viewport: any;
-    constructor({
-        container,
-        data,
-        readonly,
-        onNodeClick,
-        onZoom,
-        onError,
-    }: IParams);
-    _setConfig(): void;
-    _init(): void;
+    nodeAreaHeight?: number;
+    constructor({ container, data, config, readonly, onNodeClick, onError, }: IParams);
+    setConfig(config: IConfig): void;
+    private init;
     _onKeyDown: (e: any) => void;
     _onMouseDown: () => void;
-    _resetChildPosition(
-        n: INode,
-        dx: number,
-        dy: number,
-        notTrans: boolean
-    ): void;
+    _resetChildPosition(n: INode, dx: number, dy: number, notTrans: boolean): void;
     _resetSlibingPosition(data: INode, dy: number): void;
     /**
      * 新增节点
@@ -72,8 +62,8 @@ export default class Mindmap {
     _getBtn(x: number, y: number, data: INode, type?: IBtnType): Btn;
     _getLine({ x1, y1, x2, y2 }: IPoint2): Line;
     _getTextWidth(data: INode, level: number): number;
-    _generateMap(): void;
     render(): void;
+    rerender(config: IConfig): void;
     findData: (id: number) => INode;
     cancelSelected(): void;
     editName(): void;

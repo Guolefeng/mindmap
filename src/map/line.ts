@@ -31,6 +31,7 @@ export default class Line {
 
     private init() {
         const { line } = this.config;
+        // @ts-ignore
         const Line = zrender.Path.extend({
             shape: {
                 x1: 0,
