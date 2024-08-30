@@ -154,6 +154,7 @@ const testConfig = {
     },
 };
 
+// 创建实例，渲染脑图
 const map = new Mindmap({
     // 挂载点
     container: document.getElementById("app"),
@@ -172,6 +173,9 @@ const map = new Mindmap({
         console.log(data);
     },
 });
+
+// 销毁实例，释放内存
+map.dispose();
 ```
 
 ## Related
