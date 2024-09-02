@@ -147,7 +147,6 @@ const testConfig = {
     },
     // 动画配置
     animation: {
-        key: "animation", // 配置key值
         switch: true, // 是否开启动画
         time: 100, // 动画时间
         easing: "linear", // 动画曲线
